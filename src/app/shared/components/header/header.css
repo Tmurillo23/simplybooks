@@ -1,0 +1,17 @@
+header {
+  background-color: #272635; /* franja oscura arriba */
+  color: #FFFFFF;           /* texto blanco */
+  padding: 0.8rem 1rem;
+  text-align: center;
+  border-bottom: 2px solid #A6A6A8; /* línea separadora */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.4rem;
+}
