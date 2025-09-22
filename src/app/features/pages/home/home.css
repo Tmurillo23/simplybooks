@@ -14,7 +14,20 @@
 /* Contenedor principal */
 #home-container {
   display: flex;
+  height: fit-content ;
 }
+
+/* Sidebar */
+.sidebar {
+  background: #1e1d2b;
+  color: #fff;
+  width: 180px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  min-height: auto; /* asegura ocupar toda la altura */
+}
+
 
 .sidebar a {
   color: #fff;
@@ -30,12 +43,13 @@
   padding: 1rem;
   display: flex;
   gap: 1rem;
+  background: #fff;
+
 }
 
 /* Portada + info más grande */
 .book-cover {
-  flex: 3;   /* ocupa 3 partes */
-  background: #fff;
+  background: black;
   padding: 1rem;
   border: 1px solid #ccc;
 }
@@ -46,6 +60,7 @@
   background: #fff;
   padding: 1rem;
   border: 1px solid #ccc;
+  width: 50px;
 }
 
 

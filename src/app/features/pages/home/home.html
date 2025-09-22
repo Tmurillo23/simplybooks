@@ -1,3 +1,5 @@
+<!--  TODO: NO hacer un sidebar sino que hacerlo arriba en el header cuando se esté logueado porque esto anda complejo XD-->
+
 <!-- Top bar -->
 <section class="top-bar">
   <nav>
@@ -11,8 +13,7 @@
 </section>
 
 <!-- Contenedor principal -->
-<section id="home-container">
-
+<div id="home-container">
   <!-- Sidebar -->
   <aside class="sidebar">
     <a class="add-btn" (click)="onProfile()"></a>
@@ -24,9 +25,9 @@
           </a>
         </li>
         <li><a routerLink="upload">Cargar archivos</a></li>
-        <li><a href="#">Colecciones</a></li>
-        <li><a href="#">Préstamos</a></li>
-        <li><a href="#">Agregar</a></li>
+        <li><a routerLink="">Colecciones</a></li>
+        <li><a routerLink="">Préstamos</a></li>
+        <li><a routerLink="">Agregar</a></li>
       </ul>
     </nav>
   </aside>
@@ -34,13 +35,13 @@
   <!-- Book Section -->
   <section class="book-section">
     <div class="book-cover">
-      <div class="cover">Portada</div>
-      <div class="book-info">
-        <h2>Nombre del Libro</h2>
-        <p>Autor</p>
-        <p class="score">95/100</p>
-        <button class="btn-secondary">Ver reseña</button>
-      </div>
+     <img src="">
+    </div>
+    <div class="book-info">
+      <h2>Nombre del Libro</h2>
+      <p>Autor</p>
+      <p class="score">95/100</p>
+      <button class="btn-secondary">Ver reseña</button>
     </div>
 
     <!-- Status -->
@@ -54,4 +55,4 @@
     </div>
   </section>
 
-</section>
+</div>
