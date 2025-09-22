@@ -9,7 +9,7 @@ export class Auth {
 
   isLogged = signal(false);
 
-  constructor(){
+  constructor() {
     this.verifyUserLogged();
   }
 
@@ -20,51 +20,48 @@ export class Auth {
     if (userSrt && user.password === JSON.parse(userSrt)['password']) {
       sessionStorage.setItem('userLogged', user.username);
       this.verifyUserLogged();
-      return { success: true, redirectTo: "home" };
+      return {success: true, redirectTo: "home"};
     }
 
-    return { success: false };
+    return {success: false};
 
   }
 
-  signUp(user:User):SignUpResponse {
+  signUp(user: User): SignUpResponse {
 
     if (localStorage.getItem(user.username)) {
-      return{ success:false, message:'Usuario ya existe' };
+      return {success: false, message: 'Usuario ya existe'};
     }
 
     localStorage.setItem(user.username, JSON.stringify(user));
     sessionStorage.setItem('userLogged', user.username);
     this.verifyUserLogged();
-    return {success:true, redirectTo:'home'}
+    return {success: true, redirectTo: 'home'}
 
   }
 
-  private verifyUserLogged(){
+  private verifyUserLogged() {
     this.isLogged.set(!!sessionStorage.getItem('userLogged'))
   }
 
 
-  logout(){
+  logout() {
     sessionStorage.clear();
     this.verifyUserLogged();
   }
 
-  getUserLogged(){
+  getUserLogged() {
 
-    if(!!sessionStorage.getItem('userLogged')){
+    if (!!sessionStorage.getItem('userLogged')) {
       return {
-        username:sessionStorage.getItem('userLogged')!
+        username: sessionStorage.getItem('userLogged'),
+        email: sessionStorage.getItem('userLogged')!
       }
     }
     return {
-      username:'Bienvenido'
+      username: 'Bienvenido',
+      email: 'ejemplo@mail.com'
     }
   }
-
-
-  private getUser(username:string){
-
-  }
-
 }
+

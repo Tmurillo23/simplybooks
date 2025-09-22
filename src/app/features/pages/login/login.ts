@@ -1,14 +1,9 @@
-import {Component, inject} from '@angular/core';
-import {Router, RouterLink} from '@angular/router';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import { Auth } from '../../../shared/services/auth';
-import { User } from '../../../shared/interfaces/user';
-import Swal from 'sweetalert2';
-
-// TODO: authService
-// TODO: Custom validator
-// TODO: HTML template
-// TODO: INSTALL SWAL
+import { Component, inject } from "@angular/core";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { Router, RouterLink } from "@angular/router";
+import { Auth } from "../../../shared/services/auth";
+import { User } from "../../../shared/interfaces/user";
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-login',
@@ -17,34 +12,40 @@ import Swal from 'sweetalert2';
   styleUrl: './login.css'
 })
 export class Login {
+
+
   fb = inject(FormBuilder);
   router = inject(Router);
-  authService= inject(Auth);
-  ruta = '';
-  title = 'Login-Page'
-  validators = [Validators.required, Validators.minLength(8)];
+  authService = inject(Auth);
+
   loginForm = this.fb.group({
     username: ['', [Validators.required]],
-    password: ['', this.validators]
+    password: ['', [Validators.required, Validators.minLength(4)]]
   })
+
 
   onLogin() {
     if (!this.loginForm.valid) {
-      Swal.fire({icon: "error",
-        title: "Ingreso fallido",
-        text: "Intenta de nuevo"})
+      Swal.fire({
+        title: "Ops!",
+        text: "El formulario no es valido",
+        icon: "error"
+      });
       return;
     }
     let user = this.loginForm.value as User;
-    let loginResponse = this.authService.login(user)
-    if (!loginResponse.success) {
-      this.router.navigate([loginResponse.redirectTo])
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Ingreso fallido",
-        text: "Intenta de nuevo"
-      })
+
+    let response = this.authService.login(user);
+    if (response.success) {
+      this.router.navigate(['home'])
+      return;
     }
+    Swal.fire({
+      title: "Ops!",
+      text: response.message,
+      icon: "error"
+    });
+
   }
+
 }

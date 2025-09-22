@@ -1,4 +1,23 @@
-body, simplybooks {
+header {
+  background-color: #272635; /* franja oscura arriba */
+  color: #FFFFFF;           /* texto blanco */
+  padding: 0.8rem 1rem;
+  text-align: center;
+  border-bottom: 2px solid #A6A6A8; /* línea separadora */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 50px;
+}
+
+
+body, simplybooks{
   font-family: 'Ubuntu', 'Courier New', Courier, monospace;
   color:#023047;
   background-color: #f1f1f1;
@@ -12,11 +31,29 @@ body, simplybooks {
 main{
   flex:1;
   padding: 10px 20px;
-  width: 100%;
+  min-height: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
+
+.sidebar {
+  width: 180px;
+  background: #1e1d2b;
+  color: #fff;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+
+app-home {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 
 #login-box{
   background-color: #FFF;
@@ -89,5 +126,5 @@ footer {
   align-items: center;
   justify-content: space-around;
   color: white;
-  font-size: 35px;
+  font-size: 15px;
 }

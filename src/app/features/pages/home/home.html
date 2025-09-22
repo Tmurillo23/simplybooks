@@ -1,1 +1,57 @@
-<p>home works!</p>
+<!-- Top bar -->
+<section class="top-bar">
+  <nav>
+    <ul>
+      <li class="search-container">
+        <input type="text" placeholder="Buscar..." [(ngModel)]="searchTerm" (input)="onSearch()" />
+        <i class="fa fa-search"></i>
+      </li>
+    </ul>
+  </nav>
+</section>
+
+<!-- Contenedor principal -->
+<section id="home-container">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <a class="add-btn" (click)="onProfile()"></a>
+    <nav>
+      <ul>
+        <li>
+          <a (click)="onProfile()">
+            <i class="fa-regular fa-circle-user"></i>
+          </a>
+        </li>
+        <li><a routerLink="upload">Cargar archivos</a></li>
+        <li><a href="#">Colecciones</a></li>
+        <li><a href="#">Préstamos</a></li>
+        <li><a href="#">Agregar</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Book Section -->
+  <section class="book-section">
+    <div class="book-cover">
+      <div class="cover">Portada</div>
+      <div class="book-info">
+        <h2>Nombre del Libro</h2>
+        <p>Autor</p>
+        <p class="score">95/100</p>
+        <button class="btn-secondary">Ver reseña</button>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="book-status leyendo">
+      <h3>Estado: Leyendo</h3>
+      <div class="progress-circle">
+        <span>110 / 110</span>
+        <p>pág.</p>
+      </div>
+      <button class="btn-primary">Agregar a colección</button>
+    </div>
+  </section>
+
+</section>
