@@ -3,6 +3,9 @@ import { Login } from './features/pages/login/login';
 import { SignUp } from './features/pages/sign-up/sign-up';
 import { Home } from './features/pages/home/home';
 import {Profile} from './features/pages/profile/profile';
+import {Upload} from './features/pages/upload/upload';
+import {Collections} from './features/pages/collections/collections';
+import {Borrows} from './features/pages/borrows/borrows';
 
 export const routes: Routes = [
   {
@@ -23,6 +26,21 @@ export const routes: Routes = [
   {
     path:"profile",
     component:Profile,
+    pathMatch:"full"
+  },
+  {
+    path:"upload",
+    component:Upload,
+    pathMatch:"full"
+  },
+  {
+    path:"collections",
+    component:Collections,
+    pathMatch:"full"
+  },
+  {
+    path:"borrows",
+    component:Borrows,
     pathMatch:"full"
   },
   {

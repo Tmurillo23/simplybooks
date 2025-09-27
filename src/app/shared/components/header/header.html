@@ -1,4 +1,14 @@
 <header>
-<h1>SimplyBooks</h1>
+  @if(isLogged()){
+    <h1>SimplyBooks</h1>
+    <div class="search-section">
+      <form class="basic-search">
+        <input type="text" placeholder="Buscar..." id="basic-input">
+        <button type="submit">Buscar</button>
+      </form>
+    </div>
+  } @else {
+    <h1>SimplyBooks</h1>
+  }
 
 </header>

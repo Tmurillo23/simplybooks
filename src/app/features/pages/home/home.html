@@ -1,21 +1,5 @@
-<!--  TODO: NO hacer un sidebar sino que hacerlo arriba en el header cuando se esté logueado porque esto anda complejo XD-->
-
-<!-- Top bar -->
-<section class="top-bar">
-  <nav>
-    <ul>
-      <li class="search-container">
-        <input type="text" placeholder="Buscar..." [(ngModel)]="searchTerm" (input)="onSearch()" />
-        <i class="fa fa-search"></i>
-      </li>
-    </ul>
-  </nav>
-</section>
-
-<!-- Contenedor principal -->
-<div id="home-container">
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <section   class="sidebar">
     <a class="add-btn" (click)="onProfile()"></a>
     <nav>
       <ul>
@@ -24,35 +8,16 @@
             <i class="fa-regular fa-circle-user"></i>
           </a>
         </li>
-        <li><a routerLink="upload">Cargar archivos</a></li>
-        <li><a routerLink="">Colecciones</a></li>
-        <li><a routerLink="">Préstamos</a></li>
-        <li><a routerLink="">Agregar</a></li>
+        <li><a (click)="onLogout()"> Cerrar sesión</a> </li>
+        <li><a routerLink="upload">Agregar libros</a></li>
+        <li><a routerLink="collections">Colecciones</a></li>
+        <li><a routerLink="borrows">Préstamos</a></li>
+
       </ul>
     </nav>
-  </aside>
-
-  <!-- Book Section -->
-  <section class="book-section">
-    <div class="book-cover">
-     <img src="">
-    </div>
-    <div class="book-info">
-      <h2>Nombre del Libro</h2>
-      <p>Autor</p>
-      <p class="score">95/100</p>
-      <button class="btn-secondary">Ver reseña</button>
-    </div>
-
-    <!-- Status -->
-    <div class="book-status leyendo">
-      <h3>Estado: Leyendo</h3>
-      <div class="progress-circle">
-        <span>110 / 110</span>
-        <p>pág.</p>
-      </div>
-      <button class="btn-primary">Agregar a colección</button>
-    </div>
   </section>
 
-</div>
+
+<!-- Contenedor principal -->
+<div id="home-container">
+  </div>
