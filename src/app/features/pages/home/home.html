@@ -1,24 +1,22 @@
-  <!-- Sidebar -->
-  <section   id="sidebar">
-    <a class="add-btn" (click)="onProfile()"></a>
-    <nav>
-      <ul>
-        <li>
-          <a (click)="onProfile()">
-            <i class="fa-regular fa-circle-user"></i>
-          </a>
-        </li>
-        <li><a (click)="onLogout()"> Cerrar sesión</a> </li>
-        <li><a routerLink="upload">Agregar libros</a></li>
-        <li><a routerLink="collections">Colecciones</a></li>
-        <li><a routerLink="borrows">Préstamos</a></li>
-      </ul>
-    </nav>
-  </section>
-
-
 <!-- Contenedor principal -->
-<section id="books">
+<section id="bookshelves">
 
+  @if (bookshelvesItems().length > 0) {
+
+    @for (book of bookshelvesItems(); track book.name) {
+      <article class="book-card">
+        <img [src]="book.portrait_url" [alt]="book.name" class="book-cover" />
+
+        <div class="book-details">
+          <h3>{{ book.name }}</h3>
+          <p><strong>Páginas:</strong> {{ book.pages }}</p>
+          <p><strong>Leídas:</strong> {{ book.pages_read }} / {{ book.pages }}</p>
+          <p><strong>Rating:</strong> {{ book.rating }} ⭐</p>
+        </div>
+      </article>
+    }
+  } @else {
+    <span>Aún no tienes libros</span>
+  }
 
 </section>
