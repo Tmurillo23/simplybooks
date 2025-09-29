@@ -1,0 +1,41 @@
+<div class="book-container">
+  @if (book) {
+    <div class="book-card">
+      <div class="book-image">
+        <img
+          [src]="book.portrait_url || 'assets/default-cover.png'"
+          [alt]="book.title"
+        />
+      </div>
+
+      <div class="book-details">
+        <h2 class="book-title">{{ book.title }}</h2>
+        <h3 class="book-author">por {{ book.author }} ({{ book.year }})</h3>
+
+        @if (book.description) {
+          <p class="book-description">{{ book.description }}</p>
+        }
+
+        <p class="book-meta">
+          <strong>Páginas:</strong> {{ book.pages }}
+        </p>
+
+        @if (book.pages_read) {
+          <p class="book-meta">
+            <strong>Leídas:</strong> {{ book.pages_read }} / {{ book.pages }}
+          </p>
+        }
+
+        @if (book.rating) {
+          <p class="book-meta">
+            <strong>Rating:</strong> ⭐ {{ book.rating }}/5
+          </p>
+        }
+        <button (click)="addBookToShelf()">Agregar a mi estantería</button>
+
+      </div>
+    </div>
+  } @else {
+    <p class="no-book">No se encontró el libro.</p>
+  }
+</div>
