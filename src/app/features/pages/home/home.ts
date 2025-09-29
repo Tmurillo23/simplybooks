@@ -1,20 +1,13 @@
-import { Component,signal} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {Book} from '../../../shared/interfaces/book'
-
-export type BookShelfItem = Pick<Book, 'name' | 'pages' | 'pages_read' | 'rating' | 'portrait_url'>;
-
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import {BookshelfService} from '../../../shared/services/bookshelf';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.html',
-  imports: [
-    FormsModule
-  ],
+  imports: [FormsModule],
   styleUrl: './home.css'
 })
 export class Home {
-  bookshelvesItems = signal<BookShelfItem[]>([]);
-
+  constructor(public bookshelfService: BookshelfService) {}
 }
-

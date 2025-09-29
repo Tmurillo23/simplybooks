@@ -1,14 +1,12 @@
 <!-- Contenedor principal -->
 <section id="bookshelves">
-
-  @if (bookshelvesItems().length > 0) {
-
-    @for (book of bookshelvesItems(); track book.name) {
+  @if (bookshelfService.bookshelvesItems().length > 0) {
+    @for (book of bookshelfService.bookshelvesItems(); track book.title) {
       <article class="book-card">
-        <img [src]="book.portrait_url" [alt]="book.name" class="book-cover" />
+        <img [src]="book.portrait_url" [alt]="book.title" class="book-cover" />
 
         <div class="book-details">
-          <h3>{{ book.name }}</h3>
+          <h3>{{ book.title }}</h3>
           <p><strong>Páginas:</strong> {{ book.pages }}</p>
           <p><strong>Leídas:</strong> {{ book.pages_read }} / {{ book.pages }}</p>
           <p><strong>Rating:</strong> {{ book.rating }} ⭐</p>
@@ -18,5 +16,4 @@
   } @else {
     <span>Aún no tienes libros</span>
   }
-
 </section>
