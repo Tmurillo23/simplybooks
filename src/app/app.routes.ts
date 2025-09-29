@@ -6,6 +6,7 @@ import {Profile} from './features/pages/profile/profile';
 import {Upload} from './features/pages/upload/upload';
 import {Collections} from './features/pages/collections/collections';
 import {Borrows} from './features/pages/borrows/borrows';
+import {Book} from './features/pages/book/book';
 
 export const routes: Routes = [
   {
@@ -43,6 +44,12 @@ export const routes: Routes = [
     component:Borrows,
     pathMatch:"full"
   },
+  {
+    path:"book/:id",
+    component:Book,
+    pathMatch:"full"
+  },
+
   {
     path:"**",
     redirectTo:""
