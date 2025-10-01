@@ -4,5 +4,5 @@ export interface LoginResponse {
   redirectTo?:string;
 }
 
-export interface SignUpResponse extends LoginResponse{
-  }
+export interface SignUpResponse extends LoginResponse{}
+export interface ResetPasswordResponse extends LoginResponse{}

@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { User } from '../interfaces/user';
-import { LoginResponse, SignUpResponse } from '../interfaces/login-response';
+import { LoginResponse, SignUpResponse, ResetPasswordResponse } from '../interfaces/login-response';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +38,29 @@ export class Auth {
     this.verifyUserLogged();
     return {success: true, redirectTo: 'home'}
 
+  }
+
+  resetPassword(user: User): ResetPasswordResponse {
+    const userStr = localStorage.getItem(user.username);
+
+    if (!userStr) {
+      return { success: false, message: 'Usuario no encontrado' };
+    }
+
+    // Parse the data from the user's Json
+    const existingUser = JSON.parse(userStr) as User;
+
+    if (user.email && existingUser.email !== user.email) {
+      return { success: false, message: 'El correo electronico no coincide con el usuario' };
+    }
+
+    // Updating password and rePassword from the original user.
+    existingUser.password = user.password;
+    existingUser.rePassword = user.rePassword;
+
+    localStorage.setItem(user.username, JSON.stringify(existingUser));
+
+    return { success: true, redirectTo: 'login' };
   }
 
   private verifyUserLogged() {

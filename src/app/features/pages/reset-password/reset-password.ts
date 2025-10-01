@@ -7,13 +7,12 @@ import { CustomValidators } from '../../../validators/custom.validator';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-sign-up',
+  selector: 'app-reset-password',
   imports: [RouterLink, ReactiveFormsModule],
-  templateUrl: './sign-up.html',
-  styleUrl: './sign-up.css'
+  templateUrl: './reset-password.html',
+  styleUrl: './reset-password.css'
 })
-export class SignUp {
-
+export class ResetPassword {
   fb = inject(FormBuilder);
 
   router = inject(Router);
@@ -24,22 +23,21 @@ export class SignUp {
 
   ruta = '';
 
-  title = 'Registro de usuario';
+  title = 'Recuperar Contraseña';
 
   validators = [Validators.required, Validators.minLength(4)];
 
-  signUpForm = this.fb.group({
+  resetPasswordForm = this.fb.group({
     username:['', [Validators.required]],
     email:['', [Validators.required]],
-    password:['', this.validators],
-    rePassword:['',  this.validators],
+    newPassword:['', this.validators],
+    reNewPassword:['',  this.validators],
   }, {
-    validators : this.customValidators.controlValuesAreEqual('password', 'rePassword')
+    validators : this.customValidators.controlValuesAreEqual('newPassword', 'reNewPassword')
   })
 
-
-  onSignUp(){
-    if(!this.signUpForm.valid){
+  onResetPassword(){
+    if(!this.resetPasswordForm.valid){
         Swal.fire(
           {title: "Error",
             text: 'Faltan campos por diligenciar o sus datos son incorrectos.',
@@ -47,27 +45,31 @@ export class SignUp {
           });
       return;
     }
-    let user = this.signUpForm.value as User;
+    
+    let user: User = {
+      username: this.resetPasswordForm.value.username!,
+      email: this.resetPasswordForm.value.email!,
+      password: this.resetPasswordForm.value.newPassword!,
+      rePassword: this.resetPasswordForm.value.reNewPassword!
+    };
 
-    let signUpResponse = this.authService.signUp(user);
+    let resetPasswordResponse = this.authService.resetPassword(user);
 
-
-    if(!!signUpResponse.success) {
+    if(!!resetPasswordResponse.success) {
       Swal.fire(
         {
           title: "Success",
-          text: "Usuario creado con éxito",
+          text: "Contraseña cambiada exitosamente.",
           icon: "success",
         });
-      this.router.navigate([signUpResponse.redirectTo]);
+      this.router.navigate([resetPasswordResponse.redirectTo]);
     }
     else{
         Swal.fire(
           {title: "Error",
-            text: signUpResponse.message,
+            text: resetPasswordResponse.message,
             icon: "error"
           });
       }
     }
-
 }
