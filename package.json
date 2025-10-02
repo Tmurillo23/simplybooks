@@ -28,10 +28,12 @@
     "@angular/forms": "^20.2.0",
     "@angular/platform-browser": "^20.2.0",
     "@angular/router": "^20.2.0",
+    "@supabase/supabase-js": "^2.57.4",
     "@fortawesome/fontawesome-free": "^7.0.1",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.23.0",
     "tslib": "^2.3.0",
+    "uuid": "^13.0.0",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
