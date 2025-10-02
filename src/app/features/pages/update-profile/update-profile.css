@@ -9,7 +9,6 @@
   font-family: Arial, sans-serif;
 }
 
-/* Foto de perfil */
 .profile-header {
   display: flex;
   align-items: center;
@@ -22,10 +21,9 @@
   height: 80px;
   background: #ccc;
   border-radius: 50%;
-  border: 3px solid #272635;
+  border: 3px solid #463f3a;
 }
 
-/* Formulario */
 .profile-form .form-group {
   margin-bottom: 1.5rem;
 }
@@ -46,18 +44,33 @@
 
 /* Botón */
 .btn-primary {
-  margin: 10px;
+  margin: 20px;
   display: inline-block;
-  background: #272635;
-  color: white;
+  background: #b2967d;
+  color: black;
   padding: 0.7rem 1.5rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
   transition: background 0.3s;
 }
 
 .btn-primary:hover {
-  background: #44425a;
+  background: #d6ccc2;
+}
+
+.btn-secondary {
+  margin: 20px;
+  display: inline-block;
+  background: #d5bdaf;
+  color: black;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-secondary:hover{
+  background: #EDEDE9;
 }

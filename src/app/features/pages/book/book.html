@@ -3,9 +3,10 @@
     <div class="book-card">
       <div class="book-image">
         <img
-          [src]="book.portrait_url || 'assets/default-cover.png'"
+          [src]="book.portrait_url ? 'assets/images/' + book.portrait_url : 'assets/images/default-cover.png'"
           [alt]="book.title"
         />
+
       </div>
 
       <div class="book-details">

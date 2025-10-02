@@ -2,25 +2,23 @@ h1{
   text-align: center;
 }
 
-/* Contenedor principal */
 #upload-section {
   display: flex;
-  justify-content: space-between; /* separa los bloques */
-  align-items: flex-start;        /* alinea arriba */
-  gap: 40px;                      /* espacio entre bloques */
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
   margin-top: 20px;
 }
 
 /* Cada bloque */
 .manual-upload,
 .api-search {
-  flex: 1;             /* que ocupen anchos iguales */
-  background: #f9f9f9; /* opcional: estilo tarjeta */
+  flex: 1;
+  background: #f9f9f9;
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
-/* ========== POPUP ========= */
 .popup {
   position: fixed;
   top: 0;
@@ -81,7 +79,6 @@ h1{
   cursor: pointer;
 }
 
-/* ========== SEARCH ========== */
 .search-container {
   position: relative;
   width: 400px;

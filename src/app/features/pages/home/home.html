@@ -13,7 +13,6 @@
           <p><strong>Leídas:</strong> {{ book.pages_read }} / {{ book.pages }}</p>
           <p><strong>Rating:</strong> {{ book.rating }} ⭐</p>
 
-          <!-- Botones de acción -->
           <div class="book-actions">
             <button [routerLink]="['/editbook', book.id]" (click)="$event.stopPropagation()">
               ️ Editar
