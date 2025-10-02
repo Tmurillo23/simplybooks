@@ -8,4 +8,5 @@ export interface BookInterface {
   rating?: number;
   pages : number;
   pages_read?: number;
+  state?: string;
 }
