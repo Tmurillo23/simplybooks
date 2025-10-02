@@ -1,17 +1,14 @@
-import { Component,inject } from '@angular/core';
-import {RouterLink} from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Auth } from '../../../shared/services/auth';
 
 @Component({
   selector: 'app-profile',
-  imports: [
-    RouterLink
-  ],
+  imports: [RouterLink],
   templateUrl: './profile.html',
-  styleUrl: './profile.css'
+  styleUrls: ['./profile.css']
 })
 export class Profile {
-  authService = inject(Auth);
-  username = this.authService.getUserLogged();
-  email = 'emmfdsfdksj';
+  private authService = inject(Auth);
+  user = this.authService.getUserLogged();
 }
