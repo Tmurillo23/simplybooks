@@ -1,9 +1,6 @@
-export interface User {
-  id: string;
-  username: string;
-  email: string;
-  name: string;
-  password?: string;
-  avatarUrl?: string;
-  bio?: string;
+export interface User{
+  username:string;
+  password:string;
+  email:string;
+  rePassword?:string;
 }
