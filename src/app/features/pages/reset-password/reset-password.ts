@@ -45,12 +45,12 @@ export class ResetPassword {
           });
       return;
     }
-    
+
     let user: User = {
       username: this.resetPasswordForm.value.username!,
       email: this.resetPasswordForm.value.email!,
       password: this.resetPasswordForm.value.newPassword!,
-      rePassword: this.resetPasswordForm.value.reNewPassword!
+      rePassword: this.resetPasswordForm.value.reNewPassword!,
     };
 
     let resetPasswordResponse = this.authService.resetPassword(user);
