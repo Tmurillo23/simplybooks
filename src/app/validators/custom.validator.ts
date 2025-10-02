@@ -49,4 +49,14 @@ export class CustomValidators {
       return null;
     };
   }
+
+  passwordComplexityValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value as string;
+      if (!value) return null;
+      const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/;
+
+      return regex.test(value) ? null : { passwordComplexity: true };
+    };
+  }
 }
