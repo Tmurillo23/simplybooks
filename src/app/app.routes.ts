@@ -8,6 +8,8 @@ import { Collections } from './features/pages/collections/collections';
 import { Borrows } from './features/pages/borrows/borrows';
 import { Book } from './features/pages/book/book';
 import { ResetPassword } from './features/pages/reset-password/reset-password';
+import {UpdateBook} from './features/pages/update-book/update-book';
+import {UpdateProfile} from './features/pages/update-profile/update-profile';
 
 export const routes: Routes = [
   {
@@ -36,6 +38,11 @@ export const routes: Routes = [
     pathMatch:"full"
   },
   {
+    path:"update-profile",
+    component:UpdateProfile,
+    pathMatch:"full"
+  },
+  {
     path:"upload",
     component:Upload,
     pathMatch:"full"
@@ -55,7 +62,11 @@ export const routes: Routes = [
     component:Book,
     pathMatch:"full"
   },
-
+  {
+    path:"editbook/:id",
+    component:UpdateBook,
+    pathMatch:"full"
+  },
   {
     path:"**",
     redirectTo:""

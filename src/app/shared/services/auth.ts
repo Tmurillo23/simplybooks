@@ -14,59 +14,51 @@ export class Auth {
   }
 
   login(user: User): LoginResponse {
+    if (!user.username) return { success: false };
 
-    let userSrt = localStorage.getItem(user.username)
+    // Buscar todos los usuarios y encontrar el que tenga el username indicado
+    const storedUser = this.getAllUsers().find(u => u.username === user.username);
+    if (!storedUser) return { success: false };
 
-    if (userSrt && user.password === JSON.parse(userSrt)['password']) {
-      sessionStorage.setItem('userLogged', user.username);
+    if (user.password === storedUser.password) {
+      sessionStorage.setItem('userLogged', storedUser.email); // Guardamos email en sesión
       this.verifyUserLogged();
-      return {success: true, redirectTo: "home"};
+      return { success: true, redirectTo: 'home' };
     }
 
-    return {success: false};
-
+    return { success: false };
   }
 
   signUp(user: User): SignUpResponse {
-
-    if (localStorage.getItem(user.username)) {
-      return {success: false, message: 'Usuario ya existe'};
+    if (!user.username || !user.email) return { success: false, message: 'Usuario inválido' };
+    if (localStorage.getItem(user.email)) {
+      return { success: false, message: 'Usuario ya existe' };
     }
 
-    localStorage.setItem(user.username, JSON.stringify(user));
-    sessionStorage.setItem('userLogged', user.username);
+    localStorage.setItem(user.email, JSON.stringify(user)); // Guardamos con email como key
+    sessionStorage.setItem('userLogged', user.email); // Guardamos email en sesión
     this.verifyUserLogged();
-    return {success: true, redirectTo: 'home'}
-
+    return { success: true, redirectTo: 'home' };
   }
 
   resetPassword(user: User): ResetPasswordResponse {
-    const userStr = localStorage.getItem(user.username);
+    const email = sessionStorage.getItem('userLogged') || user.email;
+    if (!email) return { success: false, message: 'Usuario no encontrado' };
 
-    if (!userStr) {
-      return { success: false, message: 'Usuario no encontrado' };
-    }
+    const userStr = localStorage.getItem(email);
+    if (!userStr) return { success: false, message: 'Usuario no encontrado' };
 
-    // Parse the data from the user's Json
-    const existingUser = JSON.parse(userStr) as User;
+    const storedUser = JSON.parse(userStr) as User;
+    storedUser.password = user.password;
+    storedUser.rePassword = user.rePassword;
 
-    if (user.email && existingUser.email !== user.email) {
-      return { success: false, message: 'El correo electronico no coincide con el usuario' };
-    }
-
-    // Updating password and rePassword from the original user.
-    existingUser.password = user.password;
-    existingUser.rePassword = user.rePassword;
-
-    localStorage.setItem(user.username, JSON.stringify(existingUser));
-
+    localStorage.setItem(email, JSON.stringify(storedUser));
     return { success: true, redirectTo: 'login' };
   }
 
   private verifyUserLogged() {
-    this.isLogged.set(!!sessionStorage.getItem('userLogged'))
+    this.isLogged.set(!!sessionStorage.getItem('userLogged'));
   }
-
 
   logout() {
     sessionStorage.clear();
@@ -74,17 +66,37 @@ export class Auth {
   }
 
   getUserLogged() {
+    const email = sessionStorage.getItem('userLogged');
+    if (!email) return { username: 'Bienvenido', email: 'ejemplo@mail.com', password: '' };
 
-    if (!!sessionStorage.getItem('userLogged')) {
-      return {
-        username: sessionStorage.getItem('userLogged'),
-        email: sessionStorage.getItem('userLogged')!
-      }
-    }
+    const userStr = localStorage.getItem(email);
+    if (!userStr) return { username: 'Bienvenido', email: 'ejemplo@mail.com', password: '' };
+
+    const user = JSON.parse(userStr) as User;
     return {
-      username: 'Bienvenido',
-      email: 'ejemplo@mail.com'
-    }
+      username: user.username,
+      email: user.email,
+      password: user.password
+    };
+  }
+
+  updateUser(updatedUser: User) {
+    const email = sessionStorage.getItem('userLogged');
+    if (!email) return { success: false, message: 'No hay sesión activa' };
+
+    localStorage.setItem(email, JSON.stringify(updatedUser));
+    return { success: true };
+  }
+
+  private getAllUsers(): User[] {
+    return Object.keys(localStorage)
+      .map(key => {
+        try {
+          return JSON.parse(localStorage.getItem(key) || '');
+        } catch {
+          return null;
+        }
+      })
+      .filter((u): u is User => !!u);
   }
 }
-

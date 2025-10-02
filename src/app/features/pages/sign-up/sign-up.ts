@@ -15,59 +15,49 @@ import Swal from 'sweetalert2';
 export class SignUp {
 
   fb = inject(FormBuilder);
-
   router = inject(Router);
-
   authService = inject(Auth);
-
   customValidators = inject(CustomValidators);
-
-  ruta = '';
 
   title = 'Registro de usuario';
 
-  validators = [Validators.required, Validators.minLength(4)];
-
+  // Formulario con validadores
   signUpForm = this.fb.group({
-    username:['', [Validators.required]],
-    email:['', [Validators.required]],
-    password:['', this.validators],
-    rePassword:['',  this.validators],
+    username: ['', [Validators.required], [this.customValidators.usernameExistsValidator()]],
+    email: ['', [Validators.required, this.customValidators.customEmailValidator()]],
+    password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(16), this.customValidators.passwordComplexityValidator()]],
+    rePassword: ['', [Validators.required, Validators.minLength(4)]],
   }, {
-    validators : this.customValidators.controlValuesAreEqual('password', 'rePassword')
-  })
+    validators: this.customValidators.controlValuesAreEqual('password', 'rePassword')
+  });
 
-
-  onSignUp(){
-    if(!this.signUpForm.valid){
-        Swal.fire(
-          {title: "Error",
-            text: 'Faltan campos por diligenciar o sus datos son incorrectos.',
-            icon: "error"
-          });
+  onSignUp() {
+    if (!this.signUpForm.valid) {
+      Swal.fire({
+        title: "Error",
+        text: 'Faltan campos por diligenciar o sus datos son incorrectos.',
+        icon: "error"
+      });
       return;
     }
-    let user = this.signUpForm.value as User;
 
+    let user = this.signUpForm.value as User;
     let signUpResponse = this.authService.signUp(user);
 
-
-    if(!!signUpResponse.success) {
-      Swal.fire(
-        {
-          title: "Success",
-          text: "Usuario creado con éxito",
-          icon: "success",
-        });
+    if (signUpResponse?.success) {
+      Swal.fire({
+        title: "Success",
+        text: "Usuario creado con éxito",
+        icon: "success",
+      });
       this.router.navigate([signUpResponse.redirectTo]);
+    } else {
+      Swal.fire({
+        title: "Error",
+        text: signUpResponse.message,
+        icon: "error"
+      });
     }
-    else{
-        Swal.fire(
-          {title: "Error",
-            text: signUpResponse.message,
-            icon: "error"
-          });
-      }
-    }
+  }
 
 }
