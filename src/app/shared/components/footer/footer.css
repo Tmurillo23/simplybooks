@@ -1,0 +1,8 @@
+footer {
+  background-color: #d5bdaf;
+  color: black ;
+  padding: 10px;
+  display: flex;
+  text-align: left;
+  font-size: 25px;
+}

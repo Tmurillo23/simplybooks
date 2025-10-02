@@ -6,6 +6,7 @@
   padding: 1rem;
   background: #f3f3f3;
   justify-content: flex-start;
+  min-height: 100vh;
 }
 
 /* Tarjeta de libro */
@@ -26,9 +27,8 @@
   transform: translateY(-3px);
 }
 
-/* Imagen portada */
 .book-cover {
-  width: 100px;          /* portada más pequeña */
+  width: 100px;
   height: 150px;
   object-fit: cover;
   border-radius: 4px;
@@ -36,7 +36,6 @@
   border: 1px solid #ddd;
 }
 
-/* Detalles del libro */
 .book-details {
   font-size: 0.75rem; /* texto pequeño */
   line-height: 1.2;

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { BookshelfService } from '../../../shared/services/bookshelf';
 import { BookInterface } from '../../../shared/interfaces/book-interface';
 import {FormsModule} from '@angular/forms';
@@ -8,8 +8,7 @@ import {FormsModule} from '@angular/forms';
   selector: 'app-update-book',
   templateUrl: './update-book.html',
   imports: [
-    FormsModule
-  ],
+    FormsModule],
   styleUrl: './update-book.css'
 })
 export class UpdateBook {
@@ -34,6 +33,7 @@ export class UpdateBook {
        if (this.bookshelfService.updateBook(this.book)){
          alert('Libro actualizado con exito')
          this.router.navigate([`/editbook/${this.book.id}`]);
+         this.router.navigate(['/home']);
          return;
        } else{
          alert('Error en la actualización')

@@ -1,48 +1,18 @@
-header {
-  background-color: #280003; /* franja oscura arriba */
-  color: #FFFFFF;           /* texto blanco */
-  padding: 0.8rem 1rem;
-  text-align: center;
-  border-bottom: 2px solid #C2847A; /* línea separadora */
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-}
-
-header h1 {
+html, body, simplybooks {
+  height: 100%;
   margin: 0;
-  font-size: 50px;
-}
-
-
-body, simplybooks{
+  padding: 0;
   font-family: 'Ubuntu', 'Courier New', Courier, monospace;
-  color:black;
+  color: black;
   background-color: #f1f1f1;
-  margin: 0px;
-  padding: 0px;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
-main{
-  min-height: auto;
-  flex:1;
+
+main {
+  flex: 1;
   padding: 10px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-/* Footer */
-footer {
-  background-color: #280003;
-  color: #FFF;
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  color: white;
-  font-size: 15px;
 }

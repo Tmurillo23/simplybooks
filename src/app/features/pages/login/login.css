@@ -16,7 +16,7 @@
 
 input[type="text"], input[type="password"]{
   background-color: #FFF;
-  border: 2px solid #C2847A;
+  border: 2px solid #EDEDE9;
   color: black;
   padding:10px;
   font-size: 16px;
@@ -26,7 +26,7 @@ input[type="text"], input[type="password"]{
   margin-bottom: 20px;
 }
 input[type="text"]:focus,  input[type="password"]:focus{
-  border-color: #C2847A;
+  border-color: #EDEDE9;
   outline: none;
 }
 
@@ -42,21 +42,21 @@ input[type="text"]:focus,  input[type="password"]:focus{
 
 
 a.primary {
-  background-color: #BAA898;
+  background-color: #F5EBE0;
   margin-bottom: 20px;
   cursor: pointer;
 }
 
 a.primary:hover {
-  background-color: #848586;
+  background-color: #D6CCC2;
 }
 
 a.secondary {
-  background-color: #BAA898;
+  background-color: #E3D5CA;
   margin-bottom: 20px;
   cursor: pointer;
 }
 
 a.secondary:hover {
-  background-color: #848586;
+  background-color: #D5BDAF;
 }
