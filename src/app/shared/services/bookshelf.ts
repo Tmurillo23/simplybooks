@@ -3,25 +3,32 @@ import { BookInterface } from '../interfaces/book-interface';
 
 export type BookShelfItem = Pick<
   BookInterface,
-  'title' | 'author' | 'year' | 'pages' | 'pages_read' | 'rating' | 'portrait_url'
+  'id' | 'title' | 'author' | 'year' | 'portrait_url' | 'description' | 'rating' | 'pages' | 'pages_read'
 >;
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookshelfService {
-  // señal reactiva que guarda los libros de la estantería
   private _bookshelf = signal<BookShelfItem[]>([]);
 
   get bookshelvesItems() {
     return this._bookshelf;
   }
 
-  addBook(book: BookShelfItem) {
-    this._bookshelf.update(items => [...items, book]);
+  addBook(book: BookShelfItem): boolean {
+    let exists = false;
+
+    this._bookshelf.update(items => {
+      exists = items.some(b => b.id === book.id);
+      return exists ? items : [...items, book];
+    });
+
+    return !exists; // true = agregado, false = ya existía
   }
 
-  removeBook(title: string) {
-    this._bookshelf.update(items => items.filter(b => b.title !== title));
+  removeBook(id: number) {
+    this._bookshelf.update(items => items.filter(b => b.id !== id));
   }
 }
+

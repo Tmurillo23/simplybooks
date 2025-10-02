@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { BooksService } from '../../../shared/services/books-service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BookInterface } from '../../../shared/interfaces/book-interface';
-import {BookshelfService} from '../../../shared/services/bookshelf';
+import { BookshelfService } from '../../../shared/services/bookshelf';
 
 @Component({
   selector: 'app-book',
@@ -14,6 +14,7 @@ export class Book {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private bookService: BooksService,
     private bookshelfService: BookshelfService
   ) {}
@@ -25,15 +26,24 @@ export class Book {
 
   addBookToShelf() {
     if (this.book) {
-      this.bookshelfService.addBook({
+      const added = this.bookshelfService.addBook({
+        id: this.book.id,
         title: this.book.title,
         author: this.book.author,
         year: this.book.year,
         pages: this.book.pages,
-        pages_read: 0,
-        rating: 0,
-        portrait_url: 'assets/default-cover.jpg'
+        pages_read: this.book.pages_read ?? 0,
+        rating: this.book.rating ?? 0,
+        portrait_url: this.book.portrait_url ?? 'assets/default-cover.jpg',
+        description: this.book.description ?? ''
       });
+
+      if (added) {
+        alert('✅ Libro agregado con éxito a tu estantería');
+        this.router.navigate(['/home']);
+      } else {
+        alert(' El libro ya está en tu estantería');
+      }
     }
   }
 }
