@@ -8,6 +8,7 @@ import { Collections } from './features/pages/collections/collections';
 import { Borrows } from './features/pages/borrows/borrows';
 import { Book } from './features/pages/book/book';
 import { ResetPassword } from './features/pages/reset-password/reset-password';
+import {UpdateBook} from './features/pages/update-book/update-book';
 
 export const routes: Routes = [
   {
@@ -55,7 +56,11 @@ export const routes: Routes = [
     component:Book,
     pathMatch:"full"
   },
-
+  {
+    path:"editbook/:id",
+    component:UpdateBook,
+    pathMatch:"full"
+  },
   {
     path:"**",
     redirectTo:""

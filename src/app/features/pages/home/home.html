@@ -1,15 +1,27 @@
 <!-- Contenedor principal -->
 <section id="bookshelves">
   @if (bookshelfService.bookshelvesItems().length > 0) {
-    @for (book of bookshelfService.bookshelvesItems(); track book.title) {
-      <article class="book-card">
-        <img [src]="book.portrait_url" [alt]="book.title" class="book-cover" />
+    @for (book of bookshelfService.bookshelvesItems(); track book.id) {
+      <article class="book-card" [routerLink]="['/book', book.id]">
+        <img [src]="book.portrait_url || 'assets/default-cover.png'" [alt]="book.title" class="book-cover" />
 
         <div class="book-details">
           <h3>{{ book.title }}</h3>
+          <p><strong>Autor:</strong> {{ book.author }}</p>
+          <p><strong>Año:</strong> {{ book.year }}</p>
           <p><strong>Páginas:</strong> {{ book.pages }}</p>
           <p><strong>Leídas:</strong> {{ book.pages_read }} / {{ book.pages }}</p>
           <p><strong>Rating:</strong> {{ book.rating }} ⭐</p>
+
+          <!-- Botones de acción -->
+          <div class="book-actions">
+            <button [routerLink]="['/editbook', book.id]" (click)="$event.stopPropagation()">
+              ️ Editar
+            </button>
+            <button (click)="removeBook(book.id); $event.stopPropagation()">
+               Eliminar
+            </button>
+          </div>
         </div>
       </article>
     }

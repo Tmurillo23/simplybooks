@@ -31,8 +31,10 @@
             <strong>Rating:</strong> ⭐ {{ book.rating }}/5
           </p>
         }
-        <button (click)="addBookToShelf()">Agregar a mi estantería</button>
 
+        @if (!isInShelf()) {
+          <button (click)="addBookToShelf()">Agregar a mi estantería</button>
+        }
       </div>
     </div>
   } @else {
