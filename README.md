@@ -1,60 +1,71 @@
-# Simplybooks
+# Biblioteca Personal - SimplyBooks
 
-## README POR HACER
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.2.
+Un proyecto web diseñado para que los amantes de la lectura puedan **gestionar su biblioteca personal** y al mismo tiempo disfrutar de un espacio social donde compartir y descubrir libros.
 
-## Development server
+---
 
-To start a local development server, run:
+## Descripción del Proyecto
 
-```bash
-ng serve
-```
+La aplicación combina dos mundos:
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+1. **Gestión personal de biblioteca**: organiza tus libros, haz seguimiento de lecturas, controla préstamos y guarda tus archivos digitales.
+2. **Red social literaria**: comparte reseñas, sigue a otros lectores, interactúa con sus publicaciones y descubre nuevos títulos.
 
-## Code scaffolding
+Es una plataforma pensada para quienes quieren llevar un control de su lectura, pero también desean conectar con otros usuarios que comparten su pasión por los libros.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+## Funcionalidades principales
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Gestión Personal
 
-```bash
-ng generate --help
-```
+* Catálogo digital de libros (físicos y digitales).
+* Seguimiento de progreso de lectura.
+* Organización en colecciones temáticas.
+* Control de préstamos de libros físicos.
+* Almacenamiento privado de archivos digitales (PDF, TXT, EPUB).
 
-## Building
+### Funciones Sociales
 
-To build the project run:
+* Creación y publicación de reseñas con calificación por estrellas.
+* Seguimiento de otros usuarios y visualización de su actividad literaria.
+* Interacción mediante “me gusta” y comentarios.
+* Descubrimiento de nuevos libros y lectores.
+* Compartir perfiles, reseñas y colecciones mediante enlaces.
 
-```bash
-ng build
-```
+---
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Estado del Proyecto
 
-## Running unit tests
+Actualmente, el proyecto incluye:
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+* Registro y autenticación de usuarios.
+* Gestión básica de libros (agregar, visualizar y eliminar).
+* Subida de archivos digitales.
 
-```bash
-ng test
-```
+Próximamente se incorporarán:
 
-## Running end-to-end tests
+* Sistema completo de reseñas con likes y comentarios.
+* Seguimiento social (seguidores y seguidos).
+* Estadísticas y progreso de lectura.
+* Colecciones temáticas avanzadas.
+* Dashboard de préstamos.
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
+## Limitaciones conocidas
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+* Los archivos digitales son **privados y no compartibles**.
+* No hay chat privado ni mensajería directa entre usuarios.
+* No existen recomendaciones automáticas ni contenido destacado.
+* El correo electrónico se usa como identificador principal y no puede modificarse.
+---
 
-## Additional Resources
+## Cómo empezar
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+1. Clona el repositorio.
+2. Instala las dependencias.
+3. Levanta el proyecto en tu entorno local.
+
+*(Los pasos detallados para ejecutar el proyecto se encuentran en la documentación técnica).*
+
