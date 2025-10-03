@@ -16,6 +16,7 @@ export class Home implements OnInit {
   async ngOnInit() {
     await this.bookshelfService.loadUserFiles(); // Cargar archivos del usuario al inicializar el componente
   }
+  
   removeBook(id: number) {
     this.bookshelfService.removeBook(id);
     alert('📚 Libro eliminado de la estantería');

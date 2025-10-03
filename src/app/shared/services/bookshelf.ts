@@ -42,7 +42,7 @@ export class BookshelfService {
 
     try {
       const files = await this.storageService.listUserFiles(user.username);
-      console.log(files)
+
       const bookItems: BookShelfItem[] = files.map(file => {
         const fullPath = `${user.username}/${file.name}`;
         const fileUrl = this.storageService.getFileUrl(fullPath);
@@ -62,8 +62,20 @@ export class BookshelfService {
           pages_read: 0
         };
       });
-      console.log(bookItems)
-      this._bookshelf.set(bookItems);
+
+      this._bookshelf.update(currentItems => {
+        // Combinar items obtenidos de la DB con los ya existentes en this._bookshelf
+        const combinedItems = [...currentItems];
+        
+        bookItems.forEach(newBook => {
+          const exists = combinedItems.some(existingBook => existingBook.id === newBook.id);
+          if (!exists) {
+            combinedItems.push(newBook);
+          }
+        });
+        
+        return combinedItems;
+      });
     } catch (error) {
       console.error('Error loading user files:', error);
     }
