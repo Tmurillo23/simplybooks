@@ -4,6 +4,7 @@ export interface BookInterface {
   author: string;
   year: number;
   portrait_url?: string;
+  file_url?: string;
   description?: string;
   rating?: number;
   pages : number;

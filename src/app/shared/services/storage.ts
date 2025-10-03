@@ -21,7 +21,25 @@ export class Storage {
         .catch(error=>console.error(error))
   }
 
-  getFileUrl(fullPhat:string){
-    return `${SUPABASE_URL}/storage/v1/object/public/${fullPhat}`;
+  getFileUrl(fullPath: string) {
+    return `${SUPABASE_URL}/storage/v1/object/public/${SUPABASE_FILES_BUCKET}/${fullPath}`;
+  }
+
+  async listUserFiles(username: string) {
+    try {
+      const { data, error } = await this.supabase.storage
+        .from(SUPABASE_FILES_BUCKET)
+        .list(username);
+
+      if (error) {
+        console.error('Error listing files:', error);
+        return [];
+      }
+
+      return data || [];
+    } catch (error) {
+      console.error('Error listing user files:', error);
+      return [];
+    }
   }
 }

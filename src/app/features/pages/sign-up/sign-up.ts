@@ -26,7 +26,7 @@ export class SignUp {
     username: ['', [Validators.required], [this.customValidators.usernameExistsValidator()]],
     email: ['', [Validators.required, this.customValidators.customEmailValidator()]],
     password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(16), this.customValidators.passwordComplexityValidator()]],
-    rePassword: ['', [Validators.required, Validators.minLength(4)]],
+    rePassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(16), this.customValidators.passwordComplexityValidator()]],
   }, {
     validators: this.customValidators.controlValuesAreEqual('password', 'rePassword')
   });

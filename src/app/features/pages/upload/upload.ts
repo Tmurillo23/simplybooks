@@ -5,6 +5,7 @@ import { BookInterface } from '../../../shared/interfaces/book-interface';
 import { BooksService } from '../../../shared/services/books-service';
 import { Auth } from '../../../shared/services/auth';
 import { Storage } from '../../../shared/services/storage';
+import { BookshelfService } from '../../../shared/services/bookshelf';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -26,6 +27,7 @@ export class Upload{
 
   storageService = inject(Storage);
   authService = inject(Auth);
+  bookshelfService = inject(BookshelfService);
   
   constructor(
     private bookService: BooksService,
@@ -35,10 +37,21 @@ export class Upload{
     this.books = this.bookService.getBooks();
   }
 
+  // Generar ID estable basado en la ruta del archivo
+  private generateStableId(filePath: string): number {
+    let hash = 0;
+    for (let i = 0; i < filePath.length; i++) {
+      const char = filePath.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return Math.abs(hash);
+  }
+
   // Evento cuando selecciona un archivo
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
+    if (input.files && input.files.length > 0 && input.files.length < 2) {
 
       this.selectedFile = input.files[0];
       this.fileUsername = this.authService.getUserLogged().username!;
@@ -46,8 +59,35 @@ export class Upload{
         .then(response => {
 
           if (response && response.data) {
-            const url = this.storageService.getFileUrl(response.data.fullPath);
-            console.log(url)
+            const fullPath = `${this.fileUsername}/${response.data.path.split('/').pop()}`;
+            const url = this.storageService.getFileUrl(fullPath);
+            const fullName = this.selectedFile!.name;
+            const nameWithoutExt = fullName.substring(0, fullName.lastIndexOf('.')) || fullName;
+
+            const stableId = this.generateStableId(response.data.fullPath);
+            
+            const newBook = {
+              id:  stableId, // ID temporal
+              title: nameWithoutExt,
+              author: '',
+              year: 0,
+              portrait_url: '',
+              file_url: url,
+              description: '',
+              rating: 0,
+              pages: 0,
+              pages_read: 0
+            };
+
+            // Agregar al bookshelf
+            const added = this.bookshelfService.addBook(newBook);
+
+            if (added) {
+              Swal.fire('Exitoso', 'Libro agregado a tu biblioteca', 'success');
+              this.router.navigate(['/home']);
+            } else {
+              Swal.fire('Error', 'El libro ya existe en tu biblioteca', 'error');
+            }
           } else if (response) {
             Swal.fire('Error!!')
           }

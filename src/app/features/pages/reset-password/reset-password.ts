@@ -30,8 +30,8 @@ export class ResetPassword {
   resetPasswordForm = this.fb.group({
     username:['', [Validators.required]],
     email:['', [Validators.required]],
-    newPassword:['', this.validators],
-    reNewPassword:['',  this.validators],
+    newPassword:['', [Validators.required, Validators.minLength(6), Validators.maxLength(16), this.customValidators.passwordComplexityValidator()]],
+    reNewPassword:['', [Validators.required, Validators.minLength(6), Validators.maxLength(16), this.customValidators.passwordComplexityValidator()]],
   }, {
     validators : this.customValidators.controlValuesAreEqual('newPassword', 'reNewPassword')
   })
