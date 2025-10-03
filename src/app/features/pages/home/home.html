@@ -8,7 +8,7 @@
         (click)="book.file_url ? downloadFile(book) : null"
         [class.downloadable]="book.file_url">
         
-        <img [src]="book.portrait_url || 'assets/default-cover.png'" [alt]="book.title" class="book-cover" />
+        <img [src]="book.portrait_url || 'assets/default-cover.jpg'" [alt]="book.title" class="book-cover" />
 
         <div class="book-details">
           <h3>{{ book.title }}</h3>
