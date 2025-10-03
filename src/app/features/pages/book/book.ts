@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BooksService } from '../../../shared/services/books-service';
 import { BookshelfService } from '../../../shared/services/bookshelf';
 import { BookInterface } from '../../../shared/interfaces/book-interface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-book',
@@ -42,7 +43,11 @@ export class Book {
         portrait_url: this.book.portrait_url || 'assets/default-cover.png',
         description: this.book.description || ''
       });
-      alert('✅ Libro agregado con éxito');
+      Swal.fire({
+        title: 'Éxito',
+        text: 'Libro agregado con éxito',
+        icon: 'success',
+      });
       this.router.navigate(['/home']);
     }
   }

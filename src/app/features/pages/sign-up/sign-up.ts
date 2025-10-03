@@ -54,7 +54,7 @@ export class SignUp {
     } else {
       Swal.fire({
         title: "Error",
-        text: signUpResponse.message,
+        text: "El formulario no es válido",
         icon: "error"
       });
     }

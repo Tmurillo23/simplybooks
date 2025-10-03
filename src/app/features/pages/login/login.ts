@@ -27,7 +27,7 @@ export class Login {
   onLogin() {
     if (!this.loginForm.valid) {
       Swal.fire({
-        title: "Ops!",
+        title: "Error",
         text: "El formulario no es valido",
         icon: "error"
       });
@@ -41,7 +41,7 @@ export class Login {
       return;
     }
     Swal.fire({
-      title: "Ops!",
+      title: "Error",
       text: response.message,
       icon: "error"
     });

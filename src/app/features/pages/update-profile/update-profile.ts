@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Auth } from '../../../shared/services/auth';
 import { CustomValidators } from '../../../validators/custom.validator';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-update-profile',
@@ -42,7 +43,12 @@ export class UpdateProfile implements OnInit {
 
   onSubmit() {
     if (!this.profileForm.valid) {
-      alert('Por favor revisa el nombre de usuario.');
+      Swal.fire({
+        title: 'Error',
+        text: 'Por favor revisa el nombre de usuario',
+        icon: 'warning',
+      })
+
       return;
     }
 
@@ -54,9 +60,17 @@ export class UpdateProfile implements OnInit {
     const response = this.authService.updateUser(updatedUser);
 
     if (!response.success) {
-      alert(response.message || 'Error al actualizar el perfil ');
+      Swal.fire({
+        title: 'Error',
+        text: response.message || 'Error al actualizar el perfil ',
+        icon: 'error',
+      });
     } else {
-      alert('Nombre de usuario actualizado correctamente ✅');
+      Swal.fire({
+        title: 'Exito',
+        text: 'Nombre de usuario actualizado correctamente',
+        icon: 'success',
+      });
       this.router.navigate(['/profile']);
     }
   }

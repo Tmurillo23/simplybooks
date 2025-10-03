@@ -14,34 +14,44 @@ export class Home implements OnInit {
   constructor(public bookshelfService: BookshelfService) {}
 
   async ngOnInit() {
-    await this.bookshelfService.loadUserFiles(); // Cargar archivos del usuario al inicializar el componente
+    await this.bookshelfService.loadUserFiles();
   }
-  
+
   removeBook(id: number) {
     this.bookshelfService.removeBook(id);
-    alert('📚 Libro eliminado de la estantería');
+
+    Swal.fire({
+      title: 'Eliminado',
+      text: 'Libro eliminado de la estantería',
+      icon: 'success'
+    });
   }
 
   downloadFile(book: BookShelfItem) {
     if (!book.file_url) {
-      Swal.fire('Error', 'No hay archivo para descargar', 'error');
+      Swal.fire({
+        title: 'Error',
+        text: 'No hay archivo para descargar',
+        icon: 'error'
+      });
       return;
     }
 
-    // Crear un enlace temporal para descargar el archivo
     const link = document.createElement('a');
     link.href = book.file_url;
-    
-    // Extraer el nombre del archivo de la URL o usar el titulo del libro
+
     const fileName = this.getFileNameFromUrl(book.file_url) || `${book.title}.pdf`;
     link.download = fileName;
-    
+
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 
-    // Mostrar confirmacion
-    Swal.fire('Descarga iniciada', `Descargando: ${fileName}`, 'info');
+    Swal.fire({
+      title: 'Descarga iniciada',
+      text: `Descargando: ${fileName}`,
+      icon: 'info'
+    });
   }
 
   private getFileNameFromUrl(url: string): string {
@@ -53,5 +63,4 @@ export class Home implements OnInit {
       return '';
     }
   }
-  
 }

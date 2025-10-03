@@ -14,8 +14,9 @@ import Swal from 'sweetalert2';
   imports: [
     FormsModule
   ],
-  styleUrls: ['./upload.css']
+  styleUrl: './upload.css'
 })
+
 export class Upload{
   title : string = 'Agregar libros'
   showPopup = false;
@@ -28,7 +29,7 @@ export class Upload{
   storageService = inject(Storage);
   authService = inject(Auth);
   bookshelfService = inject(BookshelfService);
-  
+
   constructor(
     private bookService: BooksService,
     private router: Router,
@@ -65,7 +66,7 @@ export class Upload{
             const nameWithoutExt = fullName.substring(0, fullName.lastIndexOf('.')) || fullName;
 
             const stableId = this.generateStableId(response.data.fullPath);
-            
+
             const newBook = {
               id:  stableId, // ID temporal
               title: nameWithoutExt,
@@ -83,15 +84,18 @@ export class Upload{
             const added = this.bookshelfService.addBook(newBook);
 
             if (added) {
-              Swal.fire('Exitoso', 'Libro agregado a tu biblioteca', 'success');
+              Swal.fire(
+                { title: "Exitoso",
+                  text: "Libro agregado a tu biblioteca",
+                  icon: "success"});
               this.router.navigate(['/home']);
             } else {
-              Swal.fire('Error', 'El libro ya existe en tu biblioteca', 'error');
+              Swal.fire({title: 'Error', text: 'El libro ya existe en tu biblioteca', icon:'error'});
             }
           } else if (response) {
             Swal.fire('Error!!')
           }
-          
+
         }
         );
     }

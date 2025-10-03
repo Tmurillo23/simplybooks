@@ -1,0 +1,99 @@
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+header {
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.update-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  background-color: #EDEDE9;
+  box-sizing: border-box;
+  overflow: hidden; /* no permite scroll interno */
+}
+
+
+.update-form {
+  margin-top: 100px;
+  background-color: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 10px;
+  padding: 15px;
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.update-form input,
+.update-form textarea {
+  flex-shrink: 0;
+  padding: 6px;
+  border: 1px solid #D6CCC2;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.update-form textarea {
+  resize: none;
+  flex-grow: 1; /* ocupa espacio sobrante */
+  max-height: 100px;
+}
+
+.update-container h2 {
+  text-align: center;
+  color: black;
+  margin: 0 0 15px 0;
+  font-size: 1.4rem;
+}
+
+.update-form label {
+  font-weight: 600;
+  color: #6b5e58;
+  margin-bottom: 3px;
+  margin-top: 2px;
+  display: block;
+  font-size: 13px;
+}
+
+.update-form input:focus,
+.update-form textarea:focus {
+  outline: none;
+  border-color: #D5BDAF;
+  box-shadow: 0 0 6px rgba(213, 189, 175, 0.6);
+}
+
+.update-form button {
+  background-color: #D5BDAF;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.update-form button:hover {
+  background-color: #E3D5CA;
+  color: #3a3a3a;
+}

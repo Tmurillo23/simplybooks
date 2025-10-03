@@ -1,7 +1,7 @@
 <section class="update-container">
   @if (book) {
-    <h2>Actualizar libro</h2>
     <form (ngSubmit)="saveChanges()" class="update-form">
+      <h2>Actualizar libro</h2>
 
       <label>Título</label>
       <input type="text" [(ngModel)]="book.title" name="title" required />

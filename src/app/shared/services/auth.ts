@@ -16,12 +16,11 @@ export class Auth {
   login(user: User): LoginResponse {
     if (!user.username) return { success: false };
 
-    // Buscar todos los usuarios y encontrar el que tenga el username indicado
     const storedUser = this.getAllUsers().find(u => u.username === user.username);
-    if (!storedUser) return { success: false };
+    if (!storedUser) return { success: false, message: 'Error en el formulario' };
 
     if (user.password === storedUser.password) {
-      sessionStorage.setItem('userLogged', storedUser.email); // Guardamos email en sesión
+      sessionStorage.setItem('userLogged', storedUser.email);
       this.verifyUserLogged();
       return { success: true, redirectTo: 'home' };
     }
@@ -35,8 +34,8 @@ export class Auth {
       return { success: false, message: 'Usuario ya existe' };
     }
 
-    localStorage.setItem(user.email, JSON.stringify(user)); // Guardamos con email como key
-    sessionStorage.setItem('userLogged', user.email); // Guardamos email en sesión
+    localStorage.setItem(user.email, JSON.stringify(user));
+    sessionStorage.setItem('userLogged', user.email);
     this.verifyUserLogged();
     return { success: true, redirectTo: 'home' };
   }

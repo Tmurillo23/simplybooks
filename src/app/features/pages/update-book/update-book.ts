@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import { BookshelfService } from '../../../shared/services/bookshelf';
 import { BookInterface } from '../../../shared/interfaces/book-interface';
 import {FormsModule} from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-update-book',
@@ -31,12 +32,20 @@ export class UpdateBook {
   saveChanges() {
     if (this.book) {
        if (this.bookshelfService.updateBook(this.book)){
-         alert('Libro actualizado con exito')
+         Swal.fire({
+           title: "Completado!",
+           text: "Libro actualizado con exito",
+           icon: "success"
+         });
          this.router.navigate([`/editbook/${this.book.id}`]);
          this.router.navigate(['/home']);
          return;
        } else{
-         alert('Error en la actualización')
+         Swal.fire({
+           title: "Error",
+           text: "Error en la actualización",
+           icon: "error"
+         });
          return;
        }
     }

@@ -19,11 +19,7 @@ export class Header {
   onProfile() {
     this.router.navigate(['/profile']);
   }
-  onCollection(){}
 
-  onBorrow(){}
-
-  onSearch(){}
   onLogout(){
     this.authService.logout();
     this.router.navigateByUrl('')

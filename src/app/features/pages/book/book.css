@@ -1,57 +1,101 @@
+/* Contenedor principal */
 .book-container {
   display: flex;
   justify-content: center;
-  padding: 2rem;
+  margin: 30px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #3a3a3a;
 }
 
+/* Tarjeta */
 .book-card {
   display: flex;
   flex-direction: row;
-  gap: 2rem;
-  background: #ffffff;
+  gap: 20px;
+  background-color: #F5EBE0; /* color suave de fondo */
+  border: 1px solid #E3D5CA;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  padding: 2rem;
+  padding: 20px;
   max-width: 800px;
-  width: 100%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
+/* Imagen del libro */
 .book-image img {
-  max-width: 200px;
-  border-radius: 8px;
+  width: 160px;
+  height: auto;
   object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #D6CCC2;
+  background-color: #EDEDE9;
 }
 
+/* Detalles del libro */
 .book-details {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
+/* Título */
 .book-title {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
+  color: #D5BDAF;
   margin: 0;
-  color: #272635;
 }
 
+/* Autor */
 .book-author {
-  font-size: 1.2rem;
-  margin: 0.3rem 0 1rem 0;
-  color: #555;
-}
-
-.book-description {
   font-size: 1rem;
-  line-height: 1.6;
-  color: #333;
-  margin-bottom: 1rem;
+  color: #6b5e58;
+  margin: 0 0 10px 0;
 }
 
-.book-meta {
+/* Descripción */
+.book-description {
   font-size: 0.95rem;
-  margin: 0.4rem 0;
-  color: #444;
+  color: #4a4a4a;
+  background-color: #EDEDE9;
+  padding: 10px;
+  border-radius: 8px;
 }
 
+/* Meta (páginas, rating, etc.) */
+.book-meta {
+  font-size: 0.9rem;
+  color: #5c5c5c;
+}
+
+.book-meta strong {
+  color: #6b5e58;
+}
+
+/* Botón */
+.book-details button {
+  align-self: flex-start;
+  background-color: #D5BDAF;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.book-details button:hover {
+  background-color: #E3D5CA;
+  color: #3a3a3a;
+}
+
+/* Mensaje de no libro */
 .no-book {
-  font-size: 1.2rem;
-  color: #999;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #6b5e58;
+  background-color: #EDEDE9;
+  padding: 15px;
+  border-radius: 10px;
 }
