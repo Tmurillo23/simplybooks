@@ -61,7 +61,7 @@ Próximamente se incorporarán:
 * El correo electrónico se usa como identificador principal y no puede modificarse.
 ---
 
-## 📂 Cómo empezar
+## Cómo empezar
 
 1. Clona el repositorio.
 2. Instala las dependencias.
