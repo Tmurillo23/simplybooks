@@ -1,0 +1,31 @@
+<header>
+  @if(isLogged()){
+    <div class="header-top">
+      <a routerLink="home"><h1>SimplyBooks</h1></a>
+      <div class="sidebar">
+        <nav>
+          <ul class="nav-list">
+            <li>
+              <a (click)="onProfile()">
+                <i class="fa-regular fa-circle-user"></i>
+              </a>
+            </li>
+            <li><a (click)="onLogout()">Cerrar sesión</a></li>
+            <li><a routerLink="upload">Agregar libros</a></li>
+            <li><a routerLink="collections">Colecciones</a></li>
+            <li><a routerLink="borrows">Préstamos</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="search-section">
+      <form class="basic-search">
+        <input type="text" placeholder="Buscar..." id="basic-input">
+        <button type="submit">Buscar</button>
+      </form>
+    </div>
+  } @else {
+    <h1>SimplyBooks</h1>
+  }
+</header>
