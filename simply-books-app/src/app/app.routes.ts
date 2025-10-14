@@ -5,7 +5,7 @@ import { Home } from './features/pages/home/home';
 import { Profile } from './features/pages/profile/profile';
 import { Upload } from './features/pages/upload/upload';
 import { Collections } from './features/pages/collections/collections';
-import { Borrows } from './features/pages/borrows/borrows';
+import { Loans } from './features/pages/loans/loans';
 import { Book } from './features/pages/book/book';
 import { ResetPassword } from './features/pages/reset-password/reset-password';
 import {UpdateBook} from './features/pages/update-book/update-book';
@@ -53,8 +53,8 @@ export const routes: Routes = [
     pathMatch:"full"
   },
   {
-    path:"borrows",
-    component:Borrows,
+    path:"loans",
+    component:Loans,
     pathMatch:"full"
   },
   {
