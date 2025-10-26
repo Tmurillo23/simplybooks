@@ -4,16 +4,16 @@ import { Storage } from './storage';
 import { Auth } from './auth';
 
 export type BookShelfItem = Pick<
-BookInterface,
-'id' | 'title' | 'author' | 'year' | 'portrait_url' | 'file_url' | 'description' | 'rating' | 'pages' | 'pages_read'
->;
+  BookInterface,
+  'id' | 'title' | 'author' | 'year' | 'portrait_url' | 'file_url' | 'description' | 'rating' | 'pages' | 'pages_read'| 'reading_status'
+>
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookshelfService {
-  private _bookshelf = signal<BookShelfItem[]>([]);
-  private _loanedBookIds = signal<Set<number>>(new Set());
+  private bookshelf = signal<BookShelfItem[]>([]);
+  private loanedBookIds = signal<Set<number>>(new Set());
 
   authService = inject(Auth);
   storageService = inject(Storage);
@@ -29,15 +29,14 @@ export class BookshelfService {
     return Math.abs(hash);
   }
 
-  // ← DEJAR ESTE COMO ESTABA (sin cambios)
-  get bookshelvesItems() {
-    return this._bookshelf;
+  // Devuelve el array real de libros
+  get bookshelvesItems(): BookShelfItem[] {
+    return this.bookshelf();
   }
 
-  // ← AGREGAR ESTE NUEVO MÉTODO para libros disponibles (sin prestados)
   get availableBooks() {
-    const loanedIds = this._loanedBookIds();
-    return this._bookshelf().filter(book => !loanedIds.has(book.id));
+    const loanedIds = this.loanedBookIds();
+    return this.bookshelf().filter(book => !loanedIds.has(book.id));
   }
 
   async loadUserFiles() {
@@ -66,11 +65,12 @@ export class BookshelfService {
           description: '',
           rating: 0,
           pages: 0,
-          pages_read: 0
+          pages_read: 0,
+          reading_status: 'Por leer' // inicialización por defecto
         };
       });
 
-      this._bookshelf.update(currentItems => {
+      this.bookshelf.update(currentItems => {
         const combinedItems = [...currentItems];
 
         bookItems.forEach(newBook => {
@@ -88,9 +88,13 @@ export class BookshelfService {
   }
 
   addBook(book: BookShelfItem): boolean {
-    let exists = false;
+    // Asegurar reading_status
+    if (!book.reading_status) {
+      book.reading_status = 'Por leer';
+    }
 
-    this._bookshelf.update(items => {
+    let exists = false;
+    this.bookshelf.update(items => {
       exists = items.some(b => b.id === book.id);
       return exists ? items : [...items, book];
     });
@@ -99,6 +103,7 @@ export class BookshelfService {
   }
 
   updateBook(updated: BookInterface): boolean {
+    // Validaciones
     if (updated.pages_read && updated.pages_read > updated.pages) {
       alert('⚠️ Las páginas leídas no pueden ser mayores que el total de páginas');
       return false;
@@ -109,20 +114,24 @@ export class BookshelfService {
       return false;
     }
 
-    this._bookshelf.update(items =>
-      items.map(b => (b.id === updated.id ? updated : b))
+    // Asegurar que reading_status siempre exista
+    const newStatus = (updated as BookShelfItem).reading_status || 'Por leer';
+
+    this.bookshelf.update(items =>
+      items.map(b =>
+        b.id === updated.id ? { ...b, ...updated, reading_status: newStatus } : b
+      )
     );
 
     return true;
   }
 
   removeBook(id: number) {
-    this._bookshelf.update(items => items.filter(b => b.id !== id));
+    this.bookshelf.update(items => items.filter(b => b.id !== id));
   }
 
-
   markAsLoaned(bookId: number) {
-    this._loanedBookIds.update(ids => {
+    this.loanedBookIds.update(ids => {
       const newSet = new Set(ids);
       newSet.add(bookId);
       return newSet;
@@ -130,7 +139,7 @@ export class BookshelfService {
   }
 
   markAsAvailable(bookId: number) {
-    this._loanedBookIds.update(ids => {
+    this.loanedBookIds.update(ids => {
       const newSet = new Set(ids);
       newSet.delete(bookId);
       return newSet;

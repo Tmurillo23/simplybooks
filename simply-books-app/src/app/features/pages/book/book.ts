@@ -44,12 +44,13 @@ export class Book implements OnInit {
 
   isInShelf(): boolean {
     if (!this.book) return false;
-    return this.bookshelfService.bookshelvesItems().some(b => b.id === this.book!.id);
+    return this.bookshelfService.bookshelvesItems.some(b => b.id === this.book!.id);
   }
 
   addBookToShelf() {
     if (!this.book) return;
-    this.bookshelfService.addBook({
+
+    const bookToAdd = {
       id: this.book.id,
       title: this.book.title,
       author: this.book.author,
@@ -58,17 +59,22 @@ export class Book implements OnInit {
       pages_read: this.book.pages_read || 0,
       rating: this.book.rating || 0,
       portrait_url: this.book.portrait_url || 'assets/default-cover.png',
-      description: this.book.description || ''
-    });
+      description: this.book.description || '',
+      reading_status: this.book.reading_status || 'Por leer'
+    };
+
+    this.bookshelfService.addBook(bookToAdd);
+
+
     Swal.fire({
       title: 'Éxito',
       text: 'Libro agregado a tu biblioteca',
       icon: 'success'
     });
+
     this.router.navigate(['/home']);
   }
 
-  /** Agregar libro a una colección del usuario */
   addBookToCollection() {
     if (!this.book || !this.selectedCollectionId) {
       Swal.fire('Error', 'Selecciona una colección válida', 'error');

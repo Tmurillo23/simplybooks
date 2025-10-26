@@ -77,7 +77,8 @@ export class Upload{
               description: '',
               rating: 0,
               pages: 0,
-              pages_read: 0
+              pages_read: 0,
+              reading_status: 'Por leer'
             };
 
             // Agregar al bookshelf

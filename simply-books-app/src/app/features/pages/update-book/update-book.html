@@ -19,17 +19,21 @@
       <input type="number" [(ngModel)]="book.pages_read" name="pages_read" />
 
       <label>Rating</label>
-      <input type="number" min="0" max="5" [(ngModel)]="book.rating" name="rating" />
+      <input type="number" min="0" max="5" step="0.1" [(ngModel)]="book.rating" name="rating" />
 
       <label>Descripción</label>
       <textarea [(ngModel)]="book.description" name="description"></textarea>
 
-      <!--
-      <label>Imagen (URL)</label>
-      <input type="text" [(ngModel)]="book.portrait_url" name="portrait_url" />
-      -->
+      <label>Estado de lectura</label>
+      <select [(ngModel)]="book.reading_status" name="reading_status">
+        <option value="Por leer">Por leer</option>
+        <option value="Leyendo">Leyendo</option>
+        <option value="Pausado">Pausado</option>
+        <option value="Completado">Completado</option>
+        <option value="Abandonado">Abandonado</option>
+      </select>
 
-      <button type="submit"> Guardar cambios</button>
+      <button type="submit">Guardar cambios</button>
     </form>
   }
 </section>

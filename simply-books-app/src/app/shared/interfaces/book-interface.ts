@@ -13,5 +13,5 @@ export interface BookInterface {
   subjects?: string[];
   language?: string;
   collection_names?: string[];
-
+  reading_status: string;
 }

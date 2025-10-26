@@ -1,7 +1,7 @@
 <!-- Contenedor principal -->
 <section id="bookshelves">
   @if (bookshelfService.availableBooks.length > 0) {
-    @for (book of bookshelfService.bookshelvesItems(); track book.id) {
+    @for (book of bookshelfService.bookshelvesItems; track book.id) {
       <article
         class="book-card"
         [routerLink]="book.file_url ? null : ['/book', book.id]"

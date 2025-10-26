@@ -75,7 +75,7 @@ export class Loans implements OnInit {
 
   get availableBooks(): BookInterface[] {
     // Solo libros físicos que no están prestados
-    return this.bookshelfService.bookshelvesItems()
+    return this.bookshelfService.bookshelvesItems
       .filter(book => !book.file_url);
   }
 

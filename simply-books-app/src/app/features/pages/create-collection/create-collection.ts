@@ -32,8 +32,6 @@ export class CreateCollection implements OnInit {
   private eRef = inject(ElementRef);
 
   // Computed para obtener libros actuales del signal
-  books = computed(() => this.bookshelfService.bookshelvesItems());
-
   private currentCollectionId: string | null = null;
 
   async ngOnInit() {
@@ -43,12 +41,14 @@ export class CreateCollection implements OnInit {
 
   /** Buscar libros por título */
   onSearch() {
-    const books = this.books();
+    const books = this.bookshelfService.bookshelvesItems; // ⚠ ya es un array
     this.filteredBooks = books.filter(book =>
       book.title.toLowerCase().includes(this.searchTerm.toLowerCase()) &&
       !this.selectedBooks.some(selected => selected.id === book.id)
     );
   }
+
+
 
   /** Agregar libro a la colección usando CollectionService */
   addBook(book: BookShelfItem) {

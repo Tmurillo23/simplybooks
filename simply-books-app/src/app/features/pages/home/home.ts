@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { BookShelfItem, BookshelfService } from '../../../shared/services/bookshelf';
 import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
+import {BookInterface} from '../../../shared/interfaces/book-interface';
 
 @Component({
   selector: 'app-home',
@@ -53,6 +54,9 @@ export class Home implements OnInit {
       icon: 'info'
     });
   }
+
+
+
 
   private getFileNameFromUrl(url: string): string {
     try {

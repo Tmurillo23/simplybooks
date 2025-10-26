@@ -32,6 +32,10 @@
           </p>
         }
 
+        <p class="book-meta">
+          <strong>Estado:</strong> {{ book.reading_status }}
+        </p>
+
         @if (!isInShelf()) {
           <button (click)="addBookToShelf()">Agregar a mi estantería</button>
         }
