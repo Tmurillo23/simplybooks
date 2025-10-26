@@ -1,0 +1,63 @@
+<section id="edit-collection">
+  @if (collection) {
+    <h1>Editar colección: {{ collection.name }}</h1>
+
+    <!-- Formulario de edición -->
+    <form (ngSubmit)="updateCollection()" class="edit-form">
+      <label>
+        Nombre:
+        <input type="text" [(ngModel)]="collection.name" name="name" required />
+      </label>
+
+      <label>
+        Descripción:
+        <textarea [(ngModel)]="collection.description" name="description"></textarea>
+      </label>
+
+
+
+      <div class="form-actions">
+        <button type="submit">Guardar cambios</button>
+      </div>
+    </form>
+
+    <hr />
+
+    <!-- Sección de libros -->
+    <section id="books-management">
+      <h2>Libros en la colección</h2>
+
+      @if (collection.books.length > 0) {
+        <ul class="book-list">
+          @for (book of collection.books; track book.id) {
+            <li class="book-item">
+              <img [src]="book.portrait_url || 'assets/default-cover.jpg'" [alt]="book.title" />
+              <div>
+                <strong>{{ book.title }}</strong> — {{ book.author || 'Autor desconocido' }}
+                <button type="button" (click)="removeBook(book.id)">Eliminar</button>
+              </div>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p>No hay libros en esta colección.</p>
+      }
+
+      <!-- Agregar libro -->
+      <div class="add-book-section">
+        <h3>Agregar libro</h3>
+        <ul>
+          @for (book of availableBooks; track book.id) {
+            <li>
+              {{ book.title }} — {{ book.author || 'Autor desconocido' }}
+              <button type="button" (click)="addBook(book)">Agregar</button>
+            </li>
+          }
+        </ul>
+      </div>
+
+    </section>
+  } @else {
+    <p>No se encontró la colección que deseas editar.</p>
+  }
+</section>
