@@ -1,1 +1,58 @@
-<p>collection-detail works!</p>
+<section id="collection-books">
+  @if (collection) {
+    <header class="collection-header">
+      <h1>{{ collection.name }}</h1>
+
+      @if (collection.description) {
+        <p class="collection-description">{{ collection.description }}</p>
+      }
+
+      <button
+        class="edit-collection-btn"
+        [routerLink]="['/edit-collection', collection.id]"
+      >
+        ✏️ Editar colección
+      </button>
+    </header>
+
+    <section id="bookshelves">
+      @if (collection.books.length > 0) {
+        @for (book of collection.books; track book.id) {
+          <article
+            class="book-card"
+            [routerLink]="book.file_url ? null : ['/book', book.id]"
+            (click)="book.file_url ? downloadFile(book) : null"
+            [class.downloadable]="book.file_url">
+
+            <img [src]="book.portrait_url || 'assets/default-cover.jpg'" [alt]="book.title" class="book-cover" />
+
+            <div class="book-details">
+              <h3>{{ book.title }}</h3>
+              <p><strong>Autor:</strong> {{ book.author || 'No especificado' }}</p>
+              <p><strong>Año:</strong> {{ book.year || 'No especificado' }}</p>
+              <p><strong>Páginas:</strong> {{ book.pages || '0' }}</p>
+              <p><strong>Leídas:</strong> {{ book.pages_read }} / {{ book.pages }}</p>
+              <p><strong>Rating:</strong> {{ book.rating }} ⭐</p>
+
+              <div class="book-actions">
+                <button (click)="removeBook(book.id); $event.stopPropagation()">
+                  Eliminar
+                </button>
+
+                @if (book.file_url) {
+                  <button (click)="downloadFile(book); $event.stopPropagation()" class="download-btn">
+                    Descargar
+                  </button>
+                }
+              </div>
+            </div>
+          </article>
+        }
+      } @else {
+        <span>Esta colección no tiene libros aún</span>
+      }
+    </section>
+  } @else {
+    <span>No se encontró la colección</span>
+  }
+</section>

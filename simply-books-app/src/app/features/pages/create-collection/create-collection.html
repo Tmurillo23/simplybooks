@@ -1,1 +1,113 @@
-<p>create-collection works!</p>
+<div class="collection-form-container">
+  <h2 >Crear nueva colección</h2>
+
+  <form (ngSubmit)="createCollection()" class="collection-form space-y-4">
+
+    <!-- Nombre -->
+    <div class="form-group">
+      <label >Nombre *</label>
+      <input
+        [(ngModel)]="name"
+        name="name"
+        type="text"
+        placeholder="Nombre de la colección"
+        class="form-input w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+        required
+      />
+    </div>
+
+    <!-- Descripción -->
+    <div class="form-group">
+      <label >Descripción</label>
+      <textarea
+        [(ngModel)]="description"
+        name="description"
+        placeholder="Describe brevemente tu colección"
+        class="form-textarea w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+      ></textarea>
+    </div>
+
+    <!-- Imagen -->
+    <div class="form-group">
+      <label>URL de imagen</label>
+      <input
+        [(ngModel)]="image_url"
+        name="image_url"
+        type="text"
+        placeholder="https://..."
+      />
+    </div>
+
+    <!-- Pública -->
+    <div >
+      <input
+        [(ngModel)]="is_public"
+        name="is_public"
+        type="checkbox"
+        id="is_public"
+        class="form-checkbox w-4 h-4"
+      />
+      <label for="is_public">Hacer colección pública</label>
+    </div>
+
+    <hr  />
+
+    <!-- Búsqueda de libros -->
+    <div class="book-search">
+      <label >Agregar libros</label>
+      <input
+        [(ngModel)]="searchTerm"
+        name="searchTerm"
+        (input)="onSearch()"
+        type="text"
+        placeholder="Buscar en tu estantería..."
+
+      />
+
+      <!-- Resultados de búsqueda -->
+      @if (filteredBooks.length > 0) {
+        <ul >
+          @for (book of filteredBooks; track book.id) {
+            <li
+              (click)="addBook(book)"
+
+            >
+              {{ book.title }}
+            </li>
+          }
+        </ul>
+      }
+    </div>
+
+    <!-- Libros seleccionados -->
+    @if (selectedBooks.length > 0) {
+      <div >
+        <p class="selected-books-title text-sm font-semibold mb-2">Libros añadidos:</p>
+        <div class="selected-books-list flex flex-wrap gap-2">
+          @for (book of selectedBooks; track book.id) {
+            <span class="selected-book-item flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm">
+              {{ book.title }}
+              <button
+                type="button"
+                (click)="removeBook(book)"
+                class="remove-book-btn ml-2 text-red-500 font-bold hover:text-red-700"
+              >
+                ×
+              </button>
+            </span>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Botón crear -->
+    <div class="form-actions text-center mt-6">
+      <button
+        type="submit"
+        class="btn-submit px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+      >
+        Crear colección
+      </button>
+    </div>
+  </form>
+</div>

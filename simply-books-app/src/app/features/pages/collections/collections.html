@@ -1,1 +1,30 @@
-<p>collections works!</p>
+<section id="collections">
+
+  <!-- Botón para ir a la página de crear colección -->
+  <div class="collections-header">
+    <button
+      class="add-collection-btn"
+      [routerLink]="['/create-collection']"
+    >
+      Nueva colección
+    </button>
+  </div>
+
+  @if (collections.length > 0) {
+    @for (collection of collections; track collection.id) {
+      <article class="collection-card">
+
+        <!-- Botones de acciones -->
+        <div class="collection-actions">
+          <button [routerLink]="['/edit-collection', collection.id]">Editar</button>
+          <button (click)="deleteCollection(collection.id)">Eliminar</button>
+          <button (click)="toggleVisibility(collection.id)">
+            {{ collection.is_public ? 'Hacer privada' : 'Hacer pública' }}
+          </button>
+        </div>
+      </article>
+    }
+  } @else {
+    <span class="no-collections">Aún no tienes colecciones</span>
+  }
+</section>

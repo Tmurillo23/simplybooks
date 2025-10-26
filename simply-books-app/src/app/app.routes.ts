@@ -10,6 +10,9 @@ import { Book } from './features/pages/book/book';
 import { ResetPassword } from './features/pages/reset-password/reset-password';
 import {UpdateBook} from './features/pages/update-book/update-book';
 import {UpdateProfile} from './features/pages/update-profile/update-profile';
+import {CollectionDetail} from './features/pages/collection-detail/collection-detail';
+import {CreateCollection} from './features/pages/create-collection/create-collection';
+import {EditCollection} from './features/pages/edit-collection/edit-collection';
 
 export const routes: Routes = [
   {
@@ -52,6 +55,22 @@ export const routes: Routes = [
     component:Collections,
     pathMatch:"full"
   },
+  {
+    path:"collection/:id",
+    component:CollectionDetail,
+    pathMatch:"full"
+  },
+  {
+    path:"create-collection",
+    component:CreateCollection,
+    pathMatch:"full"
+  },
+  {
+    path:"edit-collection/:id",
+    component:EditCollection,
+    pathMatch:"full"
+  },
+
   {
     path:"loans",
     component:Loans,

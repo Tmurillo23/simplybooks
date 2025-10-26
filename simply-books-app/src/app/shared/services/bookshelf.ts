@@ -50,7 +50,7 @@ export class BookshelfService {
         const nameWithoutExt = fullName.substring(0, fullName.lastIndexOf('.')) || fullName;
 
         return {
-          id: this.generateStableId(fullPath), // ID estable dependiendo de la ruta
+          id: this.generateStableId(fullPath),
           title: nameWithoutExt,
           author: '',
           year: 0,
@@ -66,14 +66,14 @@ export class BookshelfService {
       this._bookshelf.update(currentItems => {
         // Combinar items obtenidos de la DB con los ya existentes en this._bookshelf
         const combinedItems = [...currentItems];
-        
+
         bookItems.forEach(newBook => {
           const exists = combinedItems.some(existingBook => existingBook.id === newBook.id);
           if (!exists) {
             combinedItems.push(newBook);
           }
         });
-        
+
         return combinedItems;
       });
     } catch (error) {
