@@ -66,7 +66,7 @@ export class BookshelfService {
           rating: 0,
           pages: 0,
           pages_read: 0,
-          reading_status: 'Por leer' // inicialización por defecto
+          reading_status: 'Por leer'
         };
       });
 
@@ -114,9 +114,15 @@ export class BookshelfService {
       return false;
     }
 
-    // Asegurar que reading_status siempre exista
-    const newStatus = (updated as BookShelfItem).reading_status || 'Por leer';
+    // Calcular el estado de lectura automáticamente
+    let newStatus = 'Por leer';
+    if (updated.pages_read === updated.pages) {
+      newStatus = 'Leído';
+    } else if (updated.pages_read && updated.pages_read > 0) {
+      newStatus = 'Leyendo';
+    }
 
+    // Actualizar el libro usando el estado recalculado
     this.bookshelf.update(items =>
       items.map(b =>
         b.id === updated.id ? { ...b, ...updated, reading_status: newStatus } : b
@@ -125,6 +131,8 @@ export class BookshelfService {
 
     return true;
   }
+
+
 
   removeBook(id: number) {
     this.bookshelf.update(items => items.filter(b => b.id !== id));

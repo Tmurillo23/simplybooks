@@ -1,11 +1,8 @@
 <section id="collections">
 
-  <!-- Botón para ir a la página de crear colección -->
+  <!-- Botón para crear nueva colección -->
   <div class="collections-header">
-    <button
-      class="add-collection-btn"
-      [routerLink]="['/create-collection']"
-    >
+    <button class="add-collection-btn" [routerLink]="['/create-collection']">
       Nueva colección
     </button>
   </div>
@@ -14,16 +11,15 @@
     @for (collection of collections; track collection.id) {
       <article class="collection-card">
 
-        <!-- Nombre de la colección -->
-        <h3 class="collection-name">{{ collection.name }}</h3>
+        <!-- Nombre clickeable -->
+        <h3 class="collection-name" [routerLink]="['/collection', collection.id]">
+          {{ collection.name }}
+        </h3>
 
-        <!-- Botones de acciones -->
+        <!-- Botones de acción -->
         <div class="collection-actions">
           <button [routerLink]="['/edit-collection', collection.id]">Editar</button>
           <button (click)="deleteCollection(collection.id)">Eliminar</button>
-          <button (click)="toggleVisibility(collection.id)">
-            {{ collection.is_public ? 'Hacer privada' : 'Hacer pública' }}
-          </button>
         </div>
       </article>
     }

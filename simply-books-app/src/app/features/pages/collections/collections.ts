@@ -3,12 +3,14 @@ import { CollectionService } from '../../../shared/services/collections-service'
 import { Auth } from '../../../shared/services/auth';
 import { CollectionInterface } from '../../../shared/interfaces/collection-interface';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common'; // <-- IMPORTANTE
+
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-collections',
   templateUrl: './collections.html',
-  imports: [RouterLink],
+  imports: [RouterLink,CommonModule],
   standalone: true,
   styleUrls: ['./collections.css']
 })
@@ -47,7 +49,6 @@ export class Collections {
       if (result.isConfirmed) {
         try {
           this.collectionService.deleteCollection(id);
-          // Actualizar la lista local
           this.collections = this.collections.filter(c => c.id !== id);
           Swal.fire('Eliminado', 'La colección se eliminó correctamente.', 'success');
         } catch (error: any) {
@@ -56,19 +57,5 @@ export class Collections {
       }
     });
   }
-
-  toggleVisibility(id: string): void {
-    try {
-      this.collectionService.toggleVisibility(id);
-      // Actualizar localmente la colección afectada
-      const collection = this.collections.find(c => c.id === id);
-      if (collection) {
-        collection.is_public = !collection.is_public;
-      }
-    } catch (error: any) {
-      Swal.fire('Error', error.message, 'error');
-    }
-  }
-
 
 }

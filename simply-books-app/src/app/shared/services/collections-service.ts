@@ -17,9 +17,7 @@ export class CollectionService {
   createCollection(
     user: User,
     name: string,
-    description?: string,
-    image_url?: string,
-    is_public: boolean = false
+    description?: string
   ): CollectionInterface {
     const userCollections = this.collections.filter(c => c.user.username === user.username);
     if (userCollections.length >= 10) {
@@ -32,7 +30,6 @@ export class CollectionService {
       name: name.trim(),
       description: description?.trim(),
       books: [],
-      is_public,
       created_at: new Date(),
       updated_at: new Date()
     };
@@ -90,16 +87,5 @@ export class CollectionService {
     collection.updated_at = new Date();
   }
 
-  /** Colecciones públicas */
-  getPublicCollections(): CollectionInterface[] {
-    return this.collections.filter(c => c.is_public);
-  }
 
-  /** Cambiar visibilidad */
-  toggleVisibility(collectionId: string): void {
-    const collection = this.collections.find(c => c.id === collectionId);
-    if (!collection) throw new Error('Colección no encontrada.');
-    collection.is_public = !collection.is_public;
-    collection.updated_at = new Date();
-  }
 }

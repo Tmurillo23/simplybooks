@@ -1,7 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
 import { BooksService } from '../../../shared/services/books-service';
 import { BookshelfService } from '../../../shared/services/bookshelf';
 import { CollectionService } from '../../../shared/services/collections-service';
@@ -34,8 +33,6 @@ export class Book implements OnInit {
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.book = this.bookService.getBookById(id);
-
-    // Cargar colecciones del usuario
     const user = this.authService.getUserLogged();
     if (user) {
       this.userCollections = this.collectionService.getCollectionsByUser(user);

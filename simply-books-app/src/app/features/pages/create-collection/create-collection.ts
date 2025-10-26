@@ -19,7 +19,6 @@ export class CreateCollection implements OnInit {
   name: string = '';
   description: string = '';
   image_url: string = '';
-  is_public: boolean = false;
 
   searchTerm: string = '';
   filteredBooks: BookShelfItem[] = [];
@@ -100,8 +99,6 @@ export class CreateCollection implements OnInit {
         user,
         this.name,
         this.description,
-        this.image_url,
-        this.is_public
       );
 
       this.currentCollectionId = newCollection.id;

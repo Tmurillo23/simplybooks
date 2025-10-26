@@ -17,7 +17,7 @@
           <p><strong>Páginas:</strong> {{ book.pages || '0' }}</p>
           <p><strong>Leídas:</strong> {{ book.pages_read }} / {{ book.pages }}</p>
           <p><strong>Rating:</strong> {{ book.rating }} ⭐</p>
-
+          <p><strong>Estado:</strong> {{ book.reading_status }}</p>
           <div class="book-actions">
             <button [routerLink]="['/editbook', book.id]" (click)="$event.stopPropagation()">
               ️ Editar
@@ -25,6 +25,14 @@
             <button (click)="removeBook(book.id); $event.stopPropagation()">
                Eliminar
             </button>
+            <label>Estado de lectura</label>
+            <select [(ngModel)]="book.reading_status" name="reading_status">
+              <option value="Por leer">Por leer</option>
+              <option value="Leyendo">Leyendo</option>
+              <option value="Pausado">Pausado</option>
+              <option value="Completado">Completado</option>
+              <option value="Abandonado">Abandonado</option>
+            </select>
 
             @if (book.file_url) {
               <button (click)="downloadFile(book); $event.stopPropagation()" class="download-btn">

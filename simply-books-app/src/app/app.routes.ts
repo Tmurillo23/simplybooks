@@ -14,6 +14,7 @@ import {CollectionDetail} from './features/pages/collection-detail/collection-de
 import {CreateCollection} from './features/pages/create-collection/create-collection';
 import {EditCollection} from './features/pages/edit-collection/edit-collection';
 import {LoanHistory} from './features/pages/loan-history/loan-history';
+import {Reviews} from './features/pages/reviews/reviews';
 
 export const routes: Routes = [
   {
@@ -90,6 +91,11 @@ export const routes: Routes = [
   {
     path:"editbook/:id",
     component:UpdateBook,
+    pathMatch:"full"
+  },
+  {
+    path:"reviews",
+    component:Reviews,
     pathMatch:"full"
   },
   {
