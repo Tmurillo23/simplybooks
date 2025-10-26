@@ -14,6 +14,9 @@
     @for (collection of collections; track collection.id) {
       <article class="collection-card">
 
+        <!-- Nombre de la colección -->
+        <h3 class="collection-name">{{ collection.name }}</h3>
+
         <!-- Botones de acciones -->
         <div class="collection-actions">
           <button [routerLink]="['/edit-collection', collection.id]">Editar</button>

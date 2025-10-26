@@ -12,5 +12,6 @@ export interface BookInterface {
   isbn?: string;
   subjects?: string[];
   language?: string;
+  collection_names?: string[];
 
 }

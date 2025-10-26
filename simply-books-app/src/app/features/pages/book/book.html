@@ -3,10 +3,9 @@
     <div class="book-card">
       <div class="book-image">
         <img
-          [src]="book.portrait_url ? '' + book.portrait_url : 'assets/default-cover.jpg'"
+          [src]="book.portrait_url ? book.portrait_url : 'assets/default-cover.jpg'"
           [alt]="book.title"
         />
-
       </div>
 
       <div class="book-details">
@@ -35,6 +34,22 @@
 
         @if (!isInShelf()) {
           <button (click)="addBookToShelf()">Agregar a mi estantería</button>
+        }
+
+        @if (userCollections && userCollections.length > 0) {
+          <div>
+            <label for="collectionSelect">Agregar a colección:</label>
+            <select
+              id="collectionSelect"
+              [(ngModel)]="selectedCollectionId"
+              name="collectionSelect">
+              <option value="" disabled selected>Selecciona una colección</option>
+              @for (collection of userCollections; track collection.id) {
+                <option [value]="collection.id">{{ collection.name }}</option>
+              }
+            </select>
+            <button (click)="addBookToCollection()">Agregar</button>
+          </div>
         }
       </div>
     </div>
