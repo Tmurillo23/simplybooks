@@ -1,13 +1,13 @@
 <!-- Contenedor principal -->
 <section id="bookshelves">
-  @if (bookshelfService.bookshelvesItems().length > 0) {
+  @if (bookshelfService.availableBooks.length > 0) {
     @for (book of bookshelfService.bookshelvesItems(); track book.id) {
-      <article 
-        class="book-card" 
+      <article
+        class="book-card"
         [routerLink]="book.file_url ? null : ['/book', book.id]"
         (click)="book.file_url ? downloadFile(book) : null"
         [class.downloadable]="book.file_url">
-        
+
         <img [src]="book.portrait_url || 'assets/default-cover.jpg'" [alt]="book.title" class="book-cover" />
 
         <div class="book-details">
@@ -25,7 +25,7 @@
             <button (click)="removeBook(book.id); $event.stopPropagation()">
                Eliminar
             </button>
-            
+
             @if (book.file_url) {
               <button (click)="downloadFile(book); $event.stopPropagation()" class="download-btn">
                 Descargar

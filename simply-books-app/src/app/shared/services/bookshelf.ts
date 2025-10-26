@@ -3,10 +3,9 @@ import { BookInterface } from '../interfaces/book-interface';
 import { Storage } from './storage';
 import { Auth } from './auth';
 
-
 export type BookShelfItem = Pick<
-  BookInterface,
-  'id' | 'title' | 'author' | 'year' | 'portrait_url' | 'file_url' | 'description' | 'rating' | 'pages' | 'pages_read'
+BookInterface,
+'id' | 'title' | 'author' | 'year' | 'portrait_url' | 'file_url' | 'description' | 'rating' | 'pages' | 'pages_read'
 >;
 
 @Injectable({
@@ -14,6 +13,7 @@ export type BookShelfItem = Pick<
 })
 export class BookshelfService {
   private _bookshelf = signal<BookShelfItem[]>([]);
+  private _loanedBookIds = signal<Set<number>>(new Set());
 
   authService = inject(Auth);
   storageService = inject(Storage);
@@ -24,13 +24,20 @@ export class BookshelfService {
     for (let i = 0; i < filePath.length; i++) {
       const char = filePath.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
-      hash = hash & hash; // Convert to 32bit integer
+      hash = hash & hash;
     }
     return Math.abs(hash);
   }
 
+  // ← DEJAR ESTE COMO ESTABA (sin cambios)
   get bookshelvesItems() {
     return this._bookshelf;
+  }
+
+  // ← AGREGAR ESTE NUEVO MÉTODO para libros disponibles (sin prestados)
+  get availableBooks() {
+    const loanedIds = this._loanedBookIds();
+    return this._bookshelf().filter(book => !loanedIds.has(book.id));
   }
 
   async loadUserFiles() {
@@ -64,7 +71,6 @@ export class BookshelfService {
       });
 
       this._bookshelf.update(currentItems => {
-        // Combinar items obtenidos de la DB con los ya existentes en this._bookshelf
         const combinedItems = [...currentItems];
 
         bookItems.forEach(newBook => {
@@ -89,11 +95,10 @@ export class BookshelfService {
       return exists ? items : [...items, book];
     });
 
-    return !exists; // true = agregado, false = ya existía
+    return !exists;
   }
 
   updateBook(updated: BookInterface): boolean {
-    // Validaciones
     if (updated.pages_read && updated.pages_read > updated.pages) {
       alert('⚠️ Las páginas leídas no pueden ser mayores que el total de páginas');
       return false;
@@ -108,10 +113,27 @@ export class BookshelfService {
       items.map(b => (b.id === updated.id ? updated : b))
     );
 
-    return true; // actualizacion exitosa
+    return true;
   }
 
   removeBook(id: number) {
     this._bookshelf.update(items => items.filter(b => b.id !== id));
+  }
+
+
+  markAsLoaned(bookId: number) {
+    this._loanedBookIds.update(ids => {
+      const newSet = new Set(ids);
+      newSet.add(bookId);
+      return newSet;
+    });
+  }
+
+  markAsAvailable(bookId: number) {
+    this._loanedBookIds.update(ids => {
+      const newSet = new Set(ids);
+      newSet.delete(bookId);
+      return newSet;
+    });
   }
 }

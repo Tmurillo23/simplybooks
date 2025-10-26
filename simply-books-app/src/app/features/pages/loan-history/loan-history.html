@@ -1,1 +1,64 @@
-<p>loan-history works!</p>
+<!-- loan-history.html -->
+<div class="history-container">
+  <div class="history-header">
+    <h2>Historial de Préstamos</h2>
+
+    <div class="stats">
+      <div class="stat-card">
+        <h3>{{ stats.total }}</h3>
+        <p>Total de Préstamos</p>
+      </div>
+      <div class="stat-card active">
+        <h3>{{ stats.active }}</h3>
+        <p>Préstamos Activos</p>
+      </div>
+      <div class="stat-card returned">
+        <h3>{{ stats.returned }}</h3>
+        <p>Libros Devueltos</p>
+      </div>
+    </div>
+  </div>
+
+  @if (history.length > 0) {
+    <div class="actions">
+      <button class="btn-danger" (click)="clearAllHistory()">
+        🗑️ Limpiar Historial Completo
+      </button>
+    </div>
+
+    <table class="history-table">
+      <thead>
+      <tr>
+        <th>Beneficiario</th>
+        <th>Libro</th>
+        <th>Autor</th>
+        <th>Fecha Préstamo</th>
+        <th>Fecha Devolución</th>
+        <th>Duración</th>
+        <th>Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (loan of history; track loan.id) {
+          <tr>
+            <td>{{ loan.beneficiary }}</td>
+            <td>{{ loan.book.title }}</td>
+            <td>{{ loan.book.author }}</td>
+            <td>{{ loan.loanDate }}</td>
+            <td>{{ loan.returnDate  }}</td>
+            <td>{{ calculateLoanDuration(loan) }} días</td>
+            <td>
+              <button class="btn-delete" (click)="deleteLoan(loan.id)">
+                ❌ Eliminar
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <div class="empty-state">
+      <p>📚 No hay historial de préstamos devueltos</p>
+    </div>
+  }
+</div>

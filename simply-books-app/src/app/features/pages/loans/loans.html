@@ -1,1 +1,97 @@
-<p>borrows works!</p>
+<div class="loan-container">
+  <h2>Registrar Préstamo</h2>
+
+  <form (ngSubmit)="addLoan()">
+    <div>
+      <label>Beneficiario:</label>
+      <input
+        type="text"
+        [(ngModel)]="newLoan.beneficiary"
+        name="beneficiary"
+        placeholder="Nombre del beneficiario"
+        required>
+    </div>
+
+    <div>
+      <label>Libro:</label>
+      <select [(ngModel)]="newLoan.book" name="book" required>
+        <option [ngValue]="null" disabled selected>Selecciona un libro</option>
+        @for (book of availableBooks; track book.id) {
+          <option [ngValue]="book">
+            {{ book.title }} - {{ book.author }}
+          </option>
+        }
+      </select>
+
+      @if (availableBooks.length === 0) {
+        <p class="no-books">
+          📚 No hay libros físicos disponibles para préstamo.
+          <br>
+          <small>(Los libros digitales no se pueden prestar)</small>
+        </p>
+      }
+    </div>
+
+    <div>
+      <label>Fecha de Préstamo:</label>
+      <input
+        type="date"
+        [(ngModel)]="newLoan.loanDate"
+        name="loanDate"
+        required>
+    </div>
+
+    <button type="submit">Registrar Préstamo</button>
+  </form>
+
+    <div class="history-button">
+      <button [routerLink]="['/loan-history']">
+        📜 Ver Historial de Préstamos
+      </button>
+    </div>
+
+
+  <h2>Préstamos Activos</h2>
+  @if (activeLoans && activeLoans.length > 0) {
+    <div class="loans-summary">
+      <p>📊 Tienes <strong>{{ activeLoans.length }}</strong> préstamo(s) activo(s)</p>
+    </div>
+
+    <table>
+      <thead>
+      <tr>
+        <th>Beneficiario</th>
+        <th>Libro</th>
+        <th>Autor</th>
+        <th>Fecha de Préstamo</th>
+        <th>Días Prestado</th>
+        <th>Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (loan of activeLoans; track loan.id) {
+          <tr>
+            <td>{{ loan.beneficiary }}</td>
+            <td>{{ loan.book.title }}</td>
+            <td>{{ loan.book.author }}</td>
+            <td>{{ loan.loanDate }}</td>
+            <td>
+              {{ calculateDaysSinceLoan(loan.loanDate) }} días
+            </td>
+            <td>
+              <button
+                class="btn-return"
+                (click)="markReturned(loan)">
+                ✓ Marcar como devuelto
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <div class="empty-state">
+      <p>📖 No hay préstamos activos en este momento</p>
+    </div>
+  }
+</div>

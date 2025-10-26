@@ -13,6 +13,7 @@ import {UpdateProfile} from './features/pages/update-profile/update-profile';
 import {CollectionDetail} from './features/pages/collection-detail/collection-detail';
 import {CreateCollection} from './features/pages/create-collection/create-collection';
 import {EditCollection} from './features/pages/edit-collection/edit-collection';
+import {LoanHistory} from './features/pages/loan-history/loan-history';
 
 export const routes: Routes = [
   {
@@ -74,6 +75,11 @@ export const routes: Routes = [
   {
     path:"loans",
     component:Loans,
+    pathMatch:"full"
+  },
+  {
+    path:"loan-history",
+    component:LoanHistory,
     pathMatch:"full"
   },
   {
