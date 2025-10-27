@@ -1,1 +1,62 @@
-<p>create-review works!</p>
+<div class="create-review-container">
+  <h2>Crear nueva reseña</h2>
+
+  <!-- Seleccionar libro -->
+  <div class="form-group">
+    <label for="book-select">Selecciona un libro:</label>
+    <select id="book-select" [(ngModel)]="selectedBookId">
+      <option value="" disabled selected>-- Elige un libro --</option>
+      @for (book of availableBooks; track book.id) {
+        <option [value]="book.id">{{ book.title }}</option>
+      }
+    </select>
+  </div>
+
+  <!-- Título de la reseña -->
+  <div class="form-group">
+    <label for="review-title">Título de la reseña:</label>
+    <input
+      id="review-title"
+      type="text"
+      [(ngModel)]="title"
+      placeholder="Ejemplo: Una historia que me inspiró"
+    />
+  </div>
+
+  <!-- Calificación -->
+  <div class="form-group">
+    <label>Calificación:</label>
+    <div class="stars">
+      @for (star of [1,2,3,4,5]; track star) {
+        <span
+          [class]="star <= rating ? 'filled-star' : 'empty-star'"
+          (click)="rating = star"
+          [title]="star + ' estrella(s)'"
+          aria-label="{{star}} estrellas"
+        >★</span>
+      }
+    </div>
+  </div>
+
+  <!-- Contenido de la reseña -->
+  <div class="form-group">
+    <label for="review-content">Reseña:</label>
+    <textarea
+      id="review-content"
+      [(ngModel)]="content"
+      rows="5"
+      placeholder="Escribe tu reseña aquí..."
+    ></textarea>
+  </div>
+
+  <!-- Botones de acción -->
+  <div class="buttons">
+    <button type="button" (click)="saveDraft()">💾 Guardar como borrador</button>
+    <button type="button" (click)="publishReview()">🚀 Publicar directamente</button>
+  </div>
+
+  <!-- Mensaje si no hay libros -->
+  @if (availableBooks.length === 0) {
+    <p class="no-books-msg">No hay libros disponibles para reseñas.</p>
+  }
+</div>

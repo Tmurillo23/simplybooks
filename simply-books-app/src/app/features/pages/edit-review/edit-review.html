@@ -1,1 +1,66 @@
-<p>edit-review works!</p>
+<div class="edit-review-container">
+  <h2>Editar reseña</h2>
+
+  <!-- Seleccionar libro -->
+  <div class="form-group">
+    <label for="book-select">Libro:</label>
+    <select id="book-select" [(ngModel)]="selectedBookId">
+      <option value="" disabled>-- Elige un libro --</option>
+      @for (book of availableBooks; track book.id) {
+        <option [value]="book.id">{{ book.title }}</option>
+      }
+    </select>
+  </div>
+
+  <!-- Título -->
+  <div class="form-group">
+    <label for="review-title">Título:</label>
+    <input
+      id="review-title"
+      type="text"
+      [(ngModel)]="title"
+      placeholder="Ejemplo: Un viaje inolvidable"
+    />
+  </div>
+
+  <!-- Calificación -->
+  <div class="form-group">
+    <label>Calificación:</label>
+    <div class="stars">
+      @for (star of [1, 2, 3, 4, 5]; track star) {
+        <span
+          [class]="star <= rating ? 'filled-star' : 'empty-star'"
+          (click)="rating = star"
+          [title]="star + ' estrella(s)'"
+          aria-label="{{ star }} estrellas"
+        >★</span>
+      }
+    </div>
+  </div>
+
+  <!-- Contenido -->
+  <div class="form-group">
+    <label for="review-content">Reseña:</label>
+    <textarea
+      id="review-content"
+      [(ngModel)]="content"
+      rows="5"
+      placeholder="Actualiza tu reseña..."
+    ></textarea>
+  </div>
+
+  <!-- Borrador -->
+  <div class="form-group checkbox">
+    <label>
+      <input type="checkbox" [(ngModel)]="draft" /> Guardar como borrador
+    </label>
+  </div>S
+
+  <!-- Botones -->
+  <div class="buttons">
+    <!-- Botón solo guarda cambios -->
+    <button type="button" (click)="updateReview()">💾 Actualizar reseña</button>
+    <!-- Volver a la lista de reseñas -->
+    <button type="button" [routerLink]="['/reviews']">↩️ Volver</button>
+  </div>
+</div>

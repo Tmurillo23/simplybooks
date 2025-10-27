@@ -3,14 +3,13 @@ import { CollectionService } from '../../../shared/services/collections-service'
 import { Auth } from '../../../shared/services/auth';
 import { CollectionInterface } from '../../../shared/interfaces/collection-interface';
 import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common'; // <-- IMPORTANTE
 
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-collections',
   templateUrl: './collections.html',
-  imports: [RouterLink,CommonModule],
+  imports: [RouterLink],
   standalone: true,
   styleUrls: ['./collections.css']
 })

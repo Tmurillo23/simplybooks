@@ -1,1 +1,44 @@
-<p>reviews works!</p>
+<div class="reviews-container">
+  <h2>Mis reseñas</h2>
+
+  <!-- Botón para crear nueva reseña -->
+  <div class="create-review-btn">
+    <button [routerLink]="['/create-review']">Crear nueva reseña</button>
+  </div>
+
+  @if (reviews.length === 0) {
+    <p>No has escrito ninguna reseña todavía.</p>
+  }
+
+  @for (review of reviews; track review.id) {
+    <div class="review-card">
+      <h3 class="book-title">
+        <a
+          [routerLink]="['/review', review.id]"
+          class="review-link"
+          title="Ver detalles de la reseña"
+        >
+          {{ getBookTitle(review.bookId) }}
+        </a>
+      </h3>
+
+      <p><strong>Calificación:</strong> {{ review.rating }}★</p>
+
+      <p>
+        <strong>Estado:</strong>
+        <span [class.draft]="review.draft" [class.published]="!review.draft">
+           {{ review.draft ? 'Borrador' : 'Publicado' }}
+       </span>
+
+      </p>
+
+      <div class="actions">
+        @if (review.draft) {
+          <button [routerLink]="['/edit-review', review.id]"> Editar</button>
+          <button (click)="publish(review)">Publicar</button>
+        }
+        <button (click)="delete(review)">Eliminar</button>
+      </div>
+    </div>
+  }
+</div>

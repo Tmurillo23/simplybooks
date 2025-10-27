@@ -1,0 +1,33 @@
+<div class="comment" [style.marginLeft.px]="level * 20">
+  <!-- cabecera del comentario -->
+  <div class="comment-header">
+    <strong>{{ comment.userId }}</strong>
+    <span>{{ comment.createdAt }}</span>
+  </div>
+
+  <!-- contenido -->
+  <p>{{ comment.content }}</p>
+
+  <!-- acciones -->
+  <div class="comment-actions">
+    <button (click)="parent.replyTo(comment.id)">Responder</button>
+    <button (click)="parent.deleteComment(comment.id)">Eliminar</button>
+    <button
+      (click)="parent.toggleCommentLike(comment.id)"
+      [class.liked]="parent.hasUserLikedComment(comment.id)"
+    >
+      ❤️ {{ comment.likes }} Me gusta
+    </button>
+  </div>
+
+  <!-- formulario para responder -->
+  <div [hidden]="parent.replyingTo !== comment.id">
+    <textarea [(ngModel)]="parent.newComment" rows="2" placeholder="Escribe tu respuesta..."></textarea>
+    <div class="reply-actions">
+      <button (click)="parent.addComment()">Enviar</button>
+      <button (click)="parent.cancelReply()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- puedes agregar más según el máximo de replies que quieras renderizar -->
+</div>

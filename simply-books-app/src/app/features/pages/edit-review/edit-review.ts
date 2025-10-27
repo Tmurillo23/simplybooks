@@ -1,11 +1,75 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { ReviewService } from '../../../shared/services/review-service';
+import { BookshelfService } from '../../../shared/services/bookshelf';
+import { ReviewInterface } from '../../../shared/interfaces/review-interface';
+import { BookShelfItem } from '../../../shared/services/bookshelf';
 
 @Component({
   selector: 'app-edit-review',
-  imports: [],
+  standalone: true,
+  imports: [ FormsModule, RouterLink],
   templateUrl: './edit-review.html',
-  styleUrl: './edit-review.css'
+  styleUrls: ['./edit-review.css']
 })
-export class EditReview {
+export class EditReview implements OnInit {
+  reviewId: string = '';
+  review?: ReviewInterface;
+
+  title = '';
+  content = '';
+  rating = 0;
+  draft = false;
+  selectedBookId = '';
+  availableBooks: BookShelfItem[] = [];
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private reviewService: ReviewService,
+    private bookshelfService: BookshelfService
+  ) {}
+
+  ngOnInit() {
+    this.reviewId = this.route.snapshot.paramMap.get('id') || '';
+
+    if (!this.reviewId) {
+      console.error('No se proporcionó ID de reseña');
+      return;
+    }
+
+    // Cargar reseña existente
+    const found = this.reviewService.getReviewById(this.reviewId);
+    if (!found) {
+      console.error('Reseña no encontrada');
+      return;
+    }
+
+    this.review = found;
+    this.title = found.title;
+    this.content = found.content;
+    this.rating = found.rating;
+    this.draft = !!found.draft;
+    this.selectedBookId = found.bookId;
+
+    // Cargar libros disponibles del usuario
+    this.bookshelfService.loadUserFiles();
+    this.availableBooks = this.bookshelfService.availableBooks;
+  }
+
+  updateReview() {
+    if (!this.reviewId) return;
+
+    this.reviewService.updateReview(this.reviewId, {
+      title: this.title,
+      content: this.content,
+      rating: this.rating,
+      draft: this.draft
+    });
+
+    alert('✅ Reseña actualizada correctamente');
+    this.router.navigate(['/reviews']);
+  }
 
 }

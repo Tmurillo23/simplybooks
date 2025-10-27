@@ -15,6 +15,9 @@ import {CreateCollection} from './features/pages/create-collection/create-collec
 import {EditCollection} from './features/pages/edit-collection/edit-collection';
 import {LoanHistory} from './features/pages/loan-history/loan-history';
 import {Reviews} from './features/pages/reviews/reviews';
+import {CreateReview} from './features/pages/create-review/create-review';
+import {ReviewDetail} from './features/pages/review-detail/review-detail';
+import {EditReview} from './features/pages/edit-review/edit-review';
 
 export const routes: Routes = [
   {
@@ -96,6 +99,21 @@ export const routes: Routes = [
   {
     path:"reviews",
     component:Reviews,
+    pathMatch:"full"
+  },
+  {
+    path:"create-review",
+    component:CreateReview,
+    pathMatch:"full"
+  },
+  {
+    path:"review/:id",
+    component:ReviewDetail,
+    pathMatch:"full"
+  },
+  {
+    path:"edit-review/:id",
+    component:EditReview,
     pathMatch:"full"
   },
   {

@@ -1,1 +1,148 @@
-<p>review-detail works!</p>
+<div class="review-detail-container">
+  <section class="review-info" [hidden]="!review">
+    <h2 class="review-title">{{ review?.title }}</h2>
+    <p><strong>Libro:</strong> {{ review?.bookId }}</p>
+    <p><strong>Calificación:</strong> {{ review?.rating }}★</p>
+    <p><strong>Contenido:</strong> {{ review?.content }}</p>
+    <p>
+      <strong>Estado:</strong>
+      <span [class.draft]="review?.draft" [class.published]="!review?.draft">
+        {{ review?.draft ? 'Borrador' : 'Publicado' }}
+      </span>
+    </p>
+
+    <div class="likes-section" [hidden]="review?.draft">
+      <button
+        (click)="toggleReviewLike()"
+        [class.liked]="hasUserLikedReview()"
+        class="like-btn"
+      >
+        ❤️ {{ review?.likes }} Me gusta
+      </button>
+    </div>
+
+    <a [routerLink]="['/reviews']" class="back-link">← Volver a mis reseñas</a>
+  </section>
+
+  <section class="comments-section">
+    <h3>Comentarios</h3>
+
+    <div class="new-comment">
+      <textarea
+        [(ngModel)]="newComment"
+        rows="3"
+        placeholder="Escribe un comentario..."
+      ></textarea>
+      <button (click)="addComment()">Comentar</button>
+    </div>
+
+    @if (comments.length === 0) {
+      <p>Aún no hay comentarios.</p>
+    } @else {
+      @for (comment of comments; track comment.id) {
+        <div class="comment" [style.marginLeft.px]="0">
+          <div class="comment-header">
+            <strong>{{ comment.userId }}</strong>
+            <span>{{ comment.createdAt }}</span>
+          </div>
+          <p>{{ comment.content }}</p>
+          <div class="comment-actions">
+            <button (click)="replyTo(comment.id)">Responder</button>
+            <button (click)="deleteComment(comment.id)">Eliminar</button>
+            <button (click)="toggleCommentLike(comment.id)" [class.liked]="hasUserLikedComment(comment.id)">
+              ❤️ {{ comment.likes }} Me gusta
+            </button>
+          </div>
+
+          @if (replyingTo === comment.id) {
+            <div class="reply-form" [style.marginLeft.px]="20">
+              <textarea
+                [(ngModel)]="newComment"
+                rows="2"
+                placeholder="Escribe tu respuesta..."
+              ></textarea>
+              <div class="reply-actions">
+                <button (click)="addComment()">Enviar</button>
+                <button (click)="cancelReply()">Cancelar</button>
+              </div>
+            </div>
+          }
+
+          @if (comment.replies.length > 0) {
+            @for (reply of comment.replies; track reply.id) {
+              <div class="reply" [style.marginLeft.px]="20">
+                <div class="reply-header">
+                  <strong>{{ reply.userId }}</strong>
+                  <span>{{ reply.createdAt }}</span>
+                </div>
+                <p>{{ reply.content }}</p>
+                <div class="comment-actions">
+                  <button (click)="replyTo(reply.id)">Responder</button>
+                  <button (click)="deleteComment(reply.id)">Eliminar</button>
+                  <button (click)="toggleCommentLike(reply.id)" [class.liked]="hasUserLikedComment(reply.id)">
+                    ❤️ {{ reply.likes }} Me gusta
+                  </button>
+                </div>
+
+                @if (replyingTo === reply.id) {
+                  <div class="reply-form" [style.marginLeft.px]="20">
+                    <textarea
+                      [(ngModel)]="newComment"
+                      rows="2"
+                      placeholder="Escribe tu respuesta..."
+                    ></textarea>
+                    <div class="reply-actions">
+                      <button (click)="addComment()">Enviar</button>
+                      <button (click)="cancelReply()">Cancelar</button>
+                    </div>
+                  </div>
+                }
+
+                @if (reply.replies.length > 0) {
+                  @for (subReply of reply.replies; track subReply.id) {
+                    <div class="reply" [style.marginLeft.px]="40">
+                      <div class="reply-header">
+                        <strong>{{ subReply.userId }}</strong>
+                        <span>{{ subReply.createdAt }}</span>
+                      </div>
+                      <p>{{ subReply.content }}</p>
+                      <div class="comment-actions">
+                        <button (click)="replyTo(subReply.id)">Responder</button>
+                        <button (click)="deleteComment(subReply.id)">Eliminar</button>
+                        <button (click)="toggleCommentLike(subReply.id)" [class.liked]="hasUserLikedComment(subReply.id)">
+                          ❤️ {{ subReply.likes }} Me gusta
+                        </button>
+                      </div>
+
+                      @if (replyingTo === subReply.id) {
+                        <div class="reply-form" [style.marginLeft.px]="60">
+                          <textarea
+                            [(ngModel)]="newComment"
+                            rows="2"
+                            placeholder="Escribe tu respuesta..."
+                          ></textarea>
+                          <div class="reply-actions">
+                            <button (click)="addComment()">Enviar</button>
+                            <button (click)="cancelReply()">Cancelar</button>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  }
+                }
+              </div>
+            }
+          }
+        </div>
+      }
+    }
+  </section>
+
+  <section class="draft-warning" [hidden]="!review?.draft">
+    <p class="warning-message">
+      Esta reseña es un <strong>borrador</strong>. No puede recibir comentarios ni reacciones hasta que sea publicada.
+    </p>
+  </section>
+
+  <p [hidden]="review">La reseña no fue encontrada.</p>
+</div>
