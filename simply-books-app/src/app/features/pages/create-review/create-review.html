@@ -38,16 +38,22 @@
     </div>
   </div>
 
-  <!-- Contenido de la reseña -->
   <div class="form-group">
     <label for="review-content">Reseña:</label>
-    <textarea
-      id="review-content"
+    <editor
+      apiKey="tinyMCEApiKey"
       [(ngModel)]="content"
-      rows="5"
-      placeholder="Escribe tu reseña aquí..."
-    ></textarea>
+      [init]="{
+      height: 300,
+      menubar: false,
+      plugins: 'lists link image paste help wordcount',
+      toolbar: 'undo redo | formatselect | bold italic underline | bullist numlist | link image | removeformat | help',
+
+    }
+"
+    ></editor>
   </div>
+
 
   <!-- Botones de acción -->
   <div class="buttons">

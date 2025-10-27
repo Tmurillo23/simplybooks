@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { EditorModule } from '@tinymce/tinymce-angular';
 import { ReviewService } from '../../../shared/services/review-service';
 import { BookshelfService } from '../../../shared/services/bookshelf';
 import { ReviewInterface } from '../../../shared/interfaces/review-interface';
 import { BookShelfItem } from '../../../shared/services/bookshelf';
+import { TINYMCE_KEY } from '../../../../environments/environment';
+
 
 @Component({
   selector: 'app-edit-review',
   standalone: true,
-  imports: [ FormsModule, RouterLink],
+  imports: [ FormsModule, RouterLink, EditorModule],
   templateUrl: './edit-review.html',
   styleUrls: ['./edit-review.css']
 })
@@ -23,6 +26,8 @@ export class EditReview implements OnInit {
   draft = false;
   selectedBookId = '';
   availableBooks: BookShelfItem[] = [];
+  tinyMCEApiKey = TINYMCE_KEY;
+
 
   constructor(
     private route: ActivatedRoute,

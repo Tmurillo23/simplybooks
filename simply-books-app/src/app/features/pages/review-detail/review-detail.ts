@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { EditorModule } from '@tinymce/tinymce-angular';
 import { ReviewService } from '../../../shared/services/review-service';
 import { CommentService, CommentTree } from '../../../shared/services/comment-service';
 import { ReviewInterface } from '../../../shared/interfaces/review-interface';
 import { Auth } from '../../../shared/services/auth';
-import { FormsModule } from '@angular/forms';
+import { TINYMCE_KEY } from '../../../../environments/environment';
+
 
 @Component({
   selector: 'app-review-detail',
   standalone: true,
-  imports: [RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule, EditorModule],
   templateUrl: './review-detail.html',
   styleUrls: ['./review-detail.css']
 })
@@ -18,13 +21,27 @@ export class ReviewDetail implements OnInit {
   comments: CommentTree[] = [];
   reviewId!: string;
   userEmail!: string;
+  tinyMCEApiKey = TINYMCE_KEY;
 
   newComment = '';
   replyingTo: string | null = null;
 
-  // Estado local para likes
   hasLikedReviewFlag = false;
-  likedComments: Record<string, boolean> = {}; // commentId => liked
+  likedComments: Record<string, boolean> = {};
+
+  readonlyEditorConfig = {
+    menubar: false,
+    toolbar: false,
+    statusbar: false,
+    height: 300,
+    readonly: true,
+    content_style: 'body { font-family: Helvetica, Arial, sans-serif; font-size: 16px; }',
+    setup: (editor: any) => {
+      editor.on('init', () => {
+        editor.mode.set('readonly');
+      });
+    }
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -82,7 +99,6 @@ export class ReviewDetail implements OnInit {
   toggleReviewLike(): void {
     if (!this.review || this.review.draft) return;
 
-    // Contador local
     this.review.likes += this.hasLikedReviewFlag ? -1 : 1;
     this.hasLikedReviewFlag = !this.hasLikedReviewFlag;
   }
@@ -96,7 +112,7 @@ export class ReviewDetail implements OnInit {
     const hasLiked = this.likedComments[commentId];
     this.commentService.toggleLike(commentId, hasLiked);
     this.likedComments[commentId] = !hasLiked;
-    this.loadComments(); // recarga árbol actualizado
+    this.loadComments();
   }
 
   hasUserLikedComment(commentId: string): boolean {

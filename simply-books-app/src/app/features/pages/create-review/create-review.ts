@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { EditorModule } from '@tinymce/tinymce-angular';
 import { ReviewService } from '../../../shared/services/review-service';
 import { BookshelfService, BookShelfItem } from '../../../shared/services/bookshelf';
 import { Auth } from '../../../shared/services/auth';
-import { FormsModule } from '@angular/forms';
+import { TINYMCE_KEY } from '../../../../environments/environment';
+
 
 @Component({
   selector: 'app-create-review',
   templateUrl: './create-review.html',
   styleUrls: ['./create-review.css'],
-  imports: [RouterLink, FormsModule]
+  imports: [FormsModule, EditorModule]
 })
 export class CreateReview implements OnInit {
   availableBooks: BookShelfItem[] = [];
@@ -17,8 +19,9 @@ export class CreateReview implements OnInit {
   title = '';
   content = '';
   rating = 0;
-
   userId!: string;
+  tinyMCEApiKey = TINYMCE_KEY;
+
 
   constructor(
     private reviewService: ReviewService,
@@ -29,37 +32,15 @@ export class CreateReview implements OnInit {
   ngOnInit(): void {
     const user = this.auth.getUserLogged();
     this.userId = user.email;
-
-    // Solo libros que no sean archivos (sin file_url)
     this.availableBooks = this.bookshelfService.bookshelvesItems.filter(book => !book.file_url);
   }
 
-  saveDraft(): void {
-    this.saveReview(true);
-  }
-
-  publishReview(): void {
-    this.saveReview(false);
-  }
+  saveDraft(): void { this.saveReview(true); }
+  publishReview(): void { this.saveReview(false); }
 
   private saveReview(draft: boolean): void {
-    if (!this.selectedBookId) {
-      alert('Selecciona un libro');
-      return;
-    }
-
-    if (!this.title.trim()) {
-      alert('Escribe un título para tu reseña');
-      return;
-    }
-
-    if (!this.content.trim()) {
-      alert('Escribe el contenido de la reseña');
-      return;
-    }
-
-    if (this.rating < 1 || this.rating > 5) {
-      alert('La calificación debe estar entre 1 y 5');
+    if (!this.selectedBookId || !this.title.trim() || !this.content.trim() || this.rating < 1 || this.rating > 5) {
+      alert('Completa todos los campos correctamente');
       return;
     }
 
@@ -69,9 +50,8 @@ export class CreateReview implements OnInit {
       userId: this.userId,
       content: this.content,
       rating: this.rating,
-      draft : draft,
+      draft,
     });
-
 
     alert(draft ? 'Reseña guardada como borrador' : 'Reseña publicada');
     this.resetForm();
