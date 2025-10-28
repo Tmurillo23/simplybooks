@@ -37,7 +37,6 @@ export class Reviews implements OnInit {
     return book ? book.title : 'Título no disponible';
   }
 
-  // 🔹 Publicar borrador
   publish(review: ReviewInterface): void {
     if (review.draft) {
       this.reviewService.publishReview(review.id);

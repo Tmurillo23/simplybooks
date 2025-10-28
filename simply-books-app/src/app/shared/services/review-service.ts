@@ -88,6 +88,7 @@ export class ReviewService {
    * Actualizar el contador de comentarios.
    * Solo reseñas publicadas pueden tener comentarios.
    */
+
   addComment(reviewId: string): void {
     const review = this.reviews.find(r => r.id === reviewId);
     if (review && !review.draft) {
@@ -96,7 +97,6 @@ export class ReviewService {
       console.warn('No se pueden comentar reseñas en borrador.');
     }
   }
-
   /**
    * Actualizar una reseña existente.
    * Se puede usar tanto para borradores como para publicadas.

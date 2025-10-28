@@ -18,7 +18,7 @@
           <img class="avatar" [src]="u.avatar_url || '/assets/default-avatar.png'" [alt]="u.username">
 
           <div class="meta">
-            <a [routerLink]="['/u', u.username]" class="name">{{ u.username }}</a>
+            <a [routerLink]="['/profile', u.username]" class="name">{{ u.username }}</a>
             @if (u.bio) {
               <div class="bio">{{ u.bio }}</div>
             }

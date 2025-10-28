@@ -7,12 +7,13 @@ import { CommentService, CommentTree } from '../../../shared/services/comment-se
 import { ReviewInterface } from '../../../shared/interfaces/review-interface';
 import { Auth } from '../../../shared/services/auth';
 import { TINYMCE_KEY } from '../../../../environments/environment';
+import {CommentItem} from '../comment-item/comment-item';
 
 
 @Component({
   selector: 'app-review-detail',
   standalone: true,
-  imports: [RouterLink, FormsModule, EditorModule],
+  imports: [RouterLink, FormsModule, EditorModule, CommentItem],
   templateUrl: './review-detail.html',
   styleUrls: ['./review-detail.css']
 })

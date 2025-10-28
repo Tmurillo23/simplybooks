@@ -1,8 +1,7 @@
-// typescript
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FollowingService } from '../../../shared/services/following-service';
+import { FollowService } from '../../../shared/services/follow-service';
 import { User } from '../../../shared/interfaces/user';
 
 @Component({
@@ -15,8 +14,9 @@ import { User } from '../../../shared/interfaces/user';
 export class Following implements OnInit {
   users: User[] = [];
   loading = false;
+  stats = { followers: 0, following: 0 };
 
-  constructor(private followingService: FollowingService) {}
+  constructor(private followingService: FollowService) {}
 
   ngOnInit(): void {
     this.load();
@@ -24,8 +24,8 @@ export class Following implements OnInit {
 
   load(): void {
     this.loading = true;
-    // Servicio síncrono: obtener copia inmediata de la lista
     this.users = this.followingService.getFollowingUsers();
+    this.stats = this.followingService.getFollowStats();
     this.loading = false;
   }
 
@@ -35,15 +35,14 @@ export class Following implements OnInit {
     } else {
       this.follow(u);
     }
+    this.stats = this.followingService.getFollowStats(); // 🔸 vuelve a calcular después del cambio
   }
 
   private follow(u: User): void {
-    // actualizar estado local basándonos en la respuesta síncrona
     const prev = !!u.following;
     const ok = this.followingService.followUser(u.username);
     if (ok) {
       u.following = true;
-      // si el usuario no estaba previamente en la lista, aseguramos reflejar datos mínimos
       if (!this.users.find(x => x.username === u.username)) {
         this.users.push({ ...u, following: true } as User);
       }

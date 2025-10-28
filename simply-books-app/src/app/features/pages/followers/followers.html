@@ -1,1 +1,40 @@
-<p>followers works!</p>
+<div class="followers-container">
+  <h2>Tus seguidores</h2>
+
+  <!-- Estado de carga -->
+  @if (loading) {
+    <div class="loading">Cargando seguidores...</div>
+  }
+
+  <!-- Lista vacía -->
+  @if (!loading && followers.length === 0) {
+    <div class="empty">
+      <p>No tienes seguidores por ahora 😢</p>
+    </div>
+  }
+
+  <!-- Lista de seguidores -->
+  @if (!loading && followers.length > 0) {
+    <ul class="followers-list">
+      @for (user of followers; track trackByUsername($index, user)) {
+        <li class="follower-item">
+          <div class="follower-info">
+            <img [src]="user.avatar_url || 'assets/default-avatar.png'" alt="Avatar" class="avatar" />
+            <div class="details">
+              <a [routerLink]="['/profile', user.username]" class="username">
+                {{user.username }}
+              </a>
+              <p class="bio">{{ user.bio || 'Sin descripción.' }}</p>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn follow" (click)="followBack(user)">Seguir de vuelta</button>
+            <button class="btn remove" (click)="removeFollower(user)">Eliminar</button>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</div>
+

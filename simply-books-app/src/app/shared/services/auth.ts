@@ -64,7 +64,7 @@ export class Auth {
     this.verifyUserLogged();
   }
 
-  // Devuelve el objeto User completo almacenado (o un guest user si no hay sesión)
+
   getUserLogged(): User {
     const email = sessionStorage.getItem('userLogged');
     if (!email) return { username: 'Bienvenido', email: 'ejemplo@mail.com', password: '' } as User;

@@ -20,6 +20,7 @@ import {ReviewDetail} from './features/pages/review-detail/review-detail';
 import {EditReview} from './features/pages/edit-review/edit-review';
 import {Followers} from './features/pages/followers/followers';
 import {Following} from './features/pages/following/following';
+import {SocialFeed} from './features/pages/social-feed/social-feed';
 
 export const routes: Routes = [
   {
@@ -126,6 +127,11 @@ export const routes: Routes = [
   {
     path:"edit-review/:id",
     component:EditReview,
+    pathMatch:"full"
+  },
+  {
+    path:"feed",
+    component:SocialFeed,
     pathMatch:"full"
   },
   {
