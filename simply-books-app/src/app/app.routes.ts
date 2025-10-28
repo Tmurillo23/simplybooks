@@ -18,6 +18,8 @@ import {Reviews} from './features/pages/reviews/reviews';
 import {CreateReview} from './features/pages/create-review/create-review';
 import {ReviewDetail} from './features/pages/review-detail/review-detail';
 import {EditReview} from './features/pages/edit-review/edit-review';
+import {Followers} from './features/pages/followers/followers';
+import {Following} from './features/pages/following/following';
 
 export const routes: Routes = [
   {
@@ -48,6 +50,16 @@ export const routes: Routes = [
   {
     path:"update-profile",
     component:UpdateProfile,
+    pathMatch:"full"
+  },
+  {
+    path:"followers",
+    component:Followers,
+    pathMatch:"full"
+  },
+  {
+    path:"following",
+    component:Following,
     pathMatch:"full"
   },
   {

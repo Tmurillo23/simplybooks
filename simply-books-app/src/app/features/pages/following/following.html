@@ -1,1 +1,39 @@
-<p>following works!</p>
+<div class="following-page">
+  <h2>Personas que sigues</h2>
+
+  @if (loading) {
+    <div class="loading">Cargando...</div>
+  }
+
+  @if (!loading && users.length === 0) {
+    <div class="empty">
+      No sigues a nadie todavía.
+    </div>
+  }
+
+  @if (!loading && users.length > 0) {
+    <ul class="list">
+      @for (u of users; track u.username) {
+        <li class="user">
+          <img class="avatar" [src]="u.avatar_url || '/assets/default-avatar.png'" [alt]="u.username">
+
+          <div class="meta">
+            <a [routerLink]="['/u', u.username]" class="name">{{ u.username }}</a>
+            @if (u.bio) {
+              <div class="bio">{{ u.bio }}</div>
+            }
+            <div class="stats">
+              <span>{{ u.stats?.booksRead || 0 }} libros</span>
+              <span>·</span>
+              <span>{{ u.stats?.reviewsCount || 0 }} reseñas</span>
+            </div>
+          </div>
+
+          <button class="btn" (click)="toggleFollow(u)" [class.following]="u.following">
+            {{ u.following ? 'Siguiendo' : 'Seguir' }}
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</div>

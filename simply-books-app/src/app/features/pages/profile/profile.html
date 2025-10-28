@@ -1,25 +1,50 @@
 <div class="profile-container">
-  <!-- Foto de perfil -->
+  <!-- Encabezado con avatar y nombre -->
   <div class="profile-header">
-    <div class="profile-pic"></div>
-    <h2>Foto de perfil</h2>
+    <img class="profile-pic" [src]="user.avatar_url || '/assets/default-avatar.png'" [alt]="user.username">
+    <div>
+      <h2>{{ user.username }}</h2>
+      <p class="bio" *ngIf="user.bio">{{ user.bio }}</p>
+    </div>
   </div>
 
-  @if (user.username) {
-    <form class="profile-form">
-      <div class="form-group">
-        <label for="email">Correo</label>
-        <input type="email" id="email" [value]="user.email" readonly>
-      </div>
+  <!-- Estadísticas -->
+  <div class="stats-container">
+    <div class="stat-item">
+      <div class="stat-value">{{ stats.booksRead }}</div>
+      <div class="stat-label">Libros leídos</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">{{ stats.reviewsCount }}</div>
+      <div class="stat-label">Reseñas</div>
+    </div>
+    <a [routerLink]="['/followers']" class="stat-item link-item">
+      <div class="stat-value">{{ stats.followersCount }}</div>
+      <div class="stat-label">Seguidores</div>
+    </a>
+    <a [routerLink]="['/following']" class="stat-item link-item">
+      <div class="stat-value">{{ stats.followingCount }}</div>
+      <div class="stat-label">Siguiendo</div>
+    </a>
+  </div>
 
-      <div class="form-group">
-        <label for="username">Usuario</label>
-        <input type="text" id="username" [value]="user.username" readonly>
-      </div>
+  <!-- Datos de cuenta -->
+  <form class="profile-form">
+    <div class="form-group">
+      <label for="email">Correo</label>
+      <input id="email" type="email" [value]="user.email" readonly>
+    </div>
 
-      <button type="button" class="btn-primary" [routerLink]="['/update-profile']">
-        Editar
-      </button>
-    </form>
-  }
+    <div class="form-group">
+      <label for="username">Usuario</label>
+      <input id="username" type="text" [value]="user.username" readonly>
+    </div>
+
+    <div class="form-group" *ngIf="user.created_at">
+      <label>Miembro desde</label>
+      <div>{{ user.created_at | date:'longDate' }}</div>
+    </div>
+
+    <button type="button" class="btn-primary" [routerLink]="['/update-profile']">Editar perfil</button>
+  </form>
 </div>

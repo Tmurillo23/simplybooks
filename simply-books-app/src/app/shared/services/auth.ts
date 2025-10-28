@@ -64,19 +64,32 @@ export class Auth {
     this.verifyUserLogged();
   }
 
-  getUserLogged() {
+  // Devuelve el objeto User completo almacenado (o un guest user si no hay sesión)
+  getUserLogged(): User {
     const email = sessionStorage.getItem('userLogged');
-    if (!email) return { username: 'Bienvenido', email: 'ejemplo@mail.com', password: '' };
+    if (!email) return { username: 'Bienvenido', email: 'ejemplo@mail.com', password: '' } as User;
 
     const userStr = localStorage.getItem(email);
-    if (!userStr) return { username: 'Bienvenido', email: 'ejemplo@mail.com', password: '' };
+    if (!userStr) return { username: 'Bienvenido', email: 'ejemplo@mail.com', password: '' } as User;
 
-    const user = JSON.parse(userStr) as User;
-    return {
-      username: user.username,
-      email: user.email,
-      password: user.password
-    };
+    try {
+      const stored = JSON.parse(userStr) as User;
+      const user: User = {
+        username: stored.username || '',
+        email: stored.email || email,
+        password: stored.password || '',
+        rePassword: stored.rePassword,
+        avatar_url: stored.avatar_url || '/assets/default-avatar.png',
+        created_at: stored.created_at,
+        bio: stored.bio || '',
+        following: typeof stored.following === 'boolean' ? stored.following : false,
+        stats: stored.stats || { booksRead: 0, reviewsCount: 0, followersCount: 0, followingCount: 0 }
+      } as User;
+
+      return user;
+    } catch {
+      return { username: 'Bienvenido', email: 'ejemplo@mail.com', password: '' } as User;
+    }
   }
 
   updateUser(updatedUser: User) {

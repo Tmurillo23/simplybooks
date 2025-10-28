@@ -1,3 +1,9 @@
+export interface UserStats {
+  booksRead: number;
+  reviewsCount: number;
+  followersCount: number;
+  followingCount: number;
+}
 export interface User{
   username:string;
   password:string;
@@ -5,6 +11,7 @@ export interface User{
   rePassword?:string
   avatar_url?:string;
   created_at?:Date;
-  followers_count?:number;
-  following_count?:number;
+  bio?:string;
+  following?: boolean;
+  stats?:UserStats;
 }
