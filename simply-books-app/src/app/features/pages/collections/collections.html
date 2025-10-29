@@ -1,5 +1,14 @@
-<section id="collections">
+<!-- 🔍 Buscador arriba -->
+<div class="search-bar">
+  <input
+    type="text"
+    placeholder="Buscar colección..."
+    [value]="search()"
+    (input)="search.set($any($event.target).value)"
+  />
+</div>
 
+<section id="collections">
   <!-- Botón para crear nueva colección -->
   <div class="collections-header">
     <button class="add-collection-btn" [routerLink]="['/create-collection']">
@@ -7,16 +16,19 @@
     </button>
   </div>
 
-  @if (collections.length > 0) {
-    @for (collection of collections; track collection.id) {
+  @if (filteredCollections().length > 0) {
+    @for (collection of filteredCollections(); track collection.id) {
       <article class="collection-card">
-
-        <!-- Nombre clickeable -->
-        <h3 class="collection-name" [routerLink]="['/collection', collection.id]">
-          {{ collection.name }}
+        <h3 class="collection-name">
+          <a
+            [routerLink]="['/collection', collection.id]"
+            class="collection-link"
+            title="Ver colección"
+          >
+            {{ collection.name }}
+          </a>
         </h3>
 
-        <!-- Botones de acción -->
         <div class="collection-actions">
           <button [routerLink]="['/edit-collection', collection.id]">Editar</button>
           <button (click)="deleteCollection(collection.id)">Eliminar</button>

@@ -1,9 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CollectionService } from '../../../shared/services/collections-service';
 import { Auth } from '../../../shared/services/auth';
 import { CollectionInterface } from '../../../shared/interfaces/collection-interface';
 import { RouterLink } from '@angular/router';
-
 import Swal from 'sweetalert2';
 
 @Component({
@@ -17,7 +16,8 @@ export class Collections {
   private collectionService = inject(CollectionService);
   private authService = inject(Auth);
 
-  collections: CollectionInterface[] = [];
+  collections = signal<CollectionInterface[]>([]);
+  search = signal('');
 
   ngOnInit(): void {
     this.loadCollections();
@@ -28,14 +28,23 @@ export class Collections {
 
     if (!user || !user.username) {
       console.warn('⚠️ No hay usuario logueado.');
-      this.collections = [];
+      this.collections.set([]);
       return;
     }
 
-    this.collections = this.collectionService.getCollectionsByUser(user);
+    this.collections.set(this.collectionService.getCollectionsByUser(user));
   }
 
-  /** Eliminar colección con confirmación */
+  /** ✅ Filtro por nombre */
+  filteredCollections = computed(() => {
+    const term = this.search().toLowerCase();
+    if (!term) return this.collections();
+    return this.collections().filter(c =>
+      c.name.toLowerCase().includes(term)
+    );
+  });
+
+  /** 🗑️ Eliminar con confirmación */
   deleteCollection(id: string): void {
     Swal.fire({
       title: '¿Eliminar colección?',
@@ -48,7 +57,7 @@ export class Collections {
       if (result.isConfirmed) {
         try {
           this.collectionService.deleteCollection(id);
-          this.collections = this.collections.filter(c => c.id !== id);
+          this.collections.update(list => list.filter(c => c.id !== id));
           Swal.fire('Eliminado', 'La colección se eliminó correctamente.', 'success');
         } catch (error: any) {
           Swal.fire('Error', error.message, 'error');
@@ -56,5 +65,4 @@ export class Collections {
       }
     });
   }
-
 }

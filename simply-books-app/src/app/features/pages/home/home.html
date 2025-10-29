@@ -1,45 +1,76 @@
-<!-- Contenedor principal -->
+<!-- 🔍 Buscador arriba -->
+<div class="search-bar">
+  <input
+    type="text"
+    placeholder="Buscar libro por título o autor..."
+    [value]="search()"
+    (input)="search.set($any($event.target).value)"
+  />
+</div>
+
+<!-- Contenedor principal de las cards -->
 <section id="bookshelves">
-  @if (bookshelfService.availableBooks.length > 0) {
-    @for (book of bookshelfService.bookshelvesItems; track book.id) {
+  @if (filteredBooks().length > 0) {
+    @for (book of filteredBooks(); track book.id) {
       <article
         class="book-card"
         [routerLink]="book.file_url ? null : ['/book', book.id]"
         (click)="book.file_url ? downloadFile(book) : null"
         [class.downloadable]="book.file_url">
 
-        <img [src]="book.portrait_url || 'assets/default-cover.jpg'" [alt]="book.title" class="book-cover" />
+        <img
+          [src]="book.portrait_url || 'assets/default-cover.jpg'"
+          [alt]="book.title"
+          class="book-cover"
+        />
 
         <div class="book-details">
           <h3>{{ book.title }}</h3>
           <p><strong>Autor:</strong> {{ book.author || 'No especificado' }}</p>
           <p><strong>Año:</strong> {{ book.year || 'No especificado' }}</p>
-          <p><strong>Páginas:</strong> {{ book.pages || '0' }}</p>
           <p><strong>Leídas:</strong> {{ book.pages_read }} / {{ book.pages }}</p>
           <p><strong>Rating:</strong> {{ book.rating }} ⭐</p>
-          <p><strong>Estado:</strong> {{ book.reading_status }}</p>
-          <div class="book-actions">
-            <button [routerLink]="['/editbook', book.id]" (click)="$event.stopPropagation()">
-              ️ Editar
-            </button>
-            <button (click)="removeBook(book.id); $event.stopPropagation()">
-               Eliminar
-            </button>
-            <label>Estado de lectura</label>
-            <select [(ngModel)]="book.reading_status" name="reading_status">
-              <option value="Por leer">Por leer</option>
-              <option value="Leyendo">Leyendo</option>
-              <option value="Pausado">Pausado</option>
-              <option value="Completado">Completado</option>
-              <option value="Abandonado">Abandonado</option>
-            </select>
 
-            @if (book.file_url) {
-              <button (click)="downloadFile(book); $event.stopPropagation()" class="download-btn">
-                Descargar
-              </button>
-            }
+          <label style="margin-top: 0.3rem;">Estado:</label>
+          <select
+            [(ngModel)]="book.reading_status"
+            name="reading_status"
+            (click)="$event.stopPropagation()"
+            (change)="$event.stopPropagation()"
+            style="font-size: 0.7rem; padding: 0.2rem; margin-top: 0.1rem;"
+          >
+            <option value="Por leer">Por leer</option>
+            <option value="Leyendo">Leyendo</option>
+            <option value="Pausado">Pausado</option>
+            <option value="Leído">Completado</option>
+            <option value="Abandonado">Abandonado</option>
+          </select>
+
+          <div style="margin-top: 0.4rem;">
+            <button
+              [routerLink]="['/editbook', book.id]"
+              (click)="$event.stopPropagation()"
+              style="font-size: 0.7rem; margin-right: 0.2rem;"
+            >
+              Editar
+            </button>
+            <button
+              (click)="removeBook(book.id); $event.stopPropagation()"
+              style="font-size: 0.7rem;"
+            >
+              Eliminar
+            </button>
           </div>
+
+          @if (book.file_url) {
+            <button
+              (click)="downloadFile(book); $event.stopPropagation()"
+              class="download-btn"
+              style="margin-top: 0.4rem; font-size: 0.7rem;"
+            >
+              Descargar
+            </button>
+          }
         </div>
       </article>
     }

@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { BookInterface } from '../interfaces/book-interface';
 import { Storage } from './storage';
 import { Auth } from './auth';
+import {SocialFeedService} from './social-feed-service';
 
 export type BookShelfItem = Pick<
   BookInterface,
@@ -17,6 +18,7 @@ export class BookshelfService {
 
   authService = inject(Auth);
   storageService = inject(Storage);
+  socialFeed = inject(SocialFeedService);
 
   // Generar ID estable basado en la ruta del archivo
   private generateStableId(filePath: string): number {
@@ -128,6 +130,11 @@ export class BookshelfService {
         b.id === updated.id ? { ...b, ...updated, reading_status: newStatus } : b
       )
     );
+
+    if (newStatus === 'Leído') {
+      this.socialFeed.createCompletedBookPost(updated);
+    }
+
 
     return true;
   }
