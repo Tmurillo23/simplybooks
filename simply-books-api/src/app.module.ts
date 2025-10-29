@@ -14,6 +14,7 @@ import { LoanModule } from './loan/loan.module';
 import { DigitalDocumentModule } from './digital-document/digital-document.module';
 import { FollowerModule } from './follower/follower.module';
 import { ProgressModule } from './progress/progress.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -38,7 +39,8 @@ import { ProgressModule } from './progress/progress.module';
     LoanModule,
     DigitalDocumentModule,
     FollowerModule,
-    ProgressModule
+    ProgressModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
