@@ -81,7 +81,7 @@ export class Profile implements OnInit {
           this.loadReviews();
           this.loadCollections();
         },
-        error: (err) => console.error('❌ Error cargando perfil', err)
+        error: (err) => console.error('Error cargando perfil', err)
       });
     });
   }
@@ -93,7 +93,7 @@ export class Profile implements OnInit {
         this.user = res;
         this.updateStats();
       },
-      error: (err) => console.error('❌ Error refrescando usuario', err)
+      error: (err) => console.error('Error refrescando usuario', err)
     });
   }
 

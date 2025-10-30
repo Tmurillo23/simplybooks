@@ -46,23 +46,23 @@ export class Home implements OnInit {
       } else {
         const foundUser = await this.userService.findByUsername(username!).toPromise();
         if (!foundUser) {
-          console.error('❌ No se encontró el usuario');
+          console.error('No se encontró el usuario');
           return;
         }
         this.user = foundUser;
       }
 
       if (!this.user) {
-        console.error('❌ No se pudo obtener usuario');
+        console.error('No se pudo obtener usuario');
         return;
       }
 
-      console.log('📚 Cargando biblioteca para:', this.user.username);
+      console.log('Cargando biblioteca para:', this.user.username);
 
-      // ✅ Pasar el usuario completo, no solo el username
+      // Pasar el usuario completo, no solo el username
       await this.bookshelfService.loadUserFiles(this.user);
 
-      // ✅ Pasar también el ID del usuario visitado
+      // Pasar también el ID del usuario visitado
       await this.bookshelfService.loadBooksFromApi(this.user.id);
     });
   }

@@ -34,13 +34,13 @@ export class Book implements OnInit {
   ngOnInit() {
     const id = (this.route.snapshot.paramMap.get('id'));
 
-    // Look for the book in the user's bookshelf first
+    // En la estanderia de libros, buscamos un libro.
     this.book = this.bookshelfService.bookshelvesItems.find(b => b.id === id);
 
-    // If not found in bookshelf, you might need to implement a different way
-    // to get book details, perhaps from a cache or by searching Open Library
+    // Si no se encuentra en la estanderia, informamos
+    // Obtenemos los detalles de la estanteria.
     if (!this.book) {
-      console.warn('Book not found in bookshelf, you may need to implement book details fetching');
+      console.warn('El libro no se encontro');
     }
 
     const user = this.authService.getUserLogged();
@@ -74,14 +74,14 @@ export class Book implements OnInit {
       next: (added) => {
         if (added) {
           Swal.fire({
-            title: 'Éxito',
+            title: 'Exito',
             text: 'Libro agregado a tu biblioteca',
             icon: 'success'
           });
           this.router.navigate(['/home']);
         } else {
           Swal.fire({
-            title: 'Atención',
+            title: 'Atencion',
             text: 'Este libro ya está en tu biblioteca',
             icon: 'warning'
           });
@@ -101,13 +101,13 @@ export class Book implements OnInit {
 
   addBookToCollection() {
     if (!this.book || !this.selectedCollectionId) {
-      Swal.fire('Error', 'Selecciona una colección válida', 'error');
+      Swal.fire('Error', 'Selecciona una colección valida', 'error');
       return;
     }
 
     try {
       this.collectionService.addBookToCollection(this.selectedCollectionId, this.book);
-      Swal.fire('Éxito', `Libro agregado a la colección correctamente`, 'success');
+      Swal.fire('Exito', `Libro agregado a la coleccion correctamente`, 'success');
     } catch (error: any) {
       Swal.fire('Error', error.message, 'error');
     }

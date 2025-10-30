@@ -111,7 +111,7 @@ export class Upload {
             reading_status: 'Por leer'
           };
 
-          // 4. Guardar libro (local + backend)
+          // 4. Guardar libro
           this.bookshelfService.addBook(newBook).subscribe({
             next: (added) => {
               if (added) {
@@ -136,7 +136,7 @@ export class Upload {
           });
 
         } else {
-          Swal.fire('Error!!', 'No se recibió la ruta del archivo', 'error');
+          Swal.fire('Error!!', 'No se recibio la ruta del archivo', 'error');
         }
       } catch (error) {
         console.error('Upload error:', error);
@@ -174,7 +174,7 @@ export class Upload {
           this.router.navigate(['/home']);
         } else {
           Swal.fire({
-            title: 'Atención',
+            title: 'Cuidado',
             text: 'Este libro ya está en tu biblioteca',
             icon: 'warning'
           });

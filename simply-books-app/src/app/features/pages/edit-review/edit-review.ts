@@ -44,7 +44,7 @@ export class EditReview implements OnInit {
     this.reviewId = this.route.snapshot.paramMap.get('id') || '';
 
     if (!this.reviewId) {
-      console.error('No se proporcionó ID de reseña');
+      console.error('No se proporciono ID de reseña');
       return;
     }
 
@@ -77,7 +77,7 @@ export class EditReview implements OnInit {
       draft: this.draft
     });
 
-    alert('✅ Reseña actualizada correctamente');
+    alert('Reseña actualizada correctamente');
     this.router.navigate(['/reviews']);
   }
 

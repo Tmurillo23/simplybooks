@@ -57,7 +57,7 @@ export class SignUp {
           icon: "error"
         });
       }
-    });;
+    });
   }
 
 }

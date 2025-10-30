@@ -11,7 +11,7 @@ import { LoansService } from '../../../shared/services/loan-service';
 export class LoanHistory {
   loansService = inject(LoansService);
 
-  // Historial de préstamos devueltos (computed signal)
+  // Historial de préstamos devueltos
   get history(): Loan[] {
     return this.loansService.loanHistory();
   }

@@ -31,7 +31,7 @@ export class CreateCollection implements OnInit {
   private eRef = inject(ElementRef);
   user : User = this.authService.getUserLogged();
 
-  // Computed para obtener libros actuales del signal
+  // Esta variable sirve para obtener libros actuales del signal
   private currentCollectionId: string | null = null;
 
   async ngOnInit() {
@@ -39,9 +39,9 @@ export class CreateCollection implements OnInit {
     await this.bookshelfService.loadUserFiles(this.user);
   }
 
-  /** Buscar libros por título */
+  // Buscar libros por título
   onSearch() {
-    const books = this.bookshelfService.bookshelvesItems; // ⚠ ya es un array
+    const books = this.bookshelfService.bookshelvesItems;
     this.filteredBooks = books.filter(book =>
       book.title.toLowerCase().includes(this.searchTerm.toLowerCase()) &&
       !this.selectedBooks.some(selected => selected.id === book.id)
@@ -50,7 +50,7 @@ export class CreateCollection implements OnInit {
 
 
 
-  /** Agregar libro a la colección usando CollectionService */
+  // Agregar libro a la colección usando CollectionService
   addBook(book: BookShelfItem) {
     if (!this.currentCollectionId) {
       // Todavía no se creó la colección: agregamos a la lista local
@@ -66,10 +66,10 @@ export class CreateCollection implements OnInit {
     this.searchTerm = '';
   }
 
-  /** Eliminar libro de la colección usando CollectionService */
+  // Eliminar libro de la colección usando CollectionService
   removeBook(book: BookShelfItem) {
     if (!this.currentCollectionId) {
-      // Antes de crear la colección, solo eliminar de la lista local
+      // Antes de crear la colección, solo eliminar el de la lista local
       this.selectedBooks = this.selectedBooks.filter(b => b.id !== book.id);
     } else {
       try {
@@ -80,7 +80,7 @@ export class CreateCollection implements OnInit {
     }
   }
 
-  /** Crear colección usando CollectionService */
+  // Crear colección usando CollectionService
   createCollection() {
     const user: User | null = this.authService.getUserLogged();
 
@@ -120,7 +120,7 @@ export class CreateCollection implements OnInit {
     }
   }
 
-  /** Cerrar dropdown cuando se hace clic afuera */
+  // Cerrar dropdown cuando se hace clic afuera
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event) {
     if (!this.eRef.nativeElement.contains(event.target)) {
@@ -128,7 +128,7 @@ export class CreateCollection implements OnInit {
     }
   }
 
-  /** Cerrar dropdown al presionar Escape */
+  // Cerrar dropdown al presionar Escape
   @HostListener('document:keydown.escape')
   handleEscape() {
     this.filteredBooks = [];

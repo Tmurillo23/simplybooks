@@ -27,7 +27,7 @@ export class Collections {
     const user = this.authService.getUserLogged();
 
     if (!user || !user.username) {
-      console.warn('⚠️ No hay usuario logueado.');
+      console.warn('No hay usuario logueado.');
       this.collections.set([]);
       return;
     }
@@ -35,7 +35,7 @@ export class Collections {
     this.collections.set(this.collectionService.getCollectionsByUser(user));
   }
 
-  /** ✅ Filtro por nombre */
+  // Filtro por nombre
   filteredCollections = computed(() => {
     const term = this.search().toLowerCase();
     if (!term) return this.collections();
@@ -44,21 +44,21 @@ export class Collections {
     );
   });
 
-  /** 🗑️ Eliminar con confirmación */
+  // Eliminar con confirmación
   deleteCollection(id: string): void {
     Swal.fire({
       title: '¿Eliminar colección?',
       text: 'Esta acción no se puede deshacer.',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Sí, eliminar',
+      confirmButtonText: 'Si, eliminar',
       cancelButtonText: 'Cancelar'
     }).then(result => {
       if (result.isConfirmed) {
         try {
           this.collectionService.deleteCollection(id);
           this.collections.update(list => list.filter(c => c.id !== id));
-          Swal.fire('Eliminado', 'La colección se eliminó correctamente.', 'success');
+          Swal.fire('Eliminado', 'La coleccion se elimino correctamente.', 'success');
         } catch (error: any) {
           Swal.fire('Error', error.message, 'error');
         }

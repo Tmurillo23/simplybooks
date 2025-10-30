@@ -67,7 +67,7 @@ export class ReviewDetail implements OnInit {
     this.comments = this.commentService.getCommentsTree(this.reviewId);
   }
 
-  // ===== Comentarios =====
+  // Comentarios
   addComment(): void {
     if (!this.newComment.trim()) return;
 
@@ -96,7 +96,7 @@ export class ReviewDetail implements OnInit {
     this.loadComments();
   }
 
-  // ===== Likes de reseña =====
+  // Likes de reseña
   toggleReviewLike(): void {
     if (!this.review || this.review.draft) return;
 
@@ -108,7 +108,7 @@ export class ReviewDetail implements OnInit {
     return this.hasLikedReviewFlag;
   }
 
-  // ===== Likes de comentarios =====
+  // Likes de comentarios
   toggleCommentLike(commentId: string): void {
     const hasLiked = this.likedComments[commentId];
     this.commentService.toggleLike(commentId, hasLiked);

@@ -21,13 +21,13 @@ export class Loans implements OnInit {
   loansService = inject(LoansService);
 
   ngOnInit() {
-    // Cargar préstamos al inicializar (signal no necesita subscribe)
+    // Cargar préstamos al inicializar
     this.loansService.loans();
   }
 
   addLoan() {
     if (!this.newLoan.beneficiary || !this.newLoan.book || !this.newLoan.loanDate) {
-      alert('⚠️ Por favor completa todos los campos');
+      alert('Por favor completa todos los campos');
       return;
     }
 
@@ -35,13 +35,13 @@ export class Loans implements OnInit {
 
     // No prestar libros digitales
     if (book.file_url) {
-      alert('❌ Este libro es digital y no se puede prestar físicamente');
+      alert('Este libro es digital y no se puede prestar físicamente');
       return;
     }
 
     // Verificar si el libro ya está prestado
     if (this.loansService.isBookLoaned(book.id)) {
-      alert('⚠️ Este libro ya está prestado');
+      alert('Este libro ya está prestado');
       return;
     }
 
@@ -59,13 +59,13 @@ export class Loans implements OnInit {
 
     // Limpiar formulario
     this.newLoan = {};
-    alert('✅ Préstamo registrado exitosamente');
+    alert('Préstamo registrado exitosamente');
   }
 
   markReturned(loan: Loan) {
     if (confirm(`¿Confirmas que ${loan.beneficiary} devolvió "${loan.book.title}"?`)) {
       this.loansService.markAsReturned(loan.id);
-      alert('✅ Libro marcado como devuelto y agregado de nuevo a la biblioteca');
+      alert('Libro marcado como devuelto y agregado de nuevo a la biblioteca');
     }
   }
 

@@ -28,8 +28,8 @@ export class CollectionDetail implements OnInit {
         this.collection = found;
       } else {
         Swal.fire({
-          title: 'No encontrada',
-          text: 'La colección especificada no existe.',
+          title: 'Coleccion no encontrada',
+          text: 'Esta colección no existe.',
           icon: 'error'
         }).then(() => this.router.navigate(['/collections']));
       }
@@ -41,7 +41,7 @@ export class CollectionDetail implements OnInit {
     try {
       this.collectionService.removeBookFromCollection(this.collection.id, bookId);
       this.collection = this.collectionService.getCollectionById(this.collection.id)!;
-      Swal.fire({ title: 'Eliminado', text: 'Libro eliminado de la colección.', icon: 'success' });
+      Swal.fire({ title: 'Eliminado', text: 'Libro eliminado de la coleccion.', icon: 'success' });
     } catch (error: any) {
       Swal.fire({ title: 'Error', text: error.message, icon: 'error' });
     }

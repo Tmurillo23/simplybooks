@@ -39,12 +39,12 @@ export class UpdateProfile implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.authService.getUserLogged();
-    console.log('👤 Usuario actual en update:', this.currentUser);
+    console.log('Usuario actual en update:', this.currentUser);
 
   }
 
   onUpdateProfile() {
-    console.log('🟢 onUpdateProfile ejecutado');
+    console.log('onUpdateProfile ejecutado');
 
     if (this.profileForm.invalid) {
       Swal.fire({
@@ -61,7 +61,7 @@ export class UpdateProfile implements OnInit {
     this.userService.update(this.currentUser.id!, { username:username!, biography:biography! })
       .subscribe({
         next: (response: any) => {
-          console.log('✅ Respuesta del servidor:', response);
+          console.log('Respuesta del servidor:', response);
           this.userService.profileNeedsUpdate.set(true);
 
           Swal.fire({
@@ -76,7 +76,7 @@ export class UpdateProfile implements OnInit {
           }, 200);
         },
         error: (err) => {
-          console.error('❌ Error al actualizar perfil', err);
+          console.error('Error al actualizar perfil', err);
           Swal.fire({
             icon: 'error',
             text: 'No se pudo actualizar el perfil'
@@ -96,12 +96,12 @@ export class UpdateProfile implements OnInit {
     if (!imageFile.type.startsWith('image/')) {
       Swal.fire({
         icon: 'error',
-        text: 'Por favor selecciona un archivo de imagen válido'
+        text: 'Por favor selecciona un archivo de imagen valido'
       });
       return;
     }
 
-    console.log('📤 Subiendo avatar...');
+    console.log('Subiendo avatar');
 
     this.storageService.uploadAvatar(imageFile, this.currentUser.email)
       .then(filePath => {
