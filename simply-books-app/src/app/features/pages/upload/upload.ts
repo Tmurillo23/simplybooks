@@ -7,7 +7,8 @@ import { Auth } from '../../../shared/services/auth';
 import { Storage } from '../../../shared/services/storage';
 import { BookshelfService } from '../../../shared/services/bookshelf';
 import Swal from 'sweetalert2';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subject} from 'rxjs';
+import {SUPABASE_FILES_BUCKET} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-upload',
@@ -56,23 +57,29 @@ export class Upload {
     return Math.abs(hash);
   }
 
-  // Event when file is selected
+// Event when file is selected
   async onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0 && input.files.length < 2) {
       this.selectedFile = input.files[0];
       this.fileUsername = this.authService.getUserLogged().username!;
-      
+
       try {
-        const response = await this.storageService.uploadFile(this.selectedFile, this.fileUsername);
-        
-        if (response && response.data) {
-          const fullPath = `${this.fileUsername}/${response.data.path.split('/').pop()}`;
-          const url = this.storageService.getFileUrl(fullPath);
+        // Ahora uploadFile retorna el path directamente
+        const filePath = await this.storageService.uploadFile(
+          this.selectedFile,
+          this.fileUsername,
+          SUPABASE_FILES_BUCKET
+        );
+
+        if (filePath) {
+          // Construir la URL con el path retornado
+          const url = this.storageService.getFileUrl(filePath, SUPABASE_FILES_BUCKET);
           const fullName = this.selectedFile!.name;
           const nameWithoutExt = fullName.substring(0, fullName.lastIndexOf('.')) || fullName;
 
-          const stableId = this.generateStableId(response.data.fullPath);
+          // Generar ID estable usando el filePath
+          const stableId = this.generateStableId(filePath);
 
           // Try to find book metadata from Open Library
           let bookMetadata: Partial<BookInterface> = {};
@@ -117,14 +124,18 @@ export class Upload {
             });
             this.router.navigate(['/home']);
           } else {
-            Swal.fire({ title: 'Error', text: 'El libro ya existe en tu biblioteca', icon: 'error' });
+            Swal.fire({
+              title: 'Error',
+              text: 'El libro ya existe en tu biblioteca',
+              icon: 'error'
+            });
           }
-        } else if (response) {
-          Swal.fire('Error!!', 'Error al subir el archivo', 'error');
+        } else {
+          Swal.fire('Error!!', 'No se recibió la ruta del archivo', 'error');
         }
       } catch (error) {
         console.error('Upload error:', error);
-        Swal.fire('Error!!', 'Error al subir el archivo', 'error');
+        Swal.fire('Error!!', error instanceof Error ? error.message : 'Error al subir el archivo', 'error');
       }
     }
   }

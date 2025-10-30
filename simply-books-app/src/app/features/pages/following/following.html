@@ -15,12 +15,12 @@
     <ul class="list">
       @for (u of users; track u.username) {
         <li class="user">
-          <img class="avatar" [src]="u.avatar_url || '/assets/default-avatar.png'" [alt]="u.username">
+          <img class="avatar" [src]="u.avatar || '/assets/default-avatar.png'" [alt]="u.username">
 
           <div class="meta">
             <a [routerLink]="['/profile', u.username]" class="name">{{ u.username }}</a>
-            @if (u.bio) {
-              <div class="bio">{{ u.bio }}</div>
+            @if (u.biography) {
+              <div class="bio">{{ u.biography }}</div>
             }
             <div class="stats">
               <span>{{ u.stats?.booksRead || 0 }} libros</span>

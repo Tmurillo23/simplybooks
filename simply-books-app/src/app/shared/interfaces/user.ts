@@ -10,9 +10,9 @@ export interface User{
   password:string;
   email:string;
   rePassword?:string
-  avatar_url?:string;
+  avatar?:string;
   created_at?:Date;
-  bio?:string;
+  biography?:string;
   following?: boolean;
   stats?:UserStats;
 }

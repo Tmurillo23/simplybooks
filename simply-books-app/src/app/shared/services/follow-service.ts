@@ -6,8 +6,8 @@ const MOCK_FOLLOWING: User[] = [
     username: 'ana',
     password: '',
     email: '',
-    avatar_url: '/assets/avatars/ana.jpg',
-    bio: 'Lectora voraz',
+    avatar: '/assets/avatars/ana.jpg',
+    biography: 'Lectora voraz',
     stats: { booksRead: 42, reviewsCount: 12, followersCount: 120, followingCount: 45 },
     following: true
   },
@@ -15,8 +15,8 @@ const MOCK_FOLLOWING: User[] = [
     username: 'luis',
     password: '',
     email: '',
-    avatar_url: '/assets/avatars/luis.jpg',
-    bio: 'Reseñador',
+    avatar: '/assets/avatars/luis.jpg',
+    biography: 'Reseñador',
     stats: { booksRead: 30, reviewsCount: 8, followersCount: 80, followingCount: 20 },
     following: true
   }
@@ -27,8 +27,8 @@ const MOCK_FOLLOWERS: User[] = [
     username: 'marcela',
     password: '',
     email: '',
-    avatar_url: '/assets/avatars/marcela.jpg',
-    bio: 'Amo las novelas históricas',
+    avatar: '/assets/avatars/marcela.jpg',
+    biography: 'Amo las novelas históricas',
     stats: { booksRead: 15, reviewsCount: 3, followersCount: 40, followingCount: 10 },
     following: false
   },
@@ -36,8 +36,8 @@ const MOCK_FOLLOWERS: User[] = [
     username: 'carlos',
     password: '',
     email: '',
-    avatar_url: '/assets/avatars/carlos.jpg',
-    bio: 'Fan de la ciencia ficción',
+    avatar: '/assets/avatars/carlos.jpg',
+    biography: 'Fan de la ciencia ficción',
     stats: { booksRead: 25, reviewsCount: 5, followersCount: 60, followingCount: 18 },
     following: false
   }

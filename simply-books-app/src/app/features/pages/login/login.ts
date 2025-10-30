@@ -4,6 +4,7 @@ import { Router, RouterLink } from "@angular/router";
 import { Auth } from "../../../shared/services/auth";
 import { User } from "../../../shared/interfaces/user";
 import Swal from 'sweetalert2'
+import {CustomValidators} from '../../../validators/custom.validator';
 
 @Component({
   selector: 'app-login',
@@ -17,9 +18,10 @@ export class Login {
   fb = inject(FormBuilder);
   router = inject(Router);
   authService = inject(Auth);
+  customValidators = inject(CustomValidators);
 
   loginForm = this.fb.group({
-    username: ['', [Validators.required]],
+    email: ['', [Validators.required, this.customValidators.customEmailValidator]],
     password: ['', [Validators.required, Validators.minLength(4)]]
   })
 
@@ -37,16 +39,15 @@ export class Login {
 
     this.authService.login(user).subscribe(response => {
       if (response.success) {
-        this.router.navigate(['home'])
-        return;
+        this.router.navigate(['home']);
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: response.message || "Ingreso fallido.",
+          icon: "error"
+        });
       }
-      Swal.fire({
-        title: "Error",
-        text: "Ingreso fallido.",
-        icon: "error"
-      });
     });
-
   }
 
-}
+  }

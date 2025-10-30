@@ -1,23 +1,64 @@
 <div class="profile-container">
   <div class="profile-header">
-    <div class="profile-pic"></div>
+    <div class="profile-pic">
+      <img
+        [src]="currentUser?.avatar || 'assets/user-icon.svg'"
+        alt="Avatar del usuario"
+        class="avatar-preview"
+      />
+      <button type="button" class="btn-upload" (click)="photoInput.click()">
+        Cambiar imagen
+      </button>
+      <input
+        type="file"
+        #photoInput
+        id="photo-upload"
+        (change)="onUploadFile($event)"
+        hidden
+        accept="image/*"
+      />
+    </div>
     <h2>Editar perfil</h2>
   </div>
 
-  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
-    <div class="form-group">
-      <label for="email">Correo</label>
-      <input type="email" id="email" formControlName="email" readonly>
-    </div>
-
+  <form [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()" class="profile-form">
     <div class="form-group">
       <label for="username">Usuario</label>
-      <input type="text" id="username" formControlName="username" placeholder="nombre_usuario">
+      <input
+        type="text"
+        id="username"
+        formControlName="username"
+        placeholder="nombre_usuario"
+      />
     </div>
 
+    <div class="form-group">
+      <label for="biography">Biografía:</label>
+      <editor
+        apiKey="pxpbdo4sfu85q6419mupyj9wdmhonxkw1x2uopi33acnrehl"
+        formControlName="biography"
+        [init]="{
+      height: 300,
+      menubar: false,
+      plugins: 'lists link image paste help wordcount',
+      toolbar:
+        'undo redo | formatselect | bold italic underline | bullist numlist | link image | removeformat | help'
+    }"
+      ></editor>
+    </div>
+
+
     <div class="form-buttons">
-      <button type="submit" class="btn-primary">Guardar cambios</button>
-      <button type="button" class="btn-secondary" (click)="router.navigate(['/profile'])">Regresar</button>
+      <button type="submit" class="btn-primary" [disabled]="profileForm.invalid">
+        Guardar cambios
+      </button>
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="router.navigate(['/profile'])"
+      >
+        Regresar
+      </button>
     </div>
   </form>
 </div>

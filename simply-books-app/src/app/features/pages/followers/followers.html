@@ -19,12 +19,12 @@
       @for (user of followers; track trackByUsername($index, user)) {
         <li class="follower-item">
           <div class="follower-info">
-            <img [src]="user.avatar_url || 'assets/default-avatar.png'" alt="Avatar" class="avatar" />
+            <img [src]="user.avatar || 'assets/default-avatar.png'" alt="Avatar" class="avatar" />
             <div class="details">
               <a [routerLink]="['/profile', user.username]" class="username">
                 {{user.username }}
               </a>
-              <p class="bio">{{ user.bio || 'Sin descripción.' }}</p>
+              <p class="bio">{{ user.biography || 'Sin descripción.' }}</p>
             </div>
           </div>
 

@@ -15,6 +15,8 @@ export class Home implements OnInit {
 
   // 🔹 Buscador reactivo con Signals
   search = signal('');
+
+  // 🔹 Filtrado de libros en la estantería del usuario
   filteredBooks = computed(() => {
     const term = this.search().toLowerCase();
     if (!term) return this.bookshelfService.bookshelvesItems;
@@ -25,16 +27,29 @@ export class Home implements OnInit {
   });
 
   async ngOnInit() {
-    await this.bookshelfService.loadUserFiles();
+    await this.bookshelfService.loadUserFiles(); // Archivos de usuario
+    await this.bookshelfService.loadBooksFromApi(); // Libros de la API
   }
 
-  removeBook(id: number) {
-    this.bookshelfService.removeBook(id);
 
+  removeBook(id: number) {
     Swal.fire({
-      title: 'Eliminado',
-      text: 'Libro eliminado de la estantería',
-      icon: 'success'
+      title: '¿Estás seguro?',
+      text: 'El libro se eliminará de tu biblioteca',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.bookshelfService.removeBook(id);
+        Swal.fire({
+          title: 'Eliminado',
+          text: 'Libro eliminado de la estantería',
+          icon: 'success',
+          timer: 2000
+        });
+      }
     });
   }
 
@@ -42,7 +57,7 @@ export class Home implements OnInit {
     if (!book.file_url) {
       Swal.fire({
         title: 'Error',
-        text: 'No hay archivo para descargar',
+        text: 'Este libro no tiene archivo para descargar',
         icon: 'error'
       });
       return;
@@ -61,7 +76,8 @@ export class Home implements OnInit {
     Swal.fire({
       title: 'Descarga iniciada',
       text: `Descargando: ${fileName}`,
-      icon: 'info'
+      icon: 'info',
+      timer: 2000
     });
   }
 

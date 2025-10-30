@@ -1,18 +1,17 @@
-html, body, simplybooks {
-  height: 100%;
+html, simplybooks,body {
   margin: 0;
   padding: 0;
   font-family: 'Ubuntu', 'Courier New', Courier, monospace;
   color: black;
   background-color: #f1f1f1;
-  display: flex;
-  flex-direction: column;
+  min-height: 100vh;
 }
 
 main {
-  flex: 1;
-  padding: 10px 20px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
+  min-height: 100vh;
+  box-sizing: border-box;
 }

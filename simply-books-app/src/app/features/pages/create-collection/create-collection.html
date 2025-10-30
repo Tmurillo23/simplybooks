@@ -1,55 +1,50 @@
 <div class="collection-form-container">
-  <h2 >Crear nueva colección</h2>
+  <h2>Crear nueva colección</h2>
 
-  <form (ngSubmit)="createCollection()" class="collection-form space-y-4">
+  <form (ngSubmit)="createCollection()" class="collection-form">
 
     <!-- Nombre -->
     <div class="form-group">
-      <label >Nombre *</label>
+      <label>Nombre *</label>
       <input
         [(ngModel)]="name"
         name="name"
         type="text"
         placeholder="Nombre de la colección"
-        class="form-input w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+        class="form-input"
         required
       />
     </div>
 
     <!-- Descripción -->
     <div class="form-group">
-      <label >Descripción</label>
+      <label>Descripción</label>
       <textarea
         [(ngModel)]="description"
         name="description"
         placeholder="Describe brevemente tu colección"
-        class="form-textarea w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+        class="form-textarea"
       ></textarea>
     </div>
 
+    <hr />
 
-    <hr  />
-
-    <!-- Búsqueda de libros -->
+    <!-- Búsqueda de libros con dropdown -->
     <div class="book-search">
-      <label >Agregar libros</label>
+      <label>Agregar libros</label>
       <input
         [(ngModel)]="searchTerm"
         name="searchTerm"
         (input)="onSearch()"
         type="text"
         placeholder="Buscar en tu estantería..."
-
       />
 
-      <!-- Resultados de búsqueda -->
+      <!-- Dropdown de resultados -->
       @if (filteredBooks.length > 0) {
-        <ul >
+        <ul class="search-dropdown">
           @for (book of filteredBooks; track book.id) {
-            <li
-              (click)="addBook(book)"
-
-            >
+            <li (click)="addBook(book)">
               {{ book.title }}
             </li>
           }
@@ -59,16 +54,16 @@
 
     <!-- Libros seleccionados -->
     @if (selectedBooks.length > 0) {
-      <div >
-        <p class="selected-books-title text-sm font-semibold mb-2">Libros añadidos:</p>
-        <div class="selected-books-list flex flex-wrap gap-2">
+      <div class="selected-books-section">
+        <p class="selected-books-title">Libros añadidos:</p>
+        <div class="selected-books-list">
           @for (book of selectedBooks; track book.id) {
-            <span class="selected-book-item flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm">
+            <span class="selected-book-item">
               {{ book.title }}
               <button
                 type="button"
                 (click)="removeBook(book)"
-                class="remove-book-btn ml-2 text-red-500 font-bold hover:text-red-700"
+                class="remove-book-btn"
               >
                 ×
               </button>
@@ -79,10 +74,10 @@
     }
 
     <!-- Botón crear -->
-    <div class="form-actions text-center mt-6">
+    <div class="form-actions">
       <button
         type="submit"
-        class="btn-submit px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        class="btn-submit"
       >
         Crear colección
       </button>

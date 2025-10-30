@@ -9,20 +9,36 @@ import { v7 as uuidv7 } from 'uuid';
 export class Storage {
   supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-  async uploadFile(imagefile:File, username:string) {
+  async uploadFile(imagefile: File, username: string, bucket: string) {
     const fileName = uuidv7();
-    console.log('Uploading with fileName', fileName)
-    return this.supabase.storage
-        .from(SUPABASE_FILES_BUCKET)
-        .upload(`${username}/${fileName}`, imagefile)
-        .then(response=>{
-          return response;
-        })
-        .catch(error=>console.error(error))
+
+    console.log('Uploading with fileName', fileName);
+    console.log('Bucket:', bucket);
+    console.log('Username:', username);
+
+    try {
+      const response = await this.supabase.storage
+        .from(bucket)
+        .upload(`${username}/${fileName}`, imagefile); // ⚠️ CAMBIO IMPORTANTE AQUÍ
+
+      if (response.data) {
+        return response.data.path; // Retorna el path directamente
+      }
+
+      throw response.error;
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      throw error;
+    }
   }
 
-  getFileUrl(fullPath: string) {
-    return `${SUPABASE_URL}/storage/v1/object/public/${SUPABASE_FILES_BUCKET}/${fullPath}`;
+  uploadAvatar(imageFile: File, username: string) {
+    return this.uploadFile(imageFile, username, 'avatar');
+  }
+
+  getFileUrl(fullPath: string, bucket: string) {
+    // Simplifica esto
+    return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${fullPath}`;
   }
 
   async listUserFiles(username: string) {

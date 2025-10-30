@@ -27,6 +27,7 @@ export class User {
   @Column({ nullable: true })
   avatar: string;
 
+
   @Column({ nullable: true })
   biography: string;
 

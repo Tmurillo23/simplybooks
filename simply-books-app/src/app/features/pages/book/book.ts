@@ -33,16 +33,16 @@ export class Book implements OnInit {
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    
+
     // Look for the book in the user's bookshelf first
     this.book = this.bookshelfService.bookshelvesItems.find(b => b.id === id);
-    
+
     // If not found in bookshelf, you might need to implement a different way
     // to get book details, perhaps from a cache or by searching Open Library
     if (!this.book) {
       console.warn('Book not found in bookshelf, you may need to implement book details fetching');
     }
-    
+
     const user = this.authService.getUserLogged();
     if (user) {
       this.userCollections = this.collectionService.getCollectionsByUser(user);

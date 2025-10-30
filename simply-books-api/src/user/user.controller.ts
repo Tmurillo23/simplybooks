@@ -33,7 +33,6 @@ export class UserController {
   }
 
   @Patch(':id')
-  @UseGuards(SelfOrAdminGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
   }

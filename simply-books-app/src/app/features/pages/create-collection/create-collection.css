@@ -1,0 +1,233 @@
+/* Contenedor principal del formulario */
+.collection-form-container {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 30px;
+  background-color: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #3a3a3a;
+}
+
+.collection-form-container h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #D5BDAF;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+/* Formulario */
+.collection-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Grupos de formulario */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #6b5e58;
+  font-size: 0.95rem;
+}
+
+/* Inputs y textarea */
+.form-input,
+.form-textarea {
+  padding: 12px 15px;
+  border: 1px solid #E3D5CA;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1rem;
+  color: #3a3a3a;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #D5BDAF;
+  box-shadow: 0 0 0 2px rgba(213, 189, 175, 0.2);
+  background-color: #FFFFFF;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: #8a7b73;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Línea separadora */
+hr {
+  border: none;
+  border-top: 1px solid #E3D5CA;
+  margin: 20px 0;
+}
+
+/* Búsqueda de libros con dropdown */
+.book-search {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.book-search label {
+  font-weight: 600;
+  color: #6b5e58;
+  font-size: 0.95rem;
+}
+
+.book-search input {
+  padding: 12px 15px;
+  border: 1px solid #E3D5CA;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1rem;
+  color: #3a3a3a;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.book-search input:focus {
+  outline: none;
+  border-color: #D5BDAF;
+  box-shadow: 0 0 0 2px rgba(213, 189, 175, 0.2);
+}
+
+.book-search input::placeholder {
+  color: #8a7b73;
+}
+
+/* Dropdown de resultados */
+.search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #FFFFFF;
+  border: 1px solid #E3D5CA;
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 5px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.search-dropdown li {
+  padding: 12px 15px;
+  border-bottom: 1px solid #EDEDE9;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: #3a3a3a;
+  list-style: none;
+}
+
+.search-dropdown li:hover {
+  background-color: #F5EBE0;
+}
+
+.search-dropdown li:last-child {
+  border-bottom: none;
+}
+
+.search-dropdown li:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.search-dropdown li:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* Libros seleccionados */
+.selected-books-title {
+  font-weight: 600;
+  color: #6b5e58;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.selected-books-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.selected-book-item {
+  display: flex;
+  align-items: center;
+  background-color: #EDEDE9;
+  border: 1px solid #D6CCC2;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  color: #3a3a3a;
+}
+
+.remove-book-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8a7b73;
+  transition: color 0.2s ease;
+  margin-left: 5px;
+}
+
+.remove-book-btn:hover {
+  color: #d32f2f;
+}
+
+/* Botones de acción */
+.form-actions {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.btn-submit {
+  background-color: #D5BDAF;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn-submit:hover {
+  background-color: #E3D5CA;
+  color: #3a3a3a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}

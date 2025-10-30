@@ -17,6 +17,7 @@ export class Auth {
 
   isLogged = signal(false);
   private apiUrl = 'http://localhost:3000/api/v1/auth';
+  currentUser = signal<User | null>(null);
 
   constructor() {
     this.verifyLoggedUser();
@@ -28,8 +29,8 @@ export class Auth {
         sessionStorage.setItem('token', response.token);
 
         this.verifyLoggedUser();
-        return { 
-          success: true, 
+        return {
+          success: true,
           redirectTo: 'home'
         };
       }),
@@ -49,8 +50,8 @@ export class Auth {
         sessionStorage.setItem('token', response.token);
 
         this.verifyLoggedUser();
-        return { 
-          success: true, 
+        return {
+          success: true,
           redirectTo: 'home'
         };
       }),
@@ -90,20 +91,52 @@ export class Auth {
     this.verifyLoggedUser();
   }
 
-  getUserLogged():User {
+  getUserLogged(): User {
     let user = this.jwtService.decodeToken();
-    if (!user) return { id: '0', username: 'unknown-user', password: '', email: 'no-user', rePassword: '', avatar_url: '', created_at: new Date(0), bio: '', following: false, stats: { booksRead: 0, reviewsCount: 0, followersCount: 0, followingCount: 0 } };
+
+    if (!user) {
+      return {
+        id: '0',
+        username: 'unknown-user',
+        password: '',
+        email: 'no-user',
+        rePassword: '',
+        avatar: '',
+        created_at: new Date(0),
+        biography: '',
+        following: false,
+        stats: {
+          booksRead: 0,
+          reviewsCount: 0,
+          followersCount: 0,
+          followingCount: 0
+        }
+      };
+    }
+
+    // Retornamos el usuario decodificado con valores seguros por defecto
     return {
-      id: user.id,
-      username: user.username,
-      password: user.password,
-      email: user.email,
-      rePassword: user.rePassword,
-      avatar_url: user.avatar_url,
-      created_at: user.created_at,
-      bio: user.bio,
-      following: user.following,
-      stats: user.stats,
+      id: user.id || '0',
+      username: user.username || 'unknown-user',
+      password: '',
+      email: user.email || 'no-user',
+      rePassword: '',
+      avatar: user.avatar_url || '',
+      created_at: user.created_at ? new Date(user.created_at) : new Date(0),
+      biography: user.bio || '',
+      following: user.following ?? false,
+      stats: user.stats || {
+        booksRead: 0,
+        reviewsCount: 0,
+        followersCount: 0,
+        followingCount: 0
+      }
+    };
+  }
+  updateCurrentUser(updatedUser: Partial<User>): void {
+    const currentUser = this.currentUser();
+    if (currentUser) {
+      this.currentUser.set({ ...currentUser, ...updatedUser });
     }
   }
 

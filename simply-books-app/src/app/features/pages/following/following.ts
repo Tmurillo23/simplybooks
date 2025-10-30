@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FollowService } from '../../../shared/services/follow-service';
 import { User } from '../../../shared/interfaces/user';
@@ -7,9 +6,9 @@ import { User } from '../../../shared/interfaces/user';
 @Component({
   selector: 'app-following',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   templateUrl: './following.html',
-  styleUrls: ['./following.css']
+  styleUrl: './following.css'
 })
 export class Following implements OnInit {
   users: User[] = [];
@@ -35,10 +34,10 @@ export class Following implements OnInit {
     } else {
       this.follow(u);
     }
-    this.stats = this.followingService.getFollowStats(); // 🔸 vuelve a calcular después del cambio
+    this.stats = this.followingService.getFollowStats();
   }
 
-  private follow(u: User): void {
+  follow(u: User): void {
     const prev = !!u.following;
     const ok = this.followingService.followUser(u.username);
     if (ok) {
@@ -51,7 +50,7 @@ export class Following implements OnInit {
     }
   }
 
-  private unfollow(u: User): void {
+  unfollow(u: User): void {
     const prev = !!u.following;
     const ok = this.followingService.unfollowUser(u.username);
     if (ok) {

@@ -12,20 +12,23 @@
 <section id="bookshelves">
   @if (filteredBooks().length > 0) {
     @for (book of filteredBooks(); track book.id) {
-      <article
-        class="book-card"
-        [routerLink]="book.file_url ? null : ['/book', book.id]"
-        (click)="book.file_url ? downloadFile(book) : null"
-        [class.downloadable]="book.file_url">
+      <article class="book-card">
 
-        <img
-          [src]="book.portrait_url || 'assets/default-cover.jpg'"
-          [alt]="book.title"
-          class="book-cover"
-        />
+        <!-- Portada clickeable que va al detalle -->
+        <a [routerLink]="['/book', book.id]">
+          <img
+            [src]="book.portrait_url || 'assets/default-cover.jpg'"
+            [alt]="book.title"
+            class="book-cover"
+          />
+        </a>
 
         <div class="book-details">
-          <h3>{{ book.title }}</h3>
+          <!-- Título clickeable que va al detalle -->
+          <h3>
+            <a [routerLink]="['/book', book.id]">{{ book.title }}</a>
+          </h3>
+
           <p><strong>Autor:</strong> {{ book.author || 'No especificado' }}</p>
           <p><strong>Año:</strong> {{ book.year || 'No especificado' }}</p>
           <p><strong>Leídas:</strong> {{ book.pages_read }} / {{ book.pages }}</p>
@@ -46,6 +49,7 @@
             <option value="Abandonado">Abandonado</option>
           </select>
 
+          <!-- Botones de acción -->
           <div style="margin-top: 0.4rem;">
             <button
               [routerLink]="['/editbook', book.id]"
@@ -54,6 +58,7 @@
             >
               Editar
             </button>
+
             <button
               (click)="removeBook(book.id); $event.stopPropagation()"
               style="font-size: 0.7rem;"
@@ -62,19 +67,25 @@
             </button>
           </div>
 
+          <!-- Botón de descarga solo si tiene archivo -->
           @if (book.file_url) {
             <button
               (click)="downloadFile(book); $event.stopPropagation()"
               class="download-btn"
               style="margin-top: 0.4rem; font-size: 0.7rem;"
             >
-              Descargar
+              📥 Descargar PDF
             </button>
           }
         </div>
       </article>
     }
   } @else {
-    <span>Aún no tienes libros</span>
+    <div class="empty-state">
+      <p>Aún no tienes libros en tu biblioteca</p>
+      <a [routerLink]="['/upload']" class="add-books-link">
+        ➕ Agregar libros
+      </a>
+    </div>
   }
 </section>

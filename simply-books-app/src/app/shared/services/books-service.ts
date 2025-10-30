@@ -15,6 +15,8 @@ interface OpenLibrarySearchResponse {
 export class BooksService {
   private apiUrl = 'https://openlibrary.org/search.json';
   private coversBaseUrl = 'https://covers.openlibrary.org/b';
+  private backendUrl = 'http://localhost:3000/books'; // tu API de NestJS
+
 
   constructor(private http: HttpClient) {}
 
@@ -63,6 +65,27 @@ export class BooksService {
       }))
     );
   }
+  // Guardar libro en backend
+  saveBook(book: BookInterface) {
+    return this.http.post<BookInterface>(this.backendUrl, book);
+  }
+
+  // Obtener libros desde backend
+  getBooksByUser(userId: string) {
+    return this.http.get<BookInterface[]>(`/v1/books/user/${userId}`);
+  }
+
+
+  // Actualizar libro
+  updateBook(bookId: string, book: Partial<BookInterface>) {
+    return this.http.put<BookInterface>(`${this.backendUrl}/${bookId}`, book);
+  }
+
+  // Eliminar libro
+  deleteBook(bookId: string) {
+    return this.http.delete(`${this.backendUrl}/${bookId}`);
+  }
+
 
   // Get book cover URL
   getBookCoverUrl(coverId?: number, isbn?: string[], size: 'S' | 'M' | 'L' = 'M'): string {
@@ -71,7 +94,7 @@ export class BooksService {
     } else if (isbn && isbn.length > 0) {
       return `${this.coversBaseUrl}/isbn/${isbn[0]}-${size}.jpg`;
     }
-    
+
     // Return placeholder if no cover available
     return 'assets/book-placeholder.png';
   }
@@ -79,7 +102,7 @@ export class BooksService {
   // Map Open Library API response to BookInterface
   private mapOpenLibraryToBook(doc: any): BookInterface {
     const authorName = doc.author_name && doc.author_name.length > 0 ? doc.author_name[0] : 'Unknown Author';
-    
+
     return {
       id: this.generateIdFromTitleAndAuthor(doc.title, authorName),
       title: doc.title || 'Unknown Title',
@@ -102,5 +125,5 @@ export class BooksService {
     }
     return Math.abs(hash);
   }
-  
+
 }

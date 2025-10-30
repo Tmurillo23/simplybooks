@@ -1,0 +1,162 @@
+/* Barra de búsqueda */
+.search-bar {
+  margin: 1.5rem 0 2rem 0;
+  text-align: center;
+}
+
+.search-bar input {
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #E3D5CA;
+  width: 400px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1rem;
+  background-color: #F5EBE0;
+  color: #3a3a3a;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: #D5BDAF;
+  box-shadow: 0 4px 10px rgba(213, 189, 175, 0.2);
+  background-color: #FFFFFF;
+}
+
+.search-bar input::placeholder {
+  color: #8a7b73;
+}
+
+/* Sección de colecciones */
+#collections {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #3a3a3a;
+}
+
+/* Header de colecciones */
+.collections-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 30px;
+  padding: 0 10px;
+}
+
+/* Botón nueva colección */
+.add-collection-btn {
+  background-color: #D5BDAF;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.add-collection-btn:hover {
+  background-color: #E3D5CA;
+  color: #3a3a3a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Grid de colecciones */
+#collections {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+/* Tarjeta de colección */
+.collection-card {
+  background-color: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 120px;
+}
+
+.collection-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+}
+
+/* Nombre de la colección */
+.collection-name {
+  margin: 0 0 15px 0;
+  font-size: 1.4rem;
+}
+
+.collection-link {
+  color: #D5BDAF;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+  display: block;
+  padding: 5px 0;
+}
+
+.collection-link:hover {
+  color: #8a7b73;
+  text-decoration: underline;
+}
+
+/* Acciones de la colección */
+.collection-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.collection-actions button {
+  background-color: #D5BDAF;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.collection-actions button:hover {
+  background-color: #E3D5CA;
+  color: #3a3a3a;
+  transform: translateY(-1px);
+}
+
+.collection-actions button:last-child:hover {
+  background-color: #e8b4b4;
+}
+
+/* Mensaje sin colecciones */
+.no-collections {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #6b5e58;
+  background-color: #EDEDE9;
+  padding: 30px;
+  border-radius: 12px;
+  grid-column: 1 / -1;
+  margin: 20px 0;
+  border: 1px solid #E3D5CA;
+}

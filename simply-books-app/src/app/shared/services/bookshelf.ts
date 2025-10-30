@@ -4,6 +4,7 @@ import { Storage } from './storage';
 import { Auth } from './auth';
 import { SocialFeedService } from './social-feed-service';
 import { BooksService } from './books-service';
+import {SUPABASE_FILES_BUCKET} from '../../../environments/environment';
 
 export type BookShelfItem = Pick<
   BookInterface,
@@ -56,7 +57,7 @@ export class BookshelfService {
       const bookItems: BookShelfItem[] = await Promise.all(
         files.map(async (file) => {
           const fullPath = `${user.username}/${file.name}`;
-          const fileUrl = this.storageService.getFileUrl(fullPath);
+          const fileUrl = this.storageService.getFileUrl(fullPath,SUPABASE_FILES_BUCKET);
           const fullName = file.name;
           const nameWithoutExt = fullName.substring(0, fullName.lastIndexOf('.')) || fullName;
 
@@ -100,24 +101,36 @@ export class BookshelfService {
     }
   }
 
-  // Add book from Open Library search
-  async addBookFromOpenLibrary(openLibraryBook: BookInterface): Promise<boolean> {
-    const bookItem: BookShelfItem = {
-      id: openLibraryBook.id,
-      title: openLibraryBook.title,
-      author: openLibraryBook.author,
-      year: openLibraryBook.year,
-      portrait_url: openLibraryBook.portrait_url,
-      file_url: '',
-      description: '',
-      rating: 0,
-      pages: openLibraryBook.pages,
-      pages_read: 0,
-      reading_status: 'Por leer'
-    };
+  async loadBooksFromApi() {
+    const user = this.authService.getUserLogged();
+    if (!user?.id) return; // <-- espera a tener id
 
-    return this.addBook(bookItem);
+    try {
+      const apiBooks = await this.booksService.getBooksByUser(user.id).toPromise(); // <-- endpoint correcto
+
+      const booksToAdd: BookShelfItem[] = apiBooks!
+        .filter(b => !b.file_url)
+        .map(b => ({
+          id: Number(b.id), // asegurarse de que sea número único
+          title: b.title,
+          author: b.author,
+          year: b.year || 0,
+          portrait_url: b.portrait_url || '',
+          file_url: undefined,
+          description: b.description || '',
+          rating: b.rating || 0,
+          pages: b.pages || 0,
+          pages_read: b.pages_read || 0,
+          reading_status: b.reading_status || 'Por leer'
+        }));
+
+      this.bookshelf.update(items => [...items, ...booksToAdd]);
+    } catch (error) {
+      console.error('Error loading API books:', error);
+    }
   }
+
+
 
   addBook(book: BookShelfItem): boolean {
     // Asegurar reading_status
