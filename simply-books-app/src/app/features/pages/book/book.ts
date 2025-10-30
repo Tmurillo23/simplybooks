@@ -8,6 +8,7 @@ import { Auth } from '../../../shared/services/auth';
 import { BookInterface } from '../../../shared/interfaces/book-interface';
 import { CollectionInterface } from '../../../shared/interfaces/collection-interface';
 import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-book',
   templateUrl: './book.html',
@@ -32,7 +33,16 @@ export class Book implements OnInit {
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.book = this.bookService.getBookById(id);
+    
+    // Look for the book in the user's bookshelf first
+    this.book = this.bookshelfService.bookshelvesItems.find(b => b.id === id);
+    
+    // If not found in bookshelf, you might need to implement a different way
+    // to get book details, perhaps from a cache or by searching Open Library
+    if (!this.book) {
+      console.warn('Book not found in bookshelf, you may need to implement book details fetching');
+    }
+    
     const user = this.authService.getUserLogged();
     if (user) {
       this.userCollections = this.collectionService.getCollectionsByUser(user);
@@ -60,16 +70,22 @@ export class Book implements OnInit {
       reading_status: this.book.reading_status || 'Por leer'
     };
 
-    this.bookshelfService.addBook(bookToAdd);
+    const added = this.bookshelfService.addBook(bookToAdd);
 
-
-    Swal.fire({
-      title: 'Éxito',
-      text: 'Libro agregado a tu biblioteca',
-      icon: 'success'
-    });
-
-    this.router.navigate(['/home']);
+    if (added) {
+      Swal.fire({
+        title: 'Éxito',
+        text: 'Libro agregado a tu biblioteca',
+        icon: 'success'
+      });
+      this.router.navigate(['/home']);
+    } else {
+      Swal.fire({
+        title: 'Atención',
+        text: 'Este libro ya está en tu biblioteca',
+        icon: 'warning'
+      });
+    }
   }
 
   addBookToCollection() {

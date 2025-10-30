@@ -2,11 +2,12 @@ import { inject, Injectable, signal } from '@angular/core';
 import { BookInterface } from '../interfaces/book-interface';
 import { Storage } from './storage';
 import { Auth } from './auth';
-import {SocialFeedService} from './social-feed-service';
+import { SocialFeedService } from './social-feed-service';
+import { BooksService } from './books-service';
 
 export type BookShelfItem = Pick<
   BookInterface,
-  'id' | 'title' | 'author' | 'year' | 'portrait_url' | 'file_url' | 'description' | 'rating' | 'pages' | 'pages_read'| 'reading_status'
+  'id' | 'title' | 'author' | 'year' | 'portrait_url' | 'file_url' | 'description' | 'rating' | 'pages' | 'pages_read' | 'reading_status'
 >
 
 @Injectable({
@@ -19,8 +20,9 @@ export class BookshelfService {
   authService = inject(Auth);
   storageService = inject(Storage);
   socialFeed = inject(SocialFeedService);
+  booksService = inject(BooksService);
 
-  // Generar ID estable basado en la ruta del archivo
+  // Generate ID stable basado en la ruta del archivo
   private generateStableId(filePath: string): number {
     let hash = 0;
     for (let i = 0; i < filePath.length; i++) {
@@ -51,42 +53,70 @@ export class BookshelfService {
     try {
       const files = await this.storageService.listUserFiles(user.username);
 
-      const bookItems: BookShelfItem[] = files.map(file => {
-        const fullPath = `${user.username}/${file.name}`;
-        const fileUrl = this.storageService.getFileUrl(fullPath);
-        const fullName = file.name;
-        const nameWithoutExt = fullName.substring(0, fullName.lastIndexOf('.')) || fullName;
+      const bookItems: BookShelfItem[] = await Promise.all(
+        files.map(async (file) => {
+          const fullPath = `${user.username}/${file.name}`;
+          const fileUrl = this.storageService.getFileUrl(fullPath);
+          const fullName = file.name;
+          const nameWithoutExt = fullName.substring(0, fullName.lastIndexOf('.')) || fullName;
 
-        return {
-          id: this.generateStableId(fullPath),
-          title: nameWithoutExt,
-          author: '',
-          year: 0,
-          portrait_url: '',
-          file_url: fileUrl,
-          description: '',
-          rating: 0,
-          pages: 0,
-          pages_read: 0,
-          reading_status: 'Por leer'
-        };
-      });
-
-      this.bookshelf.update(currentItems => {
-        const combinedItems = [...currentItems];
-
-        bookItems.forEach(newBook => {
-          const exists = combinedItems.some(existingBook => existingBook.id === newBook.id);
-          if (!exists) {
-            combinedItems.push(newBook);
+          // Try to find book in Open Library
+          let bookData: Partial<BookShelfItem> = {};
+          try {
+            const searchResult = await this.booksService.searchBooks(nameWithoutExt, 1).toPromise();
+            if (searchResult && searchResult.books.length > 0) {
+              const foundBook = searchResult.books[0];
+              bookData = {
+                title: foundBook.title,
+                author: foundBook.author,
+                year: foundBook.year,
+                portrait_url: foundBook.portrait_url,
+                pages: foundBook.pages
+              };
+            }
+          } catch (error) {
+            console.warn(`Could not find book "${nameWithoutExt}" in Open Library:`, error);
           }
-        });
 
-        return combinedItems;
-      });
+          return {
+            id: this.generateStableId(fullPath),
+            title: bookData.title || nameWithoutExt,
+            author: bookData.author || '',
+            year: bookData.year || 0,
+            portrait_url: bookData.portrait_url || '',
+            file_url: fileUrl,
+            description: '',
+            rating: 0,
+            pages: bookData.pages || 0,
+            pages_read: 0,
+            reading_status: 'Por leer'
+          };
+        })
+      );
+
+      this.bookshelf.set(bookItems);
     } catch (error) {
       console.error('Error loading user files:', error);
     }
+  }
+
+  // Add book from Open Library search
+  async addBookFromOpenLibrary(openLibraryBook: BookInterface): Promise<boolean> {
+    const bookItem: BookShelfItem = {
+      id: openLibraryBook.id,
+      title: openLibraryBook.title,
+      author: openLibraryBook.author,
+      year: openLibraryBook.year,
+      portrait_url: openLibraryBook.portrait_url,
+      file_url: '',
+      description: '',
+      rating: 0,
+      pages: openLibraryBook.pages,
+      pages_read: 0,
+      reading_status: 'Por leer'
+    };
+
+    return this.addBook(bookItem);
   }
 
   addBook(book: BookShelfItem): boolean {
@@ -135,11 +165,8 @@ export class BookshelfService {
       this.socialFeed.createCompletedBookPost(updated);
     }
 
-
     return true;
   }
-
-
 
   removeBook(id: number) {
     this.bookshelf.update(items => items.filter(b => b.id !== id));
@@ -159,5 +186,10 @@ export class BookshelfService {
       newSet.delete(bookId);
       return newSet;
     });
+  }
+
+  // Search books in Open Library
+  searchOpenLibrary(query: string, limit: number = 10) {
+    return this.booksService.searchBooks(query, limit);
   }
 }
