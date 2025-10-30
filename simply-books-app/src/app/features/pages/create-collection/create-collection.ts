@@ -29,13 +29,14 @@ export class CreateCollection implements OnInit {
   private authService = inject(Auth);
   private router = inject(Router);
   private eRef = inject(ElementRef);
+  user : User = this.authService.getUserLogged();
 
   // Computed para obtener libros actuales del signal
   private currentCollectionId: string | null = null;
 
   async ngOnInit() {
     // Cargar libros del usuario si no están aún
-    await this.bookshelfService.loadUserFiles();
+    await this.bookshelfService.loadUserFiles(this.user);
   }
 
   /** Buscar libros por título */

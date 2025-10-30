@@ -64,10 +64,9 @@ export class Header {
 
   goToUserProfile(username: string) {
     this.isDropdownVisible.set(false);
-    this.router.navigate(['/user', username]);
+    this.router.navigate(['/profile', username]);
   }
 
-  // 🔗 Seguir usuario (mock con FollowService)
   followUser(user: User) {
     const wasFollowing = this.followService.getFollowingUsers()
       .some(u => u.username === user.username && u.following);
@@ -81,7 +80,6 @@ export class Header {
     }
   }
 
-  // 👁️ cerrar dropdown al salir del input
   onBlur() {
     setTimeout(() => this.isDropdownVisible.set(false), 150);
   }

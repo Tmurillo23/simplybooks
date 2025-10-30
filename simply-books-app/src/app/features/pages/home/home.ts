@@ -1,22 +1,31 @@
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { BookShelfItem, BookshelfService } from '../../../shared/services/bookshelf';
-import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
+import { Auth } from '../../../shared/services/auth';
+import { UserService } from '../../../shared/services/user-service';
+import { BookShelfItem, BookshelfService } from '../../../shared/services/bookshelf';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   templateUrl: './home.html',
-  imports: [FormsModule, RouterLink],
-  styleUrl: './home.css'
+  styleUrls: ['./home.css'],
+  imports: [FormsModule, RouterLink]
 })
 export class Home implements OnInit {
   private bookshelfService = inject(BookshelfService);
+  private authService = inject(Auth);
+  private userService = inject(UserService);
+  private route = inject(ActivatedRoute);
+
+  user: any;
+  viewingOwnHome = false;
 
   // 🔹 Buscador reactivo con Signals
   search = signal('');
 
-  // 🔹 Filtrado de libros en la estantería del usuario
+  // 🔹 Filtrado reactivo
   filteredBooks = computed(() => {
     const term = this.search().toLowerCase();
     if (!term) return this.bookshelfService.bookshelvesItems;
@@ -27,12 +36,32 @@ export class Home implements OnInit {
   });
 
   async ngOnInit() {
-    await this.bookshelfService.loadBooksFromApi();
-    await this.bookshelfService.loadUserFiles();
+    this.route.paramMap.subscribe(async params => {
+      const username = params.get('username');
+      const currentUser = this.authService.getUserLogged();
+
+      this.viewingOwnHome = !username || username === currentUser.username;
+
+      if (this.viewingOwnHome) {
+        this.user = currentUser;
+      } else {
+        this.user = await this.userService.findByUsername(username!).toPromise();
+      }
+
+      if (!this.user) {
+        console.error('❌ No se pudo obtener usuario');
+        return;
+      }
+
+      console.log('📚 Cargando biblioteca para:', this.user.username);
+      await this.bookshelfService.loadUserFiles(this.user.username);
+      await this.bookshelfService.loadBooksFromApi();
+    });
   }
 
-
   removeBook(id: number) {
+    if (!this.viewingOwnHome) return; // no permitir borrar si es otro usuario
+
     Swal.fire({
       title: '¿Estás seguro?',
       text: 'El libro se eliminará de tu biblioteca',
@@ -63,12 +92,9 @@ export class Home implements OnInit {
       return;
     }
 
-    // Create a temporary anchor element to trigger download
     const link = document.createElement('a');
     link.href = book.file_url;
-    link.target = '_blank'; // Open in new tab for PDFs
-    
-    // Try to extract filename from URL or use book title
+
     const fileName = this.getFileNameFromUrl(book.file_url) || `${book.title}.pdf`;
     link.download = fileName;
 
@@ -78,7 +104,7 @@ export class Home implements OnInit {
 
     Swal.fire({
       title: 'Descarga iniciada',
-      text: `Abriendo: ${book.title}`,
+      text: `Descargando: ${fileName}`,
       icon: 'info',
       timer: 2000
     });

@@ -44,7 +44,18 @@ export const routes: Routes = [
     pathMatch:"full"
   },
   {
+    path:"home/:username",
+    component:Home,
+    pathMatch:"full"
+  },
+
+  {
     path:"profile",
+    component:Profile,
+    pathMatch:"full"
+  },
+  {
+    path:"profile/:username",
     component:Profile,
     pathMatch:"full"
   },
@@ -70,6 +81,11 @@ export const routes: Routes = [
   },
   {
     path:"collections",
+    component:Collections,
+    pathMatch:"full"
+  },
+  {
+    path:"collection/:username",
     component:Collections,
     pathMatch:"full"
   },
@@ -114,6 +130,12 @@ export const routes: Routes = [
     component:Reviews,
     pathMatch:"full"
   },
+  {
+    path:"reviews/:username",
+    component:Reviews,
+    pathMatch:"full"
+  },
+
   {
     path:"create-review",
     component:CreateReview,

@@ -20,13 +20,11 @@ export class UserController {
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard)
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
 
   @Get('username/:username')
-  @UseGuards(AuthGuard)
   findByUsername(@Param('username') username: string) {
     return this.userService.findByUsername(username);
   }
@@ -37,7 +35,6 @@ export class UserController {
   }
 
   @Delete(':id')
-  @UseGuards(SelfOrAdminGuard)
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
   }

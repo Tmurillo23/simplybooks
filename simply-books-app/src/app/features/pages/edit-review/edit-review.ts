@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { EditorModule } from '@tinymce/tinymce-angular';
@@ -7,6 +7,8 @@ import { BookshelfService } from '../../../shared/services/bookshelf';
 import { ReviewInterface } from '../../../shared/interfaces/review-interface';
 import { BookShelfItem } from '../../../shared/services/bookshelf';
 import { TINYMCE_KEY } from '../../../../environments/environment';
+import {Auth} from '../../../shared/services/auth';
+import {User} from '../../../shared/interfaces/user';
 
 
 @Component({
@@ -19,6 +21,8 @@ import { TINYMCE_KEY } from '../../../../environments/environment';
 export class EditReview implements OnInit {
   reviewId: string = '';
   review?: ReviewInterface;
+  authService = inject(Auth)
+  user: User = this.authService.getUserLogged();
 
   title = '';
   content = '';
@@ -59,7 +63,7 @@ export class EditReview implements OnInit {
     this.selectedBookId = found.bookId;
 
     // Cargar libros disponibles del usuario
-    this.bookshelfService.loadUserFiles();
+    this.bookshelfService.loadUserFiles(this.user);
     this.availableBooks = this.bookshelfService.availableBooks;
   }
 

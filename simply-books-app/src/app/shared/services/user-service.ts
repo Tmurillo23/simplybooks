@@ -16,6 +16,10 @@ export class UserService {
   findById(userId:string){
     return this.http.get<UserResponse>(`http://localhost:3000/api/v1/users/${userId}`, getHeaders);
   }
+  findByUsername(username:string){
+    return this.http.get<UserResponse>(`http://localhost:3000/api/v1/users/username/${username}`, getHeaders);
+  }
+
 
   findAll() {
     return this.http.get<UserResponse[]>(`http://localhost:3000/api/v1/users`, getHeaders);
@@ -24,5 +28,6 @@ export class UserService {
   update(userId:string, user:Partial<User>) {
     return this.http.patch<User>(`http://localhost:3000/api/v1/users/${userId}`, user, getHeaders);
   }
+
 
 }

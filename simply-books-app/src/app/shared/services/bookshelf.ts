@@ -4,7 +4,8 @@ import { Storage } from './storage';
 import { Auth } from './auth';
 import { SocialFeedService } from './social-feed-service';
 import { BooksService } from './books-service';
-import { SUPABASE_FILES_BUCKET } from '../../../environments/environment';
+import {SUPABASE_FILES_BUCKET} from '../../../environments/environment';
+import {User} from '../interfaces/user';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
@@ -36,6 +37,7 @@ export class BookshelfService {
     return Math.abs(hash);
   }
 
+  // Devuelve el array real de libros
   get bookshelvesItems(): BookShelfItem[] {
     return this.bookshelf();
   }
@@ -45,8 +47,7 @@ export class BookshelfService {
     return this.bookshelf().filter(book => !loanedIds.has(book.id));
   }
 
-  async loadUserFiles() {
-    const user = this.authService.getUserLogged();
+  async loadUserFiles(user : User) {
     if (!user.username) {
       console.error('No user logged in');
       return;
@@ -115,10 +116,10 @@ export class BookshelfService {
     try {
       console.log('Loading books from API for user:', user.id);
       const apiBooks = await this.booksService.getBooksByUser(user.id).toPromise();
-      
+
       if (apiBooks && apiBooks.length > 0) {
         console.log('Loaded books from API:', apiBooks.length);
-        
+
         const booksToAdd: BookShelfItem[] = apiBooks.map(b => ({
           id: b.id,
           title: b.title,
@@ -243,7 +244,7 @@ export class BookshelfService {
 
   removeBook(id: number) {
     this.bookshelf.update(items => items.filter(b => b.id !== id));
-    
+
     // Note: Backend deletion would require the backend UUID, which we don't have
     // You might want to implement a way to track backend IDs
   }
