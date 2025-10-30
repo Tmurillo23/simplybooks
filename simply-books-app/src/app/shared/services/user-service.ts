@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import {inject, Injectable,signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {UserResponse} from '../interfaces/user-response';
 import {User} from '../interfaces/user';
@@ -9,6 +9,8 @@ import {getHeaders} from '../utils/utility';
 })
 export class UserService {
   http = inject(HttpClient)
+  profileNeedsUpdate = signal(false);
+
 
 
   findById(userId:string){

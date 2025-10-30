@@ -13,7 +13,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 @Component({
   selector: 'app-update-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, EditorModule, FormsModule],
+  imports: [ ReactiveFormsModule, EditorModule, FormsModule],
   templateUrl: './update-profile.html',
   styleUrls: ['./update-profile.css']
 })
@@ -24,28 +24,28 @@ export class UpdateProfile implements OnInit {
   storageService = inject(Storage);
   userService = inject(UserService);
   customValidators = inject(CustomValidators);
-
   currentUser!: User;
-  profileForm!: FormGroup;
+  profileForm = this.fb.group({
+    username: [
+'',
+   {
+        validators: [Validators.required],
+        asyncValidators: [this.customValidators.usernameExistsValidator()],
+        updateOn: 'blur'
+      }
+    ],
+    biography: ['', []]
+  });
 
   ngOnInit(): void {
-    this.currentUser = this.authService.currentUser() || this.authService.getUserLogged();
+    this.currentUser = this.authService.getUserLogged();
     console.log('👤 Usuario actual en update:', this.currentUser);
 
-    this.profileForm = this.fb.group({
-      username: [
-        this.currentUser.username,
-        {
-          validators: [Validators.required],
-          asyncValidators: [this.customValidators.usernameExistsValidator()],
-          updateOn: 'blur'
-        }
-      ],
-      biography: [this.currentUser.biography || '']
-    });
   }
 
   onUpdateProfile() {
+    console.log('🟢 onUpdateProfile ejecutado');
+
     if (this.profileForm.invalid) {
       Swal.fire({
         icon: 'warning',
@@ -54,29 +54,15 @@ export class UpdateProfile implements OnInit {
       return;
     }
 
-    const formValue = this.profileForm.getRawValue();
-    const updatedUser: Partial<User> = {
-      username: formValue.username,
-      biography: formValue.biography
-    };
+    const {username, biography} = this.profileForm.value;
+    this.currentUser.username = username || this.currentUser.username;
+    this.currentUser.biography = biography || this.currentUser.biography;
 
-    console.log('📤 Enviando actualización:', updatedUser);
-
-    this.userService.update(this.currentUser.id!, updatedUser)
+    this.userService.update(this.currentUser.id!, { username:username!, biography:biography! })
       .subscribe({
         next: (response: any) => {
           console.log('✅ Respuesta del servidor:', response);
-
-          // CRÍTICO: Actualizar el token PRIMERO si viene en la respuesta
-          if (response.token) {
-            sessionStorage.setItem('token', response.token);
-            console.log('🔑 Token actualizado en sessionStorage');
-          }
-
-          // Luego forzar la recarga del usuario desde el token actualizado
-          // Esto decodifica el nuevo token y actualiza tanto signal como BehaviorSubject
-          const freshUser = this.authService.getUserLogged();
-          console.log('🔄 Usuario recargado desde token:', freshUser);
+          this.userService.profileNeedsUpdate.set(true);
 
           Swal.fire({
             icon: 'success',
@@ -85,9 +71,7 @@ export class UpdateProfile implements OnInit {
             showConfirmButton: false
           });
 
-          // Navegar después de un pequeño delay para asegurar que todo se actualizó
           setTimeout(() => {
-            console.log('🧭 Navegando a profile...');
             this.router.navigateByUrl('/profile');
           }, 200);
         },
@@ -99,8 +83,10 @@ export class UpdateProfile implements OnInit {
           });
         }
       });
-  }
 
+
+
+  }
   onUploadFile(event: Event) {
     const inputTarget = event.target as HTMLInputElement;
     if (!inputTarget.files || inputTarget.files.length <= 0) return;
@@ -120,51 +106,20 @@ export class UpdateProfile implements OnInit {
     this.storageService.uploadAvatar(imageFile, this.currentUser.email)
       .then(filePath => {
         const imageUrl = this.storageService.getFileUrl(filePath, 'avatar');
-        console.log('✅ Avatar subido, URL:', imageUrl);
+        const avatarUpdate = {avatar: imageUrl};
 
-        const avatarUpdate = { avatar: imageUrl };
-
-        this.userService.update(this.currentUser.id!, avatarUpdate)
-          .subscribe({
-            next: (response: any) => {
-              console.log('✅ Avatar guardado en BD:', response);
-
-              // Si el backend devuelve un token actualizado, guardarlo
-              if (response.token) {
-                sessionStorage.setItem('token', response.token);
-                console.log('🔑 Token actualizado después de subir avatar');
-              }
-
-              // Recargar el usuario completo desde el token
-              const freshUser = this.authService.getUserLogged();
-              console.log('🔄 Usuario recargado con avatar:', freshUser);
-
-              Swal.fire({
-                icon: 'success',
-                text: 'Avatar actualizado correctamente',
-                timer: 1500,
-                showConfirmButton: false
-              });
-
-              setTimeout(() => {
-                this.router.navigateByUrl('/profile');
-              }, 200);
-            },
-            error: (err) => {
-              console.error('❌ Error al actualizar en BD:', err);
-              Swal.fire({
-                icon: 'error',
-                text: 'Error al guardar el avatar en la base de datos'
-              });
-            }
-          });
+        this.userService.update(this.currentUser.id!, avatarUpdate).subscribe(
+          response => {
+            this.router.navigateByUrl('/profile');
+          }
+        );
       })
-      .catch(error => {
-        console.error('❌ Error detallado:', error);
-        Swal.fire({
-          text: error.message || 'Error al cargar la imagen',
-          icon: 'error'
-        });
-      });
+    .catch(error => {
+      console.log(error);
+      Swal.fire({
+        text: 'Error al cargar la imagen',
+        icon: 'error'
+      })
+    });
   }
 }

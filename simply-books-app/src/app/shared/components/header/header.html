@@ -1,34 +1,59 @@
-<header>
-  @if(isLogged()){
-    <div class="header-top">
-      <a routerLink="home"><h1>SimplyBooks</h1></a>
-      <div class="sidebar">
-        <nav>
-          <ul class="nav-list">
-            <li>
-              <a (click)="onProfile()">
-                <i class="fa-regular fa-circle-user"></i>
-              </a>
-            </li>
-            <li><a routerLink="reviews">Reseñas</a></li>
-            <li><a routerLink="upload">Agregar libros</a></li>
-            <li><a routerLink="collections">Colecciones</a></li>
-            <li><a routerLink="loans">Préstamos</a></li>
-            <li><a routerLink="feed">Feed social</a></li>
-            <li><a (click)="onLogout()">Cerrar sesión</a></li>
+<header class="header-container">
 
-          </ul>
-        </nav>
+  @if (isLogged()) {
+    <div class="header-content">
+
+      <!-- 🔹 Logo / Marca -->
+      <div class="logo" (click)="router.navigateByUrl('home')">
+        <h1>SimplyBooks</h1>
       </div>
-    </div>
 
-    <div class="search-section">
-      <form class="basic-search">
-        <input type="text" placeholder="Buscar..." id="basic-input">
-        <button type="submit">Buscar</button>
-      </form>
+      <!-- 🔹 Barra de búsqueda -->
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Buscar usuarios..."
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+          (blur)="onBlur()"
+        />
+
+
+        <!-- 🔽 Dropdown de resultados -->
+        @if (isDropdownVisible() && searchResults().length > 0) {
+          <ul class="search-dropdown">
+            @for (user of searchResults(); track user.username) {
+              <li (click)="goToUserProfile(user.username)">
+                <span class="username">{{ user.username }}</span>
+                <button
+                  class="follow-btn"
+                  (click)="followUser(user); $event.stopPropagation()"
+                >
+                  {{ isFollowing(user.username) ? 'Siguiendo' : 'Seguir' }}
+                </button>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+
+      <!-- 🔹 Navegación -->
+      <nav class="nav-links">
+        <a routerLink="/reviews">Reseñas</a>
+        <a routerLink="/add-book">Agregar libros</a>
+        <a routerLink="/collections">Colecciones</a>
+        <a routerLink="/loans">Préstamos</a>
+        <a routerLink="/feed">Feed social</a>
+        <a (click)="onProfile()">Perfil</a>
+        <a (click)="onLogout()">Cerrar sesión</a>
+      </nav>
+
     </div>
   } @else {
-    <h1>SimplyBooks</h1>
+    <!-- 🔹 Vista pública -->
+    <div class="header-public">
+      <h1 class="logo">SimplyBooks</h1>
+    </div>
   }
+
 </header>

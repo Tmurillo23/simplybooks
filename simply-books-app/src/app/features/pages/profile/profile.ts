@@ -1,31 +1,29 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterLink, Router, NavigationEnd } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil, filter } from 'rxjs/operators';
+import {Component, effect, inject, OnInit} from '@angular/core';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import { Auth } from '../../../shared/services/auth';
 import { ReviewService } from '../../../shared/services/review-service';
 import { BookshelfService, BookShelfItem } from '../../../shared/services/bookshelf';
 import { ReviewInterface } from '../../../shared/interfaces/review-interface';
 import { CollectionInterface } from '../../../shared/interfaces/collection-interface';
-import { CollectionService } from '../../../shared/services/collections-service';
-import { EditorModule } from '@tinymce/tinymce-angular';
+import {CollectionService} from '../../../shared/services/collections-service';
 import {FormsModule} from '@angular/forms';
+import { EditorModule } from '@tinymce/tinymce-angular';
+import {UserService} from '../../../shared/services/user-service';
 
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterLink, EditorModule, FormsModule],
+  imports: [RouterLink, FormsModule,EditorModule],
   templateUrl: './profile.html',
   styleUrls: ['./profile.css']
 })
-export class Profile implements OnInit, OnDestroy {
-  authService = inject(Auth);
-  reviewService = inject(ReviewService);
-  collectionService = inject(CollectionService);
-  bookshelfService = inject(BookshelfService);
-  router = inject(Router);
+export class Profile implements OnInit {
+   authService = inject(Auth);
+   reviewService = inject(ReviewService);
+   collectionService = inject(CollectionService);
+   bookshelfService = inject(BookshelfService);
+   user = this.authService.getUserLogged()
   readonlyEditorConfig = {
     menubar: false,
     toolbar: false,
@@ -40,167 +38,82 @@ export class Profile implements OnInit, OnDestroy {
       });
     }
   };
-
-  private destroy$ = new Subject<void>();
-
+  stats = {
+    booksRead: this.user.stats?.booksRead || 0,
+    reviewsCount: 0,
+    followersCount: this.user.stats?.followersCount || 0,
+    followingCount: this.user.stats?.followingCount || 0
+  };
   recentReviews: ReviewInterface[] = [];
   recentLibrary: BookShelfItem[] = [];
   recentCollections: CollectionInterface[] = [];
+  userService = inject(UserService);
 
-  user: any = null;
-  stats = {
-    booksRead: 0,
-    reviewsCount: 0,
-    followersCount: 0,
-    followingCount: 0
-  };
-
-  async ngOnInit() {
-    console.log('🎯 Profile ngOnInit iniciado');
-
-    // Cargar datos iniciales
-    await this.loadInitialData();
-
-    // Suscribirse a cambios en el usuario
-    this.setupUserSubscription();
-
-    // Suscribirse a eventos de navegación para detectar cuando volvemos
-    this.setupNavigationSubscription();
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  private async loadInitialData() {
-    // Siempre obtener el usuario más reciente
+  ngOnInit() {
     this.user = this.authService.getUserLogged();
-    console.log('🔍 Usuario cargado en loadInitialData:', this.user);
-
-    if (!this.user || this.user.username === 'unknown-user') {
-      console.warn('Usuario no autenticado o token inválido');
-      return;
-    }
-
-    await this.loadAllData();
-  }
-
-  private setupUserSubscription() {
-    console.log('🎯 Configurando suscripción a user$');
-
-    this.authService.user$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (user) => {
-          console.log('🎯 Profile recibió actualización de usuario:', user);
-
-          if (user && user.username !== 'unknown-user') {
-            // Siempre actualizar si hay un usuario válido
-            const userChanged = this.hasUserChanged(user);
-            console.log('🔄 ¿Usuario cambió?:', userChanged);
-
-            this.user = user;
-            console.log('✅ Profile actualizado con nuevo usuario:', this.user);
-
-            // Recargar datos si el usuario cambió
-            if (userChanged) {
-              this.loadAllData();
-            }
-          }
-        },
-        error: (error) => {
-          console.error('❌ Error en suscripción user$:', error);
-        }
-      });
-  }
-
-  private setupNavigationSubscription() {
-    // Detectar cuando navegamos de vuelta al profile
-    this.router.events
-      .pipe(
-        filter(event => event instanceof NavigationEnd),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((event: any) => {
-        if (event.url === '/profile' || event.urlAfterRedirects === '/profile') {
-          console.log('🔄 Regresamos a /profile, recargando usuario...');
-          // Forzar recarga del usuario desde el token
-          this.user = this.authService.getUserLogged();
-          this.loadAllData();
-        }
-      });
-  }
-
-  private hasUserChanged(newUser: any): boolean {
-    if (!this.user) return true;
-
-    // Comparar propiedades clave en lugar de JSON completo
-    const keyPropsChanged =
-      newUser.username !== this.user.username ||
-      newUser.biography !== this.user.biography ||
-      newUser.avatar !== this.user.avatar ||
-      newUser.email !== this.user.email;
-
-    console.log('🔄 Propiedades clave cambiaron:', keyPropsChanged);
-    return keyPropsChanged;
-  }
-
-  private updateStats() {
-    if (!this.user) return;
-
-    this.stats = {
-      booksRead: this.user.stats?.booksRead || 0,
-      reviewsCount: this.recentReviews.length,
-      followersCount: this.user.stats?.followersCount || 0,
-      followingCount: this.user.stats?.followingCount || 0
-    };
-
-    console.log('📊 Estadísticas actualizadas:', this.stats);
-  }
-
-  private async loadAllData() {
-    console.log('🔄 Cargando todos los datos del perfil...');
-    await this.loadLibrary();
+    this.loadLibrary();
     this.loadReviews();
     this.loadCollections();
-    this.updateStats();
+
+    console.log('👤 Usuario en perfil:', this.user);
   }
 
-  loadReviews() {
-    if (!this.user?.email) return;
+  constructor() {
+    effect(() => {
+      if (this.userService.profileNeedsUpdate()) {
+        console.log('🔁 Perfil necesita actualización, refrescando...');
+        this.refreshUserData();
+        this.userService.profileNeedsUpdate.set(false); // Reinicia el flag
+      }
+    });
+  }
 
+  refreshUserData() {
+    const current = this.authService.getUserLogged();
+    this.userService.findById(current.id!).subscribe({
+      next: (res) => {
+        this.user = res; // o tu método correspondiente
+        console.log('✅ Usuario actualizado:', res);
+      },
+      error: (err) => console.error('❌ Error refrescando usuario', err)
+    });
+  }
+
+
+
+  /** Últimas 5 reseñas publicadas */
+  private loadReviews() {
     const reviews = this.reviewService
       .getReviewsForUser(this.user.email)
       .filter(r => !r.draft);
-
     this.recentReviews = [...reviews].slice(-5).reverse();
-    this.updateStats();
+    this.stats.reviewsCount = reviews.length;
   }
 
-  async loadLibrary() {
+  /** Últimos 5 libros agregados a la librería personal */
+  private async loadLibrary() {
     await this.bookshelfService.loadUserFiles();
     const allBooks = this.bookshelfService.bookshelvesItems;
     this.recentLibrary = [...allBooks].slice(-5).reverse();
   }
 
+  /** Últimas 5 colecciones creadas */
   private loadCollections() {
-    if (!this.user) return;
-
     const collections = this.collectionService.getCollectionsByUser(this.user);
     this.recentCollections = [...collections].slice(-5).reverse();
   }
 
+  /** Enlaces principales (clic en el título del bloque) */
   goTo(type: string): any[] {
-    const username = this.user?.username || 'unknown-user';
     switch (type) {
-      case 'library': return ['/home', username];
-      case 'reviews': return ['/reviews', username];
-      case 'collections': return ['/collections', username];
+      case 'library': return ['/home', this.user.username];
+      case 'reviews': return ['/reviews', this.user.username];
+      case 'collections': return ['/collections', this.user.username];
       default: return ['/'];
     }
   }
 
+  /** Enlace al ítem específico */
   goToItem(type: string, id: any): any[] {
     switch (type) {
       case 'library': return ['/book', id];
@@ -208,12 +121,5 @@ export class Profile implements OnInit, OnDestroy {
       case 'collections': return ['/collection', id];
       default: return ['/'];
     }
-  }
-
-  // Método para debug
-  debugUser() {
-    console.log('🐛 Usuario actual en Profile:', this.user);
-    console.log('🐛 Usuario en AuthService signal:', this.authService.currentUser());
-    console.log('🐛 Token en sessionStorage:', sessionStorage.getItem('token'));
   }
 }

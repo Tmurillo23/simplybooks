@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {BehaviorSubject, catchError, map, Observable} from 'rxjs';
+import { catchError, map, Observable } from 'rxjs';
 import { User } from '../interfaces/user';
 import { LoginResponse, LoginServiceResponse } from '../interfaces/login-response';
 import { JwtService } from './jwt-service';
@@ -14,12 +14,9 @@ export class Auth {
 
   private http = inject(HttpClient);
   private jwtService = inject(JwtService);
-  userSubject = new BehaviorSubject<User | null>(null);
-  user$ = this.userSubject.asObservable();
 
   isLogged = signal(false);
   private apiUrl = 'http://localhost:3000/api/v1/auth';
-  currentUser = signal<User | null>(null);
 
   constructor() {
     this.verifyLoggedUser();
@@ -94,16 +91,30 @@ export class Auth {
   }
 
   getUserLogged(): User {
-    const user = this.jwtService.decodeToken();
+    let user = this.jwtService.decodeToken();
 
     if (!user) {
-      const defaultUser = this.getDefaultUser();
-      this.currentUser.set(defaultUser);
-      this.userSubject.next(defaultUser);
-      return defaultUser;
+      return {
+        id: '0',
+        username: 'unknown-user',
+        password: '',
+        email: 'no-user',
+        rePassword: '',
+        avatar: '',
+        created_at: new Date(0),
+        biography: '',
+        following: false,
+        stats: {
+          booksRead: 0,
+          reviewsCount: 0,
+          followersCount: 0,
+          followingCount: 0
+        }
+      };
     }
 
-    const currentUser: User = {
+    // Retornamos el usuario decodificado con valores seguros por defecto
+    return {
       id: user.id || '0',
       username: user.username || 'unknown-user',
       password: '',
@@ -120,62 +131,13 @@ export class Auth {
         followingCount: 0
       }
     };
-
-    this.currentUser.set(currentUser);
-    this.userSubject.next(currentUser); // <- IMPORTANTE
-    return currentUser;
   }
-
-
-
-  // En tu AuthService, reemplaza updateCurrentUser por esto:
-  updateCurrentUser(updatedUser: Partial<User>): void {
-    const currentUser = this.currentUser();
-    if (currentUser) {
-      const updated = { ...currentUser, ...updatedUser };
-
-      // Actualizar ambos: signal y BehaviorSubject
-      this.currentUser.set(updated);
-      this.userSubject.next(updated);
-
-      console.log('🔄 Usuario actualizado en AuthService - Signal:', this.currentUser());
-      console.log('🔄 Usuario actualizado en AuthService - BehaviorSubject:', updated);
-    }
-  }
-
-// Y asegúrate de que refreshUser también sincrone ambos:
-  refreshUser(): void {
-    const user = this.getUserLogged();
-    this.currentUser.set(user);
-    this.userSubject.next(user);
-    console.log('🔄 Usuario refrescado en AuthService:', user);
-  }
-  private getDefaultUser(): User {
-    return {
-      id: '0',
-      username: 'unknown-user',
-      password: '',
-      email: 'no-user',
-      rePassword: '',
-      avatar: '',
-      created_at: new Date(0),
-      biography: '',
-      following: false,
-      stats: {
-        booksRead: 0,
-        reviewsCount: 0,
-        followersCount: 0,
-        followingCount: 0
-      }
-    };
-  }
-
 
   isTokenExpired() {
     return this.jwtService.isTokenExpired();
   }
 
-  verifyLoggedUser() {
+  private verifyLoggedUser() {
     this.isLogged.set(!!sessionStorage.getItem('token'))
   }
 

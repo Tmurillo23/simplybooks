@@ -1,15 +1,15 @@
+
 <div class="profile-container">
-  <!-- Encabezado de perfil -->
+
+  <!--  Encabezado de perfil -->
   <header class="profile-header">
     <img
       class="profile-pic"
-      [src]="user?.avatar || '/assets/default-avatar.png'"
-      [alt]="user?.username"
-    />
+      [src]="user.avatar || '/assets/default-avatar.png'"
+      [alt]="user.username">
 
     <div class="profile-info">
-      <h2 class="username">{{ user?.username }}</h2>
-
+      <h2 class="username">{{ user.username }}</h2>
       <!-- Biografía con TinyMCE -->
       <div class="form-group bio-editor" [class.hidden]="!user?.biography">
         <label>Biografía:</label>
@@ -21,6 +21,9 @@
       </div>
     </div>
   </header>
+
+    </div>
+
 
   <!-- Estadísticas del usuario -->
   <section class="stats-container">
@@ -45,26 +48,28 @@
     </a>
   </section>
 
-  <!-- Datos de la cuenta -->
+  <!--  Datos de la cuenta -->
   <section class="profile-form">
     <div class="form-group">
       <label for="email">Correo</label>
-      <input id="email" type="email" [value]="user?.email" readonly />
+      <input id="email" type="email" [value]="user.email" readonly>
     </div>
 
     <div class="form-group">
       <label for="username">Usuario</label>
-      <input id="username" type="text" [value]="user?.username" readonly />
+      <input id="username" type="text" [value]="user.username" readonly>
     </div>
+
 
     <button type="button" class="btn-primary" [routerLink]="['/update-profile']">
       Editar perfil
     </button>
+
   </section>
-</div>
 
 <!-- Secciones del perfil -->
 <div class="profile-sections">
+
   <!-- LIBRERÍA -->
   <section class="profile-card">
     <h3 class="section-title">
@@ -75,16 +80,10 @@
       @for (book of recentLibrary; track book.id) {
         <li>
           <a [routerLink]="goToItem('library', book.id)">
-            <img
-              [src]="book.portrait_url || '/assets/book-placeholder.png'"
-              alt="{{ book.title }}"
-            />
+            <img [src]="book.portrait_url || '/assets/book-placeholder.png'" alt="">
             <span>{{ book.title }}</span>
           </a>
         </li>
-      }
-      @empty {
-        <li class="empty-message">Aún no hay libros en tu librería</li>
       }
     </ul>
   </section>
@@ -92,7 +91,7 @@
   <!-- RESEÑAS -->
   <section class="profile-card">
     <h3 class="section-title">
-      <a [routerLink]="goTo('reviews')">Mis Reseñas</a>
+      <a [routerLink]="goTo('reviews')"> Mis Reseñas</a>
     </h3>
 
     <ul class="item-list">
@@ -103,16 +102,13 @@
           </a>
         </li>
       }
-      @empty {
-        <li class="empty-message">Aún no has publicado reseñas</li>
-      }
     </ul>
   </section>
 
   <!-- COLECCIONES -->
   <section class="profile-card">
     <h3 class="section-title">
-      <a [routerLink]="goTo('collections')">Mis Colecciones</a>
+      <a [routerLink]="goTo('collections')"> Mis Colecciones</a>
     </h3>
 
     <ul class="item-list">
@@ -122,9 +118,6 @@
             {{ col.name }}
           </a>
         </li>
-      }
-      @empty {
-        <li class="empty-message">Aún no has creado colecciones</li>
       }
     </ul>
   </section>
