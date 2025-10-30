@@ -1,50 +1,232 @@
+/* Barra de búsqueda */
+.search-bar {
+  margin: 1.5rem 0 2rem 0;
+  text-align: center;
+}
+
+.search-bar input {
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #E3D5CA;
+  width: 400px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1rem;
+  background-color: #F5EBE0;
+  color: #3a3a3a;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: #D5BDAF;
+  box-shadow: 0 4px 10px rgba(213, 189, 175, 0.2);
+  background-color: #FFFFFF;
+}
+
+.search-bar input::placeholder {
+  color: #8a7b73;
+}
+
+/* Contenedor principal de libros */
 #bookshelves {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 1.5rem;
   padding: 1rem;
   justify-content: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
+/* Tarjeta de libro */
 .book-card {
-  background: #fffcf8;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  width: 140px;
-  padding: 0.6rem;
+  background-color: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  width: 160px;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  transition: transform 0.2s ease-in-out;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  position: relative;
 }
 
 .book-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
+/* Portada del libro */
 .book-cover {
-  width: 100px;
-  height: 150px;
+  width: 120px;
+  height: 180px;
   object-fit: cover;
-  border-radius: 4px;
-  margin-bottom: 0.5rem;
-  border: 1px solid #463f3a;
+  border-radius: 8px;
+  border: 2px solid #D6CCC2;
+  background-color: #EDEDE9;
+  margin-bottom: 0.8rem;
+  transition: all 0.3s ease;
 }
 
+.book-card:hover .book-cover {
+  border-color: #D5BDAF;
+}
+
+/* Enlaces de la portada y título */
+.book-card a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.book-card a:hover {
+  color: #D5BDAF;
+}
+
+/* Detalles del libro */
 .book-details {
   font-size: 0.75rem;
-  line-height: 1.2;
+  line-height: 1.3;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
 }
 
 .book-details h3 {
   font-size: 0.85rem;
   margin: 0.3rem 0;
-  color: #272635;
+  color: #D5BDAF;
+  font-weight: 600;
+  min-height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .book-details p {
-  margin: 0.2rem 0;
+  margin: 0;
   font-size: 0.7rem;
-  color: #444;
+  color: #5c5c5c;
+}
+
+.book-details strong {
+  color: #6b5e58;
+}
+
+/* Selector de estado */
+.book-details label {
+  font-size: 0.7rem;
+  color: #6b5e58;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+
+.book-details select {
+  font-size: 0.7rem;
+  padding: 0.3rem;
+  border: 1px solid #D6CCC2;
+  border-radius: 4px;
+  background-color: #FFFFFF;
+  color: #3a3a3a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.book-details select:focus {
+  outline: none;
+  border-color: #D5BDAF;
+  box-shadow: 0 0 0 2px rgba(213, 189, 175, 0.2);
+}
+
+.book-details select:disabled {
+  background-color: #EDEDE9;
+  color: #8a7b73;
+  cursor: not-allowed;
+}
+
+/* Botones de acción */
+.book-actions {
+  margin-top: 0.6rem;
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.book-actions button {
+  font-size: 0.7rem;
+  padding: 0.4rem 0.6rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  flex: 1;
+  min-width: 60px;
+}
+
+/* Botones editar/eliminar */
+.book-actions button:not(.download-btn) {
+  background-color: #D5BDAF;
+  color: #FFFFFF;
+}
+
+.book-actions button:not(.download-btn):hover:not(:disabled) {
+  background-color: #E3D5CA;
+  color: #3a3a3a;
+  transform: translateY(-1px);
+}
+
+/* Botón eliminar específico */
+.book-actions button:last-child:not(.download-btn) {
+  background-color: #e8b4b4;
+  color: #d32f2f;
+}
+
+.book-actions button:last-child:not(.download-btn):hover:not(:disabled) {
+  background-color: #d32f2f;
+  color: #FFFFFF;
+}
+
+/* Botón de descarga */
+.download-btn {
+  background-color: #8fa89b !important;
+  color: #FFFFFF !important;
+  margin-top: 0.4rem;
+  font-size: 0.7rem;
+  padding: 0.4rem 0.6rem;
+  width: 100%;
+}
+
+.download-btn:hover:not(:disabled) {
+  background-color: #a8c2b5 !important;
+  transform: translateY(-1px);
+}
+
+/* Estados deshabilitados */
+button:disabled,
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Mensaje de no libros */
+#bookshelves > p {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #6b5e58;
+  background-color: #EDEDE9;
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #E3D5CA;
+  width: 100%;
+  margin: 20px 0;
 }

@@ -1,0 +1,196 @@
+/* Contenedor principal */
+.create-review-container {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 30px;
+  background-color: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #3a3a3a;
+}
+
+.create-review-container h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #D5BDAF;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+/* Grupos de formulario */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #6b5e58;
+  font-size: 0.95rem;
+}
+
+/* Select de libros */
+select {
+  padding: 12px 15px;
+  border: 1px solid #E3D5CA;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1rem;
+  color: #3a3a3a;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+select:focus {
+  outline: none;
+  border-color: #D5BDAF;
+  box-shadow: 0 0 0 2px rgba(213, 189, 175, 0.2);
+}
+
+select option {
+  padding: 8px;
+  background-color: #FFFFFF;
+}
+
+/* Input de texto */
+input[type="text"] {
+  padding: 12px 15px;
+  border: 1px solid #E3D5CA;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1rem;
+  color: #3a3a3a;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #D5BDAF;
+  box-shadow: 0 0 0 2px rgba(213, 189, 175, 0.2);
+}
+
+input[type="text"]::placeholder {
+  color: #8a7b73;
+}
+
+/* Sistema de estrellas */
+.stars {
+  display: flex;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.stars span {
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.stars span:hover {
+  transform: scale(1.2);
+}
+
+.filled-star {
+  color: #D5BDAF;
+}
+
+.empty-star {
+  color: #D6CCC2;
+}
+
+/* Editor TinyMCE personalizado */
+.tox-tinymce {
+  border: 1px solid #E3D5CA !important;
+  border-radius: 8px !important;
+  background-color: #FFFFFF !important;
+}
+
+.tox-toolbar {
+  background-color: #EDEDE9 !important;
+  border-bottom: 1px solid #E3D5CA !important;
+}
+
+.tox-editor-container {
+  background-color: #FFFFFF !important;
+}
+
+.tox-edit-area {
+  border-top: 1px solid #E3D5CA !important;
+}
+
+/* Botones de acción */
+.buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.buttons button {
+  padding: 14px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.buttons button:first-child {
+  background-color: #EDEDE9;
+  color: #6b5e58;
+  border: 1px solid #D6CCC2;
+}
+
+.buttons button:first-child:hover {
+  background-color: #D6CCC2;
+  color: #3a3a3a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.buttons button:last-child {
+  background-color: #D5BDAF;
+  color: #FFFFFF;
+}
+
+.buttons button:last-child:hover {
+  background-color: #E3D5CA;
+  color: #3a3a3a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Mensaje de no libros */
+.no-books-msg {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #6b5e58;
+  background-color: #EDEDE9;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #E3D5CA;
+  margin-top: 20px;
+}
+
+/* Estados de deshabilitado */
+select:disabled,
+input:disabled {
+  background-color: #EDEDE9;
+  color: #8a7b73;
+  cursor: not-allowed;
+}
+

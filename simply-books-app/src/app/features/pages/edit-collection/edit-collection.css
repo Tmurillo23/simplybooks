@@ -1,0 +1,258 @@
+/* Contenedor principal */
+#edit-collection {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #3a3a3a;
+}
+
+#edit-collection h1 {
+  text-align: center;
+  font-size: 2rem;
+  color: #D5BDAF;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+/* Formulario de edición */
+.edit-form {
+  background-color: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.edit-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #6b5e58;
+  font-size: 0.95rem;
+}
+
+.edit-form input[type="text"],
+.edit-form textarea {
+  padding: 12px 15px;
+  border: 1px solid #E3D5CA;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1rem;
+  color: #3a3a3a;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.edit-form input[type="text"]:focus,
+.edit-form textarea:focus {
+  outline: none;
+  border-color: #D5BDAF;
+  box-shadow: 0 0 0 2px rgba(213, 189, 175, 0.2);
+}
+
+.edit-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Botones del formulario */
+.form-actions {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.form-actions button {
+  background-color: #D5BDAF;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.form-actions button:hover {
+  background-color: #E3D5CA;
+  color: #3a3a3a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Línea separadora */
+hr {
+  border: none;
+  border-top: 1px solid #E3D5CA;
+  margin: 40px 0;
+}
+
+/* Gestión de libros */
+#books-management {
+  background-color: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+#books-management h2 {
+  font-size: 1.6rem;
+  color: #D5BDAF;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+/* Lista de libros actuales */
+.book-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 30px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.book-item {
+  background-color: #EDEDE9;
+  border: 1px solid #D6CCC2;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: all 0.3s ease;
+}
+
+.book-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.book-item img {
+  width: 50px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #D6CCC2;
+  background-color: #FFFFFF;
+}
+
+.book-item div {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.book-item strong {
+  color: #3a3a3a;
+  font-size: 1rem;
+}
+
+.book-item button {
+  background-color: #e8b4b4;
+  color: #d32f2f;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.book-item button:hover {
+  background-color: #d32f2f;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+
+/* Mensaje de no libros */
+#books-management > p {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #6b5e58;
+  background-color: #EDEDE9;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #E3D5CA;
+  margin-bottom: 30px;
+}
+
+/* Sección agregar libros */
+.add-book-section {
+  background-color: #EDEDE9;
+  border: 1px solid #D6CCC2;
+  border-radius: 8px;
+  padding: 25px;
+}
+
+.add-book-section h3 {
+  font-size: 1.3rem;
+  color: #6b5e58;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.add-book-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.add-book-section li {
+  background-color: #FFFFFF;
+  border: 1px solid #E3D5CA;
+  border-radius: 6px;
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.add-book-section li:hover {
+  background-color: #F5EBE0;
+}
+
+.add-book-section li button {
+  background-color: #D5BDAF;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-book-section li button:hover {
+  background-color: #E3D5CA;
+  color: #3a3a3a;
+  transform: translateY(-1px);
+}
+
+/* Mensaje de colección no encontrada */
+#edit-collection > p {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #6b5e58;
+  background-color: #EDEDE9;
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #E3D5CA;
+  margin: 50px auto;
+  max-width: 500px;
+}

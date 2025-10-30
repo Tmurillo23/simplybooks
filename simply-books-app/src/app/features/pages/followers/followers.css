@@ -1,0 +1,150 @@
+/* Contenedor principal */
+.followers-container {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #3a3a3a;
+}
+
+.followers-container h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #D5BDAF;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+/* Estado de carga */
+.loading {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #6b5e58;
+  background-color: #EDEDE9;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #E3D5CA;
+}
+
+/* Estado vacío */
+.empty {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #6b5e58;
+  background-color: #EDEDE9;
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid #E3D5CA;
+}
+
+/* Lista de seguidores */
+.followers-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Item de seguidor */
+.follower-item {
+  background-color: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+.follower-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* Información del seguidor */
+.follower-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #D6CCC2;
+  background-color: #EDEDE9;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.username {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #D5BDAF;
+  text-decoration: none;
+}
+
+.username:hover {
+  color: #8a7b73;
+  text-decoration: underline;
+}
+
+.bio {
+  font-size: 0.9rem;
+  color: #5c5c5c;
+  margin: 0;
+  max-width: 400px;
+}
+
+/* Acciones */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn.follow {
+  background-color: #D5BDAF;
+  color: #FFFFFF;
+}
+
+.btn.follow:hover {
+  background-color: #E3D5CA;
+  color: #3a3a3a;
+  transform: translateY(-1px);
+}
+
+.btn.remove {
+  background-color: #EDEDE9;
+  color: #8a7b73;
+  border: 1px solid #D6CCC2;
+}
+
+.btn.remove:hover {
+  background-color: #e8b4b4;
+  color: #d32f2f;
+  transform: translateY(-1px);
+}

@@ -1,7 +1,6 @@
 <div class="followers-container">
   <h2>Tus seguidores</h2>
 
-  <!-- Estado de carga -->
   @if (loading) {
     <div class="loading">Cargando seguidores...</div>
   }
@@ -9,21 +8,19 @@
   <!-- Lista vacía -->
   @if (!loading && followers.length === 0) {
     <div class="empty">
-      <p>No tienes seguidores por ahora 😢</p>
+      <p>No tienes seguidores por ahora </p>
     </div>
   }
 
   <!-- Lista de seguidores -->
   @if (!loading && followers.length > 0) {
     <ul class="followers-list">
-      @for (user of followers; track trackByUsername($index, user)) {
+      @for (user of followers; track user.id) {
         <li class="follower-item">
           <div class="follower-info">
             <img [src]="user.avatar || 'assets/default-avatar.png'" alt="Avatar" class="avatar" />
             <div class="details">
-              <a [routerLink]="['/profile', user.username]" class="username">
-                {{user.username }}
-              </a>
+              <span class="username">{{ user.username }}</span>
               <p class="bio">{{ user.biography || 'Sin descripción.' }}</p>
             </div>
           </div>
@@ -37,4 +34,3 @@
     </ul>
   }
 </div>
-

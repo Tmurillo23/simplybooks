@@ -1,24 +1,75 @@
-h1{
+/* Título principal */
+h1 {
   text-align: center;
+  font-size: 2.5rem;
+  color: #D5BDAF;
+  margin-bottom: 40px;
+  font-weight: 600;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
+/* Sección principal de carga */
 #upload-section {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 40px;
   margin-top: 20px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
-/* Cada bloque */
+/* Cada bloque de carga */
 .manual-upload,
 .api-search {
   flex: 1;
-  background: #f9f9f9;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  background-color: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
 }
+
+.manual-upload:hover,
+.api-search:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+}
+
+.manual-upload h2,
+.api-search h2 {
+  font-size: 1.5rem;
+  color: #D5BDAF;
+  margin-bottom: 20px;
+  font-weight: 600;
+  border-bottom: 2px solid #E3D5CA;
+  padding-bottom: 10px;
+}
+
+/* Input de archivo */
+.manual-upload input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  border: 2px dashed #D6CCC2;
+  border-radius: 8px;
+  background-color: #EDEDE9;
+  color: #3a3a3a;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.manual-upload input[type="file"]:hover {
+  border-color: #D5BDAF;
+  background-color: #f8f2ec;
+}
+
+/* Popup del formulario */
 .popup {
   position: fixed;
   top: 0;
@@ -33,78 +84,140 @@ h1{
 }
 
 .popup-content {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 8px;
-  width: 400px;
+  background: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  padding: 30px;
+  width: 450px;
   position: relative;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
 .popup-content h2 {
   margin-top: 0;
+  font-size: 1.6rem;
+  color: #D5BDAF;
+  margin-bottom: 25px;
+  font-weight: 600;
+  text-align: center;
 }
 
 .popup-content label {
   display: block;
-  margin: 0.8rem 0 0.3rem;
+  font-weight: 600;
+  color: #6b5e58;
+  margin: 15px 0 8px 0;
+  font-size: 0.95rem;
 }
 
-.popup-content input,
-.popup-content textarea {
+.popup-content input {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #bbb;
-  border-radius: 4px;
+  padding: 12px 15px;
+  border: 1px solid #E3D5CA;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1rem;
+  color: #3a3a3a;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.popup-content input:focus {
+  outline: none;
+  border-color: #D5BDAF;
+  box-shadow: 0 0 0 2px rgba(213, 189, 175, 0.2);
+}
+
+.popup-content input::placeholder {
+  color: #8a7b73;
 }
 
 .popup-content button {
-  margin-top: 1rem;
-  padding: 0.6rem 1rem;
+  background-color: #D5BDAF;
+  color: #FFFFFF;
   border: none;
-  background: #007bff;
-  color: white;
-  border-radius: 6px;
+  border-radius: 8px;
+  padding: 14px 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  width: 100%;
+  margin-top: 20px;
 }
 
 .popup-content button:hover {
-  background: #0056b3;
+  background-color: #E3D5CA;
+  color: #3a3a3a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 .close {
   position: absolute;
-  top: 8px;
-  right: 12px;
-  font-size: 1.5rem;
+  top: 15px;
+  right: 20px;
+  font-size: 1.8rem;
   cursor: pointer;
+  color: #8a7b73;
+  transition: color 0.3s ease;
+  background: none;
+  border: none;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+.close:hover {
+  color: #d32f2f;
+}
+
+/* Búsqueda con dropdown */
 .search-container {
   position: relative;
-  width: 400px;
+  width: 100%;
 }
 
 .search-container input {
   width: 100%;
-  padding: 0.6rem 0.8rem;
+  padding: 12px 15px;
+  border: 1px solid #E3D5CA;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
   font-size: 1rem;
-  border: 1px solid #aaa;
-  border-radius: 6px;
-  outline: none;
+  color: #3a3a3a;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
+.search-container input:focus {
+  outline: none;
+  border-color: #D5BDAF;
+  box-shadow: 0 0 0 2px rgba(213, 189, 175, 0.2);
+}
+
+.search-container input::placeholder {
+  color: #8a7b73;
+}
+
+/* Dropdown de resultados */
 .dropdown {
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
-  background: #fff;
-  border: 1px solid #ddd;
+  background: #FFFFFF;
+  border: 1px solid #E3D5CA;
   border-top: none;
-  border-radius: 0 0 6px 6px;
-  max-height: 220px;
+  border-radius: 0 0 8px 8px;
+  max-height: 250px;
   overflow-y: auto;
-  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -112,23 +225,38 @@ h1{
 }
 
 .dropdown li {
-  padding: 0.6rem 0.8rem;
+  padding: 12px 15px;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
-  transition: background 0.2s;
+  align-items: center;
+  transition: background 0.2s ease;
+  border-bottom: 1px solid #EDEDE9;
+}
+
+.dropdown li:last-child {
+  border-bottom: none;
 }
 
 .dropdown li:hover {
-  background: #f0f0f0;
+  background-color: #F5EBE0;
 }
 
 .dropdown .title {
   font-weight: 600;
-  color: #333;
+  color: #3a3a3a;
+  font-size: 0.95rem;
 }
 
 .dropdown .author {
-  font-size: 0.9rem;
-  color: #666;
+  font-size: 0.85rem;
+  color: #8a7b73;
+  font-style: italic;
+}
+
+/* Estados deshabilitados */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
 }

@@ -2,9 +2,9 @@ export type PostType = 'review' | 'completed' | 'collection';
 
 export interface Post {
   id: string;
-  userId: string; // quien generó la actividad
+  userId: string;
   type: PostType;
-  targetId: string; // id del libro/colección/reseña
+  targetId: string;
   targetType: 'book' | 'collection' | 'review';
   title?: string;
   createdAt: string;

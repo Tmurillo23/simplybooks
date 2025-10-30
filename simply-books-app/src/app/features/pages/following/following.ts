@@ -1,31 +1,42 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { FollowService } from '../../../shared/services/follow-service';
+import { Auth } from '../../../shared/services/auth';
 import { User } from '../../../shared/interfaces/user';
 
 @Component({
   selector: 'app-following',
   standalone: true,
-  imports: [RouterModule],
+  imports: [],
   templateUrl: './following.html',
-  styleUrl: './following.css'
+  styleUrls: ['./following.css']
 })
 export class Following implements OnInit {
   users: User[] = [];
   loading = false;
   stats = { followers: 0, following: 0 };
+  currentUserId!: string;
 
-  constructor(private followingService: FollowService) {}
+  constructor(
+    private followService: FollowService,
+    private auth: Auth
+  ) {}
 
   ngOnInit(): void {
+    const user = this.auth.getUserLogged();
+    if (!user) return;
+    this.currentUserId = user.id!;
     this.load();
   }
 
   load(): void {
     this.loading = true;
-    this.users = this.followingService.getFollowingUsers();
-    this.stats = this.followingService.getFollowStats();
-    this.loading = false;
+    this.followService.getFollowing(this.currentUserId).subscribe({
+      next: (res) => {
+        this.users = res;
+        this.loading = false;
+      },
+      error: () => (this.loading = false)
+    });
   }
 
   toggleFollow(u: User): void {
@@ -34,33 +45,17 @@ export class Following implements OnInit {
     } else {
       this.follow(u);
     }
-    this.stats = this.followingService.getFollowStats();
   }
 
   follow(u: User): void {
-    const prev = !!u.following;
-    const ok = this.followingService.followUser(u.username);
-    if (ok) {
+    this.followService.followUser(this.currentUserId, u.id!).subscribe(() => {
       u.following = true;
-      if (!this.users.find(x => x.username === u.username)) {
-        this.users.push({ ...u, following: true } as User);
-      }
-    } else {
-      u.following = prev;
-    }
+    });
   }
 
   unfollow(u: User): void {
-    const prev = !!u.following;
-    const ok = this.followingService.unfollowUser(u.username);
-    if (ok) {
+    this.followService.unfollowUser(this.currentUserId, u.id!).subscribe(() => {
       u.following = false;
-    } else {
-      u.following = prev;
-    }
-  }
-
-  trackByUsername(_: number, u: User): string {
-    return u.username;
+    });
   }
 }

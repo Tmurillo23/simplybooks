@@ -1,4 +1,4 @@
-<!-- 🔍 Buscador arriba -->
+<!--Buscador de libros -->
 <div class="search-bar">
   <input
     type="text"
@@ -34,14 +34,13 @@
           <p><strong>Leídas:</strong> {{ book.pages_read }} / {{ book.pages }}</p>
           <p><strong>Rating:</strong> {{ book.rating }} ⭐</p>
 
-          <label style="margin-top: 0.3rem;">Estado:</label>
+          <label>Estado:</label>
           <select
             [(ngModel)]="book.reading_status"
             name="reading_status"
             (click)="$event.stopPropagation()"
             (change)="$event.stopPropagation()"
             [disabled]="!viewingOwnHome"
-            style="font-size: 0.7rem; padding: 0.2rem; margin-top: 0.1rem;"
           >
             <option value="Por leer">Por leer</option>
             <option value="Leyendo">Leyendo</option>
@@ -51,12 +50,11 @@
           </select>
 
           <!-- Botones de acción -->
-          <div style="margin-top: 0.4rem;">
+          <div class="book-actions">
             <button
               [routerLink]="['/editbook', book.id]"
               (click)="$event.stopPropagation()"
               [disabled]="!viewingOwnHome"
-              style="font-size: 0.7rem; margin-right: 0.2rem;"
             >
               Editar
             </button>
@@ -64,7 +62,6 @@
             <button
               (click)="removeBook(book.id); $event.stopPropagation()"
               [disabled]="!viewingOwnHome"
-              style="font-size: 0.7rem;"
             >
               Eliminar
             </button>
@@ -76,7 +73,6 @@
               (click)="downloadFile(book); $event.stopPropagation()"
               [disabled]="!viewingOwnHome"
               class="download-btn"
-              style="margin-top: 0.4rem; font-size: 0.7rem;"
             >
               📥 Descargar PDF
             </button>
@@ -88,5 +84,4 @@
   } @else {
     <p>Agrega algunos libros</p>
   }
-
 </section>

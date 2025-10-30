@@ -1,0 +1,238 @@
+/* Contenedor principal */
+.loan-container {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #3a3a3a;
+}
+
+.loan-container h2 {
+  font-size: 1.8rem;
+  color: #D5BDAF;
+  margin-bottom: 25px;
+  font-weight: 600;
+  border-bottom: 2px solid #E3D5CA;
+  padding-bottom: 10px;
+}
+
+/* Formulario de préstamo */
+.loan-container form {
+  background-color: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.loan-container form > div {
+  margin-bottom: 20px;
+}
+
+.loan-container label {
+  display: block;
+  font-weight: 600;
+  color: #6b5e58;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.loan-container input[type="text"],
+.loan-container input[type="date"],
+.loan-container select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #E3D5CA;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1rem;
+  color: #3a3a3a;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.loan-container input[type="text"]:focus,
+.loan-container input[type="date"]:focus,
+.loan-container select:focus {
+  outline: none;
+  border-color: #D5BDAF;
+  box-shadow: 0 0 0 2px rgba(213, 189, 175, 0.2);
+}
+
+.loan-container input[type="text"]::placeholder {
+  color: #8a7b73;
+}
+
+/* Mensaje de no libros */
+.no-books {
+  background-color: #EDEDE9;
+  border: 1px solid #D6CCC2;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 10px;
+  color: #6b5e58;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.no-books small {
+  color: #8a7b73;
+  font-size: 0.8rem;
+}
+
+/* Botón del formulario */
+.loan-container form button[type="submit"] {
+  background-color: #D5BDAF;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  width: 100%;
+  margin-top: 10px;
+}
+
+.loan-container form button[type="submit"]:hover {
+  background-color: #E3D5CA;
+  color: #3a3a3a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Botón de historial */
+.history-button {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.history-button button {
+  background-color: #EDEDE9;
+  color: #6b5e58;
+  border: 1px solid #D6CCC2;
+  border-radius: 8px;
+  padding: 12px 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.history-button button:hover {
+  background-color: #D6CCC2;
+  color: #3a3a3a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Resumen de préstamos activos */
+.loans-summary {
+  background-color: #e8f5e8;
+  border: 1px solid #c8e6c9;
+  border-radius: 8px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.loans-summary p {
+  margin: 0;
+  color: #2e7d32;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.loans-summary strong {
+  color: #1b5e20;
+}
+
+/* Tabla de préstamos activos */
+.loan-container table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  margin-bottom: 30px;
+}
+
+.loan-container thead {
+  background-color: #D5BDAF;
+}
+
+.loan-container th {
+  padding: 15px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #FFFFFF;
+  font-size: 0.9rem;
+  border-bottom: 2px solid #E3D5CA;
+}
+
+.loan-container tbody tr {
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #EDEDE9;
+}
+
+.loan-container tbody tr:hover {
+  background-color: #F5EBE0;
+}
+
+.loan-container td {
+  padding: 12px;
+  font-size: 0.9rem;
+  color: #3a3a3a;
+  border-bottom: 1px solid #EDEDE9;
+}
+
+/* Botón de devolución */
+.btn-return {
+  background-color: #4caf50;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-return:hover {
+  background-color: #388e3c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Estado vacío */
+.empty-state {
+  text-align: center;
+  background-color: #EDEDE9;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  padding: 40px;
+  margin-top: 20px;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  color: #6b5e58;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Estados deshabilitados */
+button:disabled,
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}

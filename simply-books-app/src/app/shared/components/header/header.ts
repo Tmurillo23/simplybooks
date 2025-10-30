@@ -9,7 +9,7 @@ import { User } from '../../interfaces/user';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [FormsModule,RouterLink],
+  imports: [FormsModule, RouterLink],
   templateUrl: './header.html',
   styleUrls: ['./header.css']
 })
@@ -19,25 +19,36 @@ export class Header {
   followService = inject(FollowService);
   router = inject(Router);
 
+  // 🔐 Estado de sesión
   isLogged = this.authService.isLogged;
+  currentUser = this.authService.getUserLogged();
 
   // 🔍 Signals
   searchQuery = signal('');
   allUsers = signal<User[]>([]);
   searchResults = signal<User[]>([]);
   isDropdownVisible = signal(false);
+  followingList = signal<string[]>([]); // guarda IDs de los usuarios seguidos
 
   constructor() {
-    // ✅ Carga inicial de usuarios en el signal correcto
+    // ✅ Carga inicial de usuarios
     this.userService.findAll().subscribe({
-      next: (users) => {
-        this.allUsers.set(users); // ✅ correcto
-        console.log('Usuarios cargados:', users);
-      },
-      error: (err) => console.error(err)
+      next: (users) => this.allUsers.set(users),
+      error: (err) => console.error('Error cargando usuarios', err),
     });
 
-    // Efecto reactivo: filtra los usuarios mientras se escribe
+    // ✅ Carga inicial de seguidos (solo si está logueado)
+    if (this.currentUser) {
+      this.followService.getFollowing(this.currentUser.id!).subscribe({
+        next: (users) => {
+          const ids = users.map(u => u.id!);
+          this.followingList.set(ids);
+        },
+        error: (err) => console.error('Error cargando seguidos', err),
+      });
+    }
+
+    // 🧠 Efecto reactivo: buscar usuarios mientras se escribe
     effect(() => {
       const query = this.searchQuery().trim().toLowerCase();
       if (query.length > 1) {
@@ -53,42 +64,58 @@ export class Header {
     });
   }
 
+  // 👤 Ir al perfil propio
   onProfile() {
     this.router.navigate(['/profile']);
   }
 
+  // 🚪 Cerrar sesión
   onLogout() {
     this.authService.logout();
     this.router.navigateByUrl('');
   }
 
+  // 🔗 Ir al perfil de otro usuario
   goToUserProfile(username: string) {
     this.isDropdownVisible.set(false);
     this.router.navigate(['/profile', username]);
   }
 
+  // ❤️ Seguir / dejar de seguir a un usuario
   followUser(user: User) {
-    const wasFollowing = this.followService.getFollowingUsers()
-      .some(u => u.username === user.username && u.following);
+    const current = this.currentUser;
+    if (!current) return;
 
-    if (wasFollowing) {
-      this.followService.unfollowUser(user.username);
-      alert(`Has dejado de seguir a ${user.username}`);
+    const isFollowing = this.followingList().includes(user.id!);
+
+    if (isFollowing) {
+      // Dejar de seguir
+      this.followService.unfollowUser(current.id!, user.id!).subscribe({
+        next: () => {
+          alert(`Has dejado de seguir a ${user.username}`);
+          this.followingList.update(list => list.filter(id => id !== user.id));
+        },
+        error: () => alert('Error al dejar de seguir'),
+      });
     } else {
-      this.followService.followUser(user.username);
-      alert(`Ahora sigues a ${user.username}`);
+      // Seguir
+      this.followService.followUser(current.id!, user.id!).subscribe({
+        next: () => {
+          alert(`Ahora sigues a ${user.username}`);
+          this.followingList.update(list => [...list!, user.id!]);
+        },
+        error: () => alert('Error al seguir usuario'),
+      });
     }
   }
 
+  // 👁️ Saber si ya sigo a un usuario
+  isFollowing(userId: string): boolean {
+    return this.followingList().includes(userId);
+  }
+
+  // 🔽 Cierra el dropdown al perder foco
   onBlur() {
     setTimeout(() => this.isDropdownVisible.set(false), 150);
   }
-
-  // Saber si ya sigues a un usuario
-  isFollowing(username: string): boolean {
-    return this.followService.getFollowingUsers().some(
-      u => u.username === username && u.following
-    );
-  }
-
 }

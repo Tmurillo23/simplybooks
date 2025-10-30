@@ -1,4 +1,4 @@
-<div class="following-page">
+<div class="following-container">
   <h2>Personas que sigues</h2>
 
   @if (loading) {
@@ -7,30 +7,34 @@
 
   @if (!loading && users.length === 0) {
     <div class="empty">
-      No sigues a nadie todavía.
+      <p>No sigues a nadie todavía.</p>
     </div>
   }
 
   @if (!loading && users.length > 0) {
-    <ul class="list">
-      @for (u of users; track u.username) {
-        <li class="user">
-          <img class="avatar" [src]="u.avatar || '/assets/default-avatar.png'" [alt]="u.username">
+    <ul class="following-list">
+      @for (u of users; track u.id) {
+        <li class="following-item">
+          <div class="user-info">
+            <img class="avatar" [src]="u.avatar || 'assets/default-avatar.png'" [alt]="u.username">
 
-          <div class="meta">
-            <a [routerLink]="['/profile', u.username]" class="name">{{ u.username }}</a>
-            @if (u.biography) {
-              <div class="bio">{{ u.biography }}</div>
-            }
-            <div class="stats">
-              <span>{{ u.stats?.booksRead || 0 }} libros</span>
-              <span>·</span>
-              <span>{{ u.stats?.reviewsCount || 0 }} reseñas</span>
+            <div class="user-details">
+              <span class="username">{{ u.username }}</span>
+
+              @if (u.biography) {
+                <p class="bio">{{ u.biography }}</p>
+              }
+
+              <div class="stats">
+                <span>{{ u.stats?.booksRead || 0 }} libros</span>
+                <span>·</span>
+                <span>{{ u.stats?.reviewsCount || 0 }} reseñas</span>
+              </div>
             </div>
           </div>
 
-          <button class="btn" (click)="toggleFollow(u)" [class.following]="u.following">
-            {{ u.following ? 'Siguiendo' : 'Seguir' }}
+          <button class="btn unfollow" (click)="toggleFollow(u)">
+            {{ u.following ? 'Dejar de seguir' : 'Seguir' }}
           </button>
         </li>
       }

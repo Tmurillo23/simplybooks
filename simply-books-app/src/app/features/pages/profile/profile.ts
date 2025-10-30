@@ -9,7 +9,7 @@ import { CollectionService } from '../../../shared/services/collections-service'
 import { FormsModule } from '@angular/forms';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { UserService } from '../../../shared/services/user-service';
-import { User } from '../../../shared/interfaces/user'; // Asegúrate de tener esta interfaz
+import { User } from '../../../shared/interfaces/user';
 
 @Component({
   selector: 'app-profile',
@@ -54,7 +54,7 @@ export class Profile implements OnInit {
   recentCollections: CollectionInterface[] = [];
 
   constructor() {
-    // Efecto reactivo si se necesita refrescar el perfil
+    // Refresca datos si otro componente pide actualización
     effect(() => {
       if (this.userService.profileNeedsUpdate()) {
         this.refreshUserData();
@@ -68,6 +68,7 @@ export class Profile implements OnInit {
       const username = params.get('username');
       const currentUser = this.authService.getUserLogged();
 
+      // Si no hay username en la ruta o coincide con el del usuario logueado → es su propio perfil
       this.viewingOwnProfile = !username || username === currentUser.username;
 
       const userToLoad = this.viewingOwnProfile ? currentUser.username : username!;
@@ -75,7 +76,6 @@ export class Profile implements OnInit {
       this.userService.findByUsername(userToLoad).subscribe({
         next: (res) => {
           this.user = res;
-          console.log('✅ Perfil cargado:', res);
           this.updateStats();
           this.loadLibrary();
           this.loadReviews();
@@ -91,7 +91,7 @@ export class Profile implements OnInit {
     this.userService.findByUsername(this.user.username).subscribe({
       next: (res) => {
         this.user = res;
-        console.log('✅ Usuario actualizado:', res);
+        this.updateStats();
       },
       error: (err) => console.error('❌ Error refrescando usuario', err)
     });
@@ -103,24 +103,21 @@ export class Profile implements OnInit {
     this.stats.followingCount = this.user.stats?.followingCount || 0;
   }
 
-  /** Últimas 5 reseñas */
+  /** Últimas reseñas */
   private loadReviews() {
-    const reviews = this.reviewService
-      .getReviewsForUser(this.user.email)
-      .filter(r => !r.draft);
-
+    const reviews = this.reviewService.getReviewsForUser(this.user.email).filter(r => !r.draft);
     this.recentReviews = [...reviews].slice(-5).reverse();
     this.stats.reviewsCount = reviews.length;
   }
 
-  /** Últimos 5 libros */
+  /** Últimos libros */
   private async loadLibrary() {
     await this.bookshelfService.loadUserFiles(this.user);
     const allBooks = this.bookshelfService.bookshelvesItems;
     this.recentLibrary = [...allBooks].slice(-5).reverse();
   }
 
-  /** Últimas 5 colecciones */
+  /** Últimas colecciones */
   private loadCollections() {
     const collections = this.collectionService.getCollectionsByUser(this.user);
     this.recentCollections = [...collections].slice(-5).reverse();
@@ -129,18 +126,18 @@ export class Profile implements OnInit {
   goTo(type: string): any[] {
     switch (type) {
       case 'library': return ['/home', this.user.username];
-      case 'reviews': return ['/reviews', this.user.username];
-      case 'collections': return ['/collections', this.user.username];
-      default: return ['/'];
+      case 'reviews': return(['/reviews', this.user.username]);
+      case 'collections': return(['/collections', this.user.username]);
+      default: return(['/']);
     }
   }
 
   goToItem(type: string, id: any): any[] {
     switch (type) {
-      case 'library': return ['/book', id];
-      case 'reviews': return ['/review', id];
-      case 'collection': return ['/collection', id];
-      default: return ['/'];
+      case 'library': return(['/book', id]);
+      case 'reviews': return(['/review', id]);
+      case 'collection': return(['/collection', id]);
+      default: return(['/']);
     }
   }
 }

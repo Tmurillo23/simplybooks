@@ -1,0 +1,270 @@
+/* Contenedor principal */
+.review-detail-container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #3a3a3a;
+}
+
+/* Sección de información de la reseña */
+.review-info {
+  background-color: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.review-title {
+  font-size: 2rem;
+  color: #D5BDAF;
+  margin-bottom: 20px;
+  font-weight: 600;
+  border-bottom: 2px solid #E3D5CA;
+  padding-bottom: 10px;
+}
+
+.review-info p {
+  margin-bottom: 15px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.review-info strong {
+  color: #6b5e58;
+  font-weight: 600;
+}
+
+/* Editor de solo lectura */
+.form-group {
+  margin: 25px 0;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: #6b5e58;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+/* Estados de la reseña */
+.review-info span.draft {
+  color: #ff9800;
+  font-weight: 600;
+  background-color: #fff3e0;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ffb74d;
+}
+
+.review-info span.published {
+  color: #4caf50;
+  font-weight: 600;
+  background-color: #e8f5e8;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #c8e6c9;
+}
+
+/* Sección de likes */
+.likes-section {
+  margin: 25px 0;
+  text-align: center;
+}
+
+.like-btn {
+  background-color: #D5BDAF;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.like-btn:hover {
+  background-color: #E3D5CA;
+  color: #3a3a3a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.like-btn.liked {
+  background-color: #e8b4b4;
+  color: #d32f2f;
+}
+
+.like-btn.liked:hover {
+  background-color: #d32f2f;
+  color: #FFFFFF;
+}
+
+/* Enlace de volver */
+.back-link {
+  display: inline-block;
+  color: #6b5e58;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 20px;
+  padding: 10px 15px;
+  border: 1px solid #D6CCC2;
+  border-radius: 6px;
+  background-color: #EDEDE9;
+  transition: all 0.3s ease;
+}
+
+.back-link:hover {
+  background-color: #D6CCC2;
+  color: #3a3a3a;
+  text-decoration: none;
+  transform: translateX(-5px);
+}
+
+/* Sección de comentarios */
+.comments-section {
+  background-color: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.comments-section h3 {
+  font-size: 1.5rem;
+  color: #D5BDAF;
+  margin-bottom: 20px;
+  font-weight: 600;
+  border-bottom: 1px solid #E3D5CA;
+  padding-bottom: 10px;
+}
+
+/* Nuevo comentario */
+.new-comment {
+  margin-bottom: 30px;
+}
+
+.new-comment textarea {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #E3D5CA;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1rem;
+  color: #3a3a3a;
+  resize: vertical;
+  min-height: 80px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.new-comment textarea:focus {
+  outline: none;
+  border-color: #D5BDAF;
+  box-shadow: 0 0 0 2px rgba(213, 189, 175, 0.2);
+}
+
+.new-comment textarea::placeholder {
+  color: #8a7b73;
+}
+
+.new-comment button {
+  background-color: #D5BDAF;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.new-comment button:hover {
+  background-color: #E3D5CA;
+  color: #3a3a3a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Mensaje de sin comentarios */
+.comments-section > p {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #6b5e58;
+  background-color: #EDEDE9;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #D6CCC2;
+  margin: 20px 0;
+}
+
+/* Advertencia de borrador */
+.draft-warning {
+  background-color: #fff3e0;
+  border: 1px solid #ffb74d;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.warning-message {
+  font-size: 1.1rem;
+  color: #e65100;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.warning-message strong {
+  color: #bf360c;
+}
+
+/* Mensaje de reseña no encontrada */
+.review-detail-container > p {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #6b5e58;
+  background-color: #EDEDE9;
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid #E3D5CA;
+  margin: 50px 0;
+}
+
+/* Editor TinyMCE personalizado para solo lectura */
+.tox-tinymce {
+  border: 1px solid #E3D5CA !important;
+  border-radius: 8px !important;
+  background-color: #FFFFFF !important;
+}
+
+.tox-toolbar {
+  background-color: #EDEDE9 !important;
+  border-bottom: 1px solid #E3D5CA !important;
+}
+
+.tox-editor-container {
+  background-color: #FFFFFF !important;
+}
+
+.tox-edit-area {
+  border-top: 1px solid #E3D5CA !important;
+}
+
+/* Estados deshabilitados */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+

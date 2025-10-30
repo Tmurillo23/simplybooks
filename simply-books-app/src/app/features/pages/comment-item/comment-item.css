@@ -1,0 +1,176 @@
+/* Contenedor principal del comentario */
+.comment {
+  background-color: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  transition: all 0.3s ease;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.comment:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Header del comentario */
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #EDEDE9;
+}
+
+.comment-header strong {
+  font-size: 1rem;
+  color: #D5BDAF;
+  font-weight: 600;
+}
+
+.comment-header span {
+  font-size: 0.85rem;
+  color: #8a7b73;
+}
+
+/* Contenido del comentario */
+.comment p {
+  margin: 0 0 15px 0;
+  color: #3a3a3a;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Acciones del comentario */
+.comment-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.comment-actions button {
+  background: none;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b5e58;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.comment-actions button:hover {
+  background-color: #EDEDE9;
+  color: #3a3a3a;
+}
+
+/* Botón de me gusta cuando está activado */
+.comment-actions button.liked {
+  color: #d32f2f;
+  background-color: #ffeaea;
+}
+
+.comment-actions button.liked:hover {
+  background-color: #f8d7d7;
+}
+
+/* Formulario de respuesta */
+.reply-form {
+  background-color: #EDEDE9;
+  border: 1px solid #D6CCC2;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+.reply-form textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #E3D5CA;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 0.95rem;
+  color: #3a3a3a;
+  resize: vertical;
+  min-height: 60px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.reply-form textarea:focus {
+  outline: none;
+  border-color: #D5BDAF;
+  box-shadow: 0 0 0 2px rgba(213, 189, 175, 0.2);
+}
+
+.reply-form textarea::placeholder {
+  color: #8a7b73;
+}
+
+/* Acciones del formulario de respuesta */
+.reply-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  justify-content: flex-end;
+}
+
+.reply-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reply-actions button:first-child {
+  background-color: #D5BDAF;
+  color: #FFFFFF;
+}
+
+.reply-actions button:first-child:hover {
+  background-color: #E3D5CA;
+  color: #3a3a3a;
+}
+
+.reply-actions button:last-child {
+  background-color: #EDEDE9;
+  color: #8a7b73;
+  border: 1px solid #D6CCC2;
+}
+
+.reply-actions button:last-child:hover {
+  background-color: #e8b4b4;
+  color: #d32f2f;
+}
+
+/* Estilos para comentarios anidados (respuestas) */
+.comment .comment {
+  background-color: #EDEDE9;
+  border-color: #D6CCC2;
+  margin-top: 12px;
+}
+
+.comment .comment .comment {
+  background-color: #e8e2db;
+  border-color: #d5c9bc;
+}
+
+/* Efecto visual para niveles de anidación */
+.comment {
+  border-left: 3px solid transparent;
+}
+
+.comment .comment {
+  border-left-color: #D5BDAF;
+}
+
+.comment .comment .comment {
+  border-left-color: #8a7b73;
+}

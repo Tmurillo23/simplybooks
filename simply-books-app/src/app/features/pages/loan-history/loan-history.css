@@ -1,0 +1,187 @@
+/* Contenedor principal */
+.history-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #3a3a3a;
+}
+
+/* Header con estadísticas */
+.history-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.history-header h2 {
+  font-size: 2rem;
+  color: #D5BDAF;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+/* Estadísticas */
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  background-color: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  padding: 25px;
+  text-align: center;
+  min-width: 150px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+}
+
+.stat-card h3 {
+  font-size: 2.5rem;
+  color: #D5BDAF;
+  margin: 0 0 10px 0;
+  font-weight: 700;
+}
+
+.stat-card p {
+  font-size: 0.9rem;
+  color: #6b5e58;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Tarjeta activa */
+.stat-card.active {
+  background-color: #e8f5e8;
+  border-color: #c8e6c9;
+}
+
+.stat-card.active h3 {
+  color: #4caf50;
+}
+
+/* Tarjeta devueltos */
+.stat-card.returned {
+  background-color: #e3f2fd;
+  border-color: #bbdefb;
+}
+
+.stat-card.returned h3 {
+  color: #2196f3;
+}
+
+/* Acciones */
+.actions {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.btn-danger {
+  background-color: #e8b4b4;
+  color: #d32f2f;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn-danger:hover {
+  background-color: #d32f2f;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Tabla de historial */
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.history-table thead {
+  background-color: #D5BDAF;
+}
+
+.history-table th {
+  padding: 15px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #FFFFFF;
+  font-size: 0.9rem;
+  border-bottom: 2px solid #E3D5CA;
+}
+
+.history-table tbody tr {
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #EDEDE9;
+}
+
+.history-table tbody tr:hover {
+  background-color: #F5EBE0;
+}
+
+.history-table td {
+  padding: 12px;
+  font-size: 0.9rem;
+  color: #3a3a3a;
+  border-bottom: 1px solid #EDEDE9;
+}
+
+/* Botones de acción en tabla */
+.btn-delete {
+  background-color: #e8b4b4;
+  color: #d32f2f;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-delete:hover {
+  background-color: #d32f2f;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+
+/* Estado vacío */
+.empty-state {
+  text-align: center;
+  background-color: #EDEDE9;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  padding: 60px 40px;
+  margin-top: 40px;
+}
+
+.empty-state p {
+  font-size: 1.2rem;
+  color: #6b5e58;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Estados de carga o deshabilitado */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}

@@ -1,4 +1,4 @@
-html, simplybooks,body {
+html, simplybooks, body {
   margin: 0;
   padding: 0;
   font-family: 'Ubuntu', 'Courier New', Courier, monospace;
@@ -11,7 +11,14 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   min-height: 100vh;
   box-sizing: border-box;
+  padding: 20px;
+  width: 100%;
+}
+
+.main-content {
+  width: 100%;
+  max-width: 1200px;
+  /* El contenido se centrará horizontalmente pero podrá crecer verticalmente */
 }

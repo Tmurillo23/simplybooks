@@ -1,0 +1,100 @@
+/* Contenedor principal del feed */
+.feed-container {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #3a3a3a;
+}
+
+.feed-container h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #D5BDAF;
+  margin-bottom: 30px;
+  font-weight: 600;
+  border-bottom: 2px solid #E3D5CA;
+  padding-bottom: 10px;
+}
+
+/* Tarjeta de post */
+.post-card {
+  background-color: #F5EBE0;
+  border: 1px solid #E3D5CA;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.post-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+  background-color: #f8f2ec;
+}
+
+/* Contenido del post */
+.post-card p {
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #3a3a3a;
+}
+
+.post-card strong {
+  color: #D5BDAF;
+  font-weight: 600;
+}
+
+.post-card em {
+  font-style: italic;
+  color: #6b5e58;
+}
+
+/* Información de tiempo */
+.post-card small {
+  font-size: 0.85rem;
+  color: #8a7b73;
+  display: block;
+  margin-top: 15px;
+}
+
+/* Botón eliminar */
+.post-card button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #e8b4b4;
+  color: #d32f2f;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.post-card button:hover {
+  background-color: #d32f2f;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Estados vacíos */
+.feed-container:empty::after {
+  content: "No hay actividad reciente";
+  text-align: center;
+  display: block;
+  font-size: 1.1rem;
+  color: #6b5e58;
+  background-color: #EDEDE9;
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid #E3D5CA;
+  margin-top: 20px;
+}
