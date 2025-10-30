@@ -1,40 +1,55 @@
 <div class="reviews-container">
   <h2>Mis reseñas</h2>
 
+  <!-- 🔍 Buscador -->
+  <div class="search-bar">
+    <input
+      type="text"
+      placeholder="Buscar reseña por título..."
+      [value]="search()"
+      (input)="search.set($any($event.target).value)"
+    />
+  </div>
+
   <!-- Botón para crear nueva reseña -->
   <div class="create-review-btn">
     <button [routerLink]="['/create-review']">Crear nueva reseña</button>
   </div>
 
-  @if (reviews.length === 0) {
-    <p>No has escrito ninguna reseña todavía.</p>
+  @if (filteredReviews().length === 0) {
+    <p>No se encontraron reseñas que coincidan.</p>
   }
 
-  @for (review of reviews; track review.id) {
+  @for (review of filteredReviews(); track review.id) {
     <div class="review-card">
-      <h3 class="book-title">
+      <!-- 🔹 Título principal: título de la reseña -->
+      <h3 class="review-title">
         <a
           [routerLink]="['/review', review.id]"
           class="review-link"
           title="Ver detalles de la reseña"
         >
-          {{ getBookTitle(review.bookId) }}
+          {{ review.title }}
         </a>
       </h3>
+
+      <!-- 🔹 Información secundaria: libro asociado -->
+      <p class="book-info">
+        <strong>Libro:</strong> {{ getBookTitle(review.bookId) }}
+      </p>
 
       <p><strong>Calificación:</strong> {{ review.rating }}★</p>
 
       <p>
         <strong>Estado:</strong>
         <span [class.draft]="review.draft" [class.published]="!review.draft">
-           {{ review.draft ? 'Borrador' : 'Publicado' }}
-       </span>
-
+          {{ review.draft ? 'Borrador' : 'Publicado' }}
+        </span>
       </p>
 
       <div class="actions">
         @if (review.draft) {
-          <button [routerLink]="['/edit-review', review.id]"> Editar</button>
+          <button [routerLink]="['/edit-review', review.id]">Editar</button>
           <button (click)="publish(review)">Publicar</button>
         }
         <button (click)="delete(review)">Eliminar</button>

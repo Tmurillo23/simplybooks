@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { CollectionInterface } from '../interfaces/collection-interface';
 import { BookInterface } from '../interfaces/book-interface';
 import { User } from '../interfaces/user';
+import {SocialFeedService} from './social-feed-service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { User } from '../interfaces/user';
 export class CollectionService {
 
   private collections: CollectionInterface[] = [];
+  socialFeedService = inject(SocialFeedService);
 
   constructor() {}
 
@@ -35,6 +37,8 @@ export class CollectionService {
     };
 
     this.collections.push(newCollection);
+    this.socialFeedService.createCollectionPost(newCollection);
+
     return newCollection;
   }
 

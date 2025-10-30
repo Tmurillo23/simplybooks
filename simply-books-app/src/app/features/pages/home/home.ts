@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BookShelfItem, BookshelfService } from '../../../shared/services/bookshelf';
 import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
-import {BookInterface} from '../../../shared/interfaces/book-interface';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +11,18 @@ import {BookInterface} from '../../../shared/interfaces/book-interface';
   styleUrl: './home.css'
 })
 export class Home implements OnInit {
-  constructor(public bookshelfService: BookshelfService) {}
+  private bookshelfService = inject(BookshelfService);
+
+  // 🔹 Buscador reactivo con Signals
+  search = signal('');
+  filteredBooks = computed(() => {
+    const term = this.search().toLowerCase();
+    if (!term) return this.bookshelfService.bookshelvesItems;
+    return this.bookshelfService.bookshelvesItems.filter(book =>
+      (book.title?.toLowerCase().includes(term) ||
+        book.author?.toLowerCase().includes(term))
+    );
+  });
 
   async ngOnInit() {
     await this.bookshelfService.loadUserFiles();
@@ -54,9 +64,6 @@ export class Home implements OnInit {
       icon: 'info'
     });
   }
-
-
-
 
   private getFileNameFromUrl(url: string): string {
     try {

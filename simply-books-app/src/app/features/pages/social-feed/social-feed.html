@@ -1,1 +1,24 @@
-<p>social-feed works!</p>
+<div class="feed-container">
+  <h2>Actividad reciente</h2>
+
+  @for (post of posts(); track post.id) {
+    <div class="post-card" (click)="viewPostDetail(post)">
+      <p><strong>{{ post.userId }}</strong> realizó una actividad</p>
+
+      @switch (post.type) {
+        @case ('review') {
+          <p>📝 Publicó una nueva reseña: <em>{{ post.title }}</em></p>
+        }
+        @case ('completed') {
+          <p>📘 Completó el libro con ID {{ post.targetId }}</p>
+        }
+        @case ('collection') {
+          <p>📚 Creó una nueva colección: <em>{{ post.title }}</em></p>
+        }
+      }
+
+      <small>{{ post.createdAt}}</small>
+      <button (click)="deletePost(post.id)">Eliminar</button>
+    </div>
+  }
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { ReviewService } from '../../../shared/services/review-service';
 import { ReviewInterface } from '../../../shared/interfaces/review-interface';
 import { BookshelfService } from '../../../shared/services/bookshelf';
@@ -12,14 +12,24 @@ import { Auth } from '../../../shared/services/auth';
   styleUrls: ['./reviews.css']
 })
 export class Reviews implements OnInit {
-  userId!: string;
-  reviews: ReviewInterface[] = [];
+  private reviewService = inject(ReviewService);
+  private bookshelfService = inject(BookshelfService);
+  private auth = inject(Auth);
 
-  constructor(
-    private reviewService: ReviewService,
-    private bookshelfService: BookshelfService,
-    private auth: Auth
-  ) {}
+  userId!: string;
+  reviews = signal<ReviewInterface[]>([]);
+  search = signal('');
+
+  filteredReviews = computed(() => {
+    const term = this.search().toLowerCase();
+    if (!term) return this.reviews();
+
+    return this.reviews().filter(r => {
+      const bookTitle = this.getBookTitle(r.bookId).toLowerCase();
+      const reviewTitle = r.title?.toLowerCase() || '';
+      return bookTitle.includes(term) || reviewTitle.includes(term);
+    });
+  });
 
   ngOnInit(): void {
     const user = this.auth.getUserLogged();
@@ -28,10 +38,9 @@ export class Reviews implements OnInit {
   }
 
   private loadReviews(): void {
-    this.reviews = this.reviewService.getReviewsForUser(this.userId);
+    this.reviews.set(this.reviewService.getReviewsForUser(this.userId));
   }
 
-  /** 🔹 Obtener el título del libro desde el bookshelf */
   getBookTitle(bookId: string): string {
     const book = this.bookshelfService.bookshelvesItems.find(b => b.id.toString() === bookId);
     return book ? book.title : 'Título no disponible';
@@ -44,7 +53,6 @@ export class Reviews implements OnInit {
     }
   }
 
-  // 🔹 Eliminar reseña
   delete(review: ReviewInterface): void {
     this.reviewService.deleteReview(review.id);
     this.loadReviews();
