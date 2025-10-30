@@ -4,7 +4,9 @@ import { Storage } from './storage';
 import { Auth } from './auth';
 import { SocialFeedService } from './social-feed-service';
 import { BooksService } from './books-service';
-import {SUPABASE_FILES_BUCKET} from '../../../environments/environment';
+import { SUPABASE_FILES_BUCKET } from '../../../environments/environment';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 export type BookShelfItem = Pick<
   BookInterface,
@@ -23,7 +25,7 @@ export class BookshelfService {
   socialFeed = inject(SocialFeedService);
   booksService = inject(BooksService);
 
-  // Generate ID stable basado en la ruta del archivo
+  // Generate stable ID based on file path
   private generateStableId(filePath: string): number {
     let hash = 0;
     for (let i = 0; i < filePath.length; i++) {
@@ -34,7 +36,6 @@ export class BookshelfService {
     return Math.abs(hash);
   }
 
-  // Devuelve el array real de libros
   get bookshelvesItems(): BookShelfItem[] {
     return this.bookshelf();
   }
@@ -57,7 +58,7 @@ export class BookshelfService {
       const bookItems: BookShelfItem[] = await Promise.all(
         files.map(async (file) => {
           const fullPath = `${user.username}/${file.name}`;
-          const fileUrl = this.storageService.getFileUrl(fullPath,SUPABASE_FILES_BUCKET);
+          const fileUrl = this.storageService.getFileUrl(fullPath, SUPABASE_FILES_BUCKET);
           const fullName = file.name;
           const nameWithoutExt = fullName.substring(0, fullName.lastIndexOf('.')) || fullName;
 
@@ -72,26 +73,29 @@ export class BookshelfService {
                 author: foundBook.author,
                 year: foundBook.year,
                 portrait_url: foundBook.portrait_url,
-                pages: foundBook.pages
+                pages: foundBook.pages,
+                description: foundBook.description
               };
             }
           } catch (error) {
             console.warn(`Could not find book "${nameWithoutExt}" in Open Library:`, error);
           }
 
-          return {
+          const bookItem = {
             id: this.generateStableId(fullPath),
             title: bookData.title || nameWithoutExt,
             author: bookData.author || '',
             year: bookData.year || 0,
             portrait_url: bookData.portrait_url || '',
             file_url: fileUrl,
-            description: '',
+            description: bookData.description || '',
             rating: 0,
             pages: bookData.pages || 0,
             pages_read: 0,
             reading_status: 'Por leer'
           };
+
+          return bookItem;
         })
       );
 
@@ -103,20 +107,25 @@ export class BookshelfService {
 
   async loadBooksFromApi() {
     const user = this.authService.getUserLogged();
-    if (!user?.id) return; // <-- espera a tener id
+    if (!user?.id) {
+      console.warn('No user ID available for loading books from API');
+      return;
+    }
 
     try {
-      const apiBooks = await this.booksService.getBooksByUser(user.id).toPromise(); // <-- endpoint correcto
-
-      const booksToAdd: BookShelfItem[] = apiBooks!
-        .filter(b => !b.file_url)
-        .map(b => ({
-          id: Number(b.id), // asegurarse de que sea número único
+      console.log('Loading books from API for user:', user.id);
+      const apiBooks = await this.booksService.getBooksByUser(user.id).toPromise();
+      
+      if (apiBooks && apiBooks.length > 0) {
+        console.log('Loaded books from API:', apiBooks.length);
+        
+        const booksToAdd: BookShelfItem[] = apiBooks.map(b => ({
+          id: b.id,
           title: b.title,
           author: b.author,
           year: b.year || 0,
-          portrait_url: b.portrait_url || '',
-          file_url: undefined,
+          portrait_url: b.portrait_url || 'assets/default-cover.jpg',
+          file_url: b.file_url || '', // This will be empty for backend books
           description: b.description || '',
           rating: b.rating || 0,
           pages: b.pages || 0,
@@ -124,15 +133,17 @@ export class BookshelfService {
           reading_status: b.reading_status || 'Por leer'
         }));
 
-      this.bookshelf.update(items => [...items, ...booksToAdd]);
+        // Replace the current bookshelf with books from API
+        this.bookshelf.set(booksToAdd);
+      } else {
+        console.log('No books found in API for user');
+      }
     } catch (error) {
       console.error('Error loading API books:', error);
     }
   }
 
-
-
-  addBook(book: BookShelfItem): boolean {
+  async addBook(book: BookShelfItem): Promise<boolean> {
     // Asegurar reading_status
     if (!book.reading_status) {
       book.reading_status = 'Por leer';
@@ -144,7 +155,45 @@ export class BookshelfService {
       return exists ? items : [...items, book];
     });
 
+    if (!exists) {
+      // Save to backend if user is logged in
+      const user = this.authService.getUserLogged();
+      if (user?.id) {
+        try {
+          console.log('Saving book to backend for user:', user.id);
+          await this.booksService.saveBookToBackend(book as BookInterface, user.id).toPromise();
+          console.log('Book saved successfully to backend');
+        } catch (error) {
+          console.error('Error saving book to backend:', error);
+          // Remove from local state if backend save fails
+          this.bookshelf.update(items => items.filter(b => b.id !== book.id));
+          return false;
+        }
+      } else {
+        console.warn('No user ID available, book saved only locally');
+      }
+    }
+
     return !exists;
+  }
+
+  // Add book from Open Library search
+  async addBookFromOpenLibrary(openLibraryBook: BookInterface): Promise<boolean> {
+    const bookItem: BookShelfItem = {
+      id: openLibraryBook.id,
+      title: openLibraryBook.title,
+      author: openLibraryBook.author,
+      year: openLibraryBook.year,
+      portrait_url: openLibraryBook.portrait_url,
+      file_url: '',
+      description: openLibraryBook.description || '',
+      rating: 0,
+      pages: openLibraryBook.pages,
+      pages_read: 0,
+      reading_status: 'Por leer'
+    };
+
+    return this.addBook(bookItem);
   }
 
   updateBook(updated: BookInterface): boolean {
@@ -174,6 +223,17 @@ export class BookshelfService {
       )
     );
 
+    // Update in backend if user is logged in
+    const user = this.authService.getUserLogged();
+    if (user?.id && updated.userId) {
+      this.booksService.updateBookInBackend(updated.userId, updated).pipe(
+        catchError(error => {
+          console.error('Error updating book in backend:', error);
+          return of(null);
+        })
+      ).subscribe();
+    }
+
     if (newStatus === 'Leído') {
       this.socialFeed.createCompletedBookPost(updated);
     }
@@ -183,6 +243,9 @@ export class BookshelfService {
 
   removeBook(id: number) {
     this.bookshelf.update(items => items.filter(b => b.id !== id));
+    
+    // Note: Backend deletion would require the backend UUID, which we don't have
+    // You might want to implement a way to track backend IDs
   }
 
   markAsLoaned(bookId: number) {

@@ -54,7 +54,7 @@ export class Book implements OnInit {
     return this.bookshelfService.bookshelvesItems.some(b => b.id === this.book!.id);
   }
 
-  addBookToShelf() {
+  async addBookToShelf() {
     if (!this.book) return;
 
     const bookToAdd = {
@@ -70,7 +70,7 @@ export class Book implements OnInit {
       reading_status: this.book.reading_status || 'Por leer'
     };
 
-    const added = this.bookshelfService.addBook(bookToAdd);
+    const added = await this.bookshelfService.addBook(bookToAdd);
 
     if (added) {
       Swal.fire({

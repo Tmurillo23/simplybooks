@@ -27,8 +27,8 @@ export class Home implements OnInit {
   });
 
   async ngOnInit() {
-    await this.bookshelfService.loadUserFiles(); // Archivos de usuario
-    await this.bookshelfService.loadBooksFromApi(); // Libros de la API
+    await this.bookshelfService.loadBooksFromApi();
+    await this.bookshelfService.loadUserFiles();
   }
 
 
@@ -63,9 +63,12 @@ export class Home implements OnInit {
       return;
     }
 
+    // Create a temporary anchor element to trigger download
     const link = document.createElement('a');
     link.href = book.file_url;
-
+    link.target = '_blank'; // Open in new tab for PDFs
+    
+    // Try to extract filename from URL or use book title
     const fileName = this.getFileNameFromUrl(book.file_url) || `${book.title}.pdf`;
     link.download = fileName;
 
@@ -75,7 +78,7 @@ export class Home implements OnInit {
 
     Swal.fire({
       title: 'Descarga iniciada',
-      text: `Descargando: ${fileName}`,
+      text: `Abriendo: ${book.title}`,
       icon: 'info',
       timer: 2000
     });
