@@ -80,7 +80,7 @@ export class CollectionService {
   }
 
   /** Eliminar libro de colección */
-  removeBookFromCollection(collectionId: string, bookId: number): void {
+  removeBookFromCollection(collectionId: string, bookId: string): void {
     const collection = this.collections.find(c => c.id === collectionId);
     if (!collection) throw new Error('Colección no encontrada.');
 

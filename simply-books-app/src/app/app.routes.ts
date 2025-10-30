@@ -85,7 +85,7 @@ export const routes: Routes = [
     pathMatch:"full"
   },
   {
-    path:"collection/:username",
+    path:"collections/:username",
     component:Collections,
     pathMatch:"full"
   },

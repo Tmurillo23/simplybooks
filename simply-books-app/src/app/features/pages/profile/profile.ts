@@ -139,7 +139,7 @@ export class Profile implements OnInit {
     switch (type) {
       case 'library': return ['/book', id];
       case 'reviews': return ['/review', id];
-      case 'collections': return ['/collection', id];
+      case 'collection': return ['/collection', id];
       default: return ['/'];
     }
   }

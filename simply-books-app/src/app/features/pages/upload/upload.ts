@@ -7,19 +7,18 @@ import { Auth } from '../../../shared/services/auth';
 import { Storage } from '../../../shared/services/storage';
 import { BookshelfService } from '../../../shared/services/bookshelf';
 import Swal from 'sweetalert2';
-import { debounceTime, distinctUntilChanged, Subject} from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { SUPABASE_FILES_BUCKET } from '../../../../environments/environment';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.html',
-  imports: [
-    FormsModule
-  ],
+  imports: [FormsModule],
   styleUrl: './upload.css'
 })
 export class Upload {
-  title: string = 'Agregar libros'
+  title: string = 'Agregar libros';
   showPopup = false;
   selectedFile: File | null = null;
   fileUsername: string | null = null;
@@ -37,7 +36,7 @@ export class Upload {
     private router: Router,
     private eRef: ElementRef
   ) {
-    // Setup search debouncing
+    // Configura búsqueda con debounce
     this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
@@ -46,7 +45,7 @@ export class Upload {
     });
   }
 
-  // Generate stable ID based on file path
+  // Genera ID estable basado en la ruta del archivo
   private generateStableId(filePath: string): number {
     let hash = 0;
     for (let i = 0; i < filePath.length; i++) {
@@ -57,7 +56,7 @@ export class Upload {
     return Math.abs(hash);
   }
 
-  // Event when file is selected
+  // Evento cuando se selecciona un archivo
   async onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0 && input.files.length < 2) {
@@ -65,7 +64,7 @@ export class Upload {
       this.fileUsername = this.authService.getUserLogged().username!;
 
       try {
-        // 1. First upload file to bucket
+        // 1. Subir archivo al bucket
         const filePath = await this.storageService.uploadFile(
           this.selectedFile,
           this.fileUsername,
@@ -76,10 +75,9 @@ export class Upload {
           const url = this.storageService.getFileUrl(filePath, SUPABASE_FILES_BUCKET);
           const fullName = this.selectedFile!.name;
           const nameWithoutExt = fullName.substring(0, fullName.lastIndexOf('.')) || fullName;
-
           const stableId = this.generateStableId(filePath);
 
-          // 2. Try to find book metadata from Open Library
+          // 2. Buscar metadatos en Open Library
           let bookMetadata: Partial<BookInterface> = {};
           try {
             const searchResult = await this.bookService.searchBooks(nameWithoutExt, 1).toPromise();
@@ -95,17 +93,17 @@ export class Upload {
               };
             }
           } catch (error) {
-            console.warn('Could not find book metadata:', error);
+            console.warn('No se encontraron metadatos:', error);
           }
 
-          // 3. Create book object with file URL from bucket
+          // 3. Crear objeto del libro
           const newBook = {
-            id: stableId,
+            id: uuidv4(),
             title: bookMetadata.title || nameWithoutExt,
             author: bookMetadata.author || '',
             year: bookMetadata.year || 0,
             portrait_url: bookMetadata.portrait_url || '',
-            file_url: url, // This is the bucket URL
+            file_url: url,
             description: bookMetadata.description || `Archivo: ${nameWithoutExt}`,
             rating: 0,
             pages: bookMetadata.pages || 0,
@@ -113,23 +111,30 @@ export class Upload {
             reading_status: 'Por leer'
           };
 
-          // 4. Add to bookshelf (which will save to backend)
-          const added = await this.bookshelfService.addBook(newBook);
+          // 4. Guardar libro (local + backend)
+          this.bookshelfService.addBook(newBook).subscribe({
+            next: (added) => {
+              if (added) {
+                Swal.fire({
+                  title: "Exitoso",
+                  text: "Libro agregado a tu biblioteca",
+                  icon: "success"
+                });
+                this.router.navigate(['/home']);
+              } else {
+                Swal.fire({
+                  title: 'Error',
+                  text: 'El libro ya existe en tu biblioteca',
+                  icon: 'error'
+                });
+              }
+            },
+            error: (err) => {
+              console.error('Error al guardar libro:', err);
+              Swal.fire('Error', 'No se pudo guardar el libro en el backend', 'error');
+            }
+          });
 
-          if (added) {
-            Swal.fire({
-              title: "Exitoso",
-              text: "Libro agregado a tu biblioteca",
-              icon: "success"
-            });
-            this.router.navigate(['/home']);
-          } else {
-            Swal.fire({
-              title: 'Error',
-              text: 'El libro ya existe en tu biblioteca',
-              icon: 'error'
-            });
-          }
         } else {
           Swal.fire('Error!!', 'No se recibió la ruta del archivo', 'error');
         }
@@ -140,15 +145,15 @@ export class Upload {
     }
   }
 
-  // Add book from Open Library search to bookshelf and backend
-  async addBookFromSearch(book: BookInterface) {
+  // Agregar libro desde búsqueda (Open Library)
+  addBookFromSearch(book: BookInterface) {
     const bookToAdd = {
       id: book.id,
       title: book.title,
       author: book.author,
       year: book.year,
       portrait_url: book.portrait_url,
-      file_url: '', // No file URL for Open Library books (only metadata)
+      file_url: '',
       description: book.description || `Libro "${book.title}" por ${book.author}`,
       rating: 0,
       pages: book.pages,
@@ -156,23 +161,33 @@ export class Upload {
       reading_status: 'Por leer'
     };
 
-    const added = await this.bookshelfService.addBook(bookToAdd);
-
-    if (added) {
-      Swal.fire({
-        title: "Exitoso",
-        text: "Libro agregado a tu biblioteca",
-        icon: "success"
-      });
-      this.filteredBooks = [];
-      this.searchTerm = '';
-      this.router.navigate(['/home']);
-    } else {
-      Swal.fire({ title: 'Atención', text: 'Este libro ya está en tu biblioteca', icon: 'warning' });
-    }
+    this.bookshelfService.addBook(bookToAdd).subscribe({
+      next: (added) => {
+        if (added) {
+          Swal.fire({
+            title: "Exitoso",
+            text: "Libro agregado a tu biblioteca",
+            icon: "success"
+          });
+          this.filteredBooks = [];
+          this.searchTerm = '';
+          this.router.navigate(['/home']);
+        } else {
+          Swal.fire({
+            title: 'Atención',
+            text: 'Este libro ya está en tu biblioteca',
+            icon: 'warning'
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Error al guardar libro desde búsqueda:', err);
+        Swal.fire('Error', 'No se pudo guardar el libro en el backend', 'error');
+      }
+    });
   }
 
-  // Search for books in Open Library
+  // Buscar libros en Open Library
   onSearch() {
     if (this.searchTerm.trim().length > 2) {
       this.searchSubject.next(this.searchTerm);
@@ -189,7 +204,7 @@ export class Upload {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Search error:', error);
+        console.error('Error de búsqueda:', error);
         this.isLoading = false;
         this.filteredBooks = [];
         Swal.fire('Error', 'No se pudo conectar con la base de datos de libros', 'error');

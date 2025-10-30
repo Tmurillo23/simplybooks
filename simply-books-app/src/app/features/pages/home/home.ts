@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { Auth } from '../../../shared/services/auth';
 import { UserService } from '../../../shared/services/user-service';
 import { BookShelfItem, BookshelfService } from '../../../shared/services/bookshelf';
+import { User } from '../../../shared/interfaces/user';
 
 @Component({
   selector: 'app-home',
@@ -19,13 +20,11 @@ export class Home implements OnInit {
   private userService = inject(UserService);
   private route = inject(ActivatedRoute);
 
-  user: any;
+  user!: User;
   viewingOwnHome = false;
 
-  // 🔹 Buscador reactivo con Signals
   search = signal('');
 
-  // 🔹 Filtrado reactivo
   filteredBooks = computed(() => {
     const term = this.search().toLowerCase();
     if (!term) return this.bookshelfService.bookshelvesItems;
@@ -45,7 +44,12 @@ export class Home implements OnInit {
       if (this.viewingOwnHome) {
         this.user = currentUser;
       } else {
-        this.user = await this.userService.findByUsername(username!).toPromise();
+        const foundUser = await this.userService.findByUsername(username!).toPromise();
+        if (!foundUser) {
+          console.error('❌ No se encontró el usuario');
+          return;
+        }
+        this.user = foundUser;
       }
 
       if (!this.user) {
@@ -54,12 +58,17 @@ export class Home implements OnInit {
       }
 
       console.log('📚 Cargando biblioteca para:', this.user.username);
-      await this.bookshelfService.loadUserFiles(this.user.username);
-      await this.bookshelfService.loadBooksFromApi();
+
+      // ✅ Pasar el usuario completo, no solo el username
+      await this.bookshelfService.loadUserFiles(this.user);
+
+      // ✅ Pasar también el ID del usuario visitado
+      await this.bookshelfService.loadBooksFromApi(this.user.id);
     });
   }
 
-  removeBook(id: number) {
+
+  removeBook(id: string) {
     if (!this.viewingOwnHome) return; // no permitir borrar si es otro usuario
 
     Swal.fire({
@@ -83,6 +92,8 @@ export class Home implements OnInit {
   }
 
   downloadFile(book: BookShelfItem) {
+    if (!this.viewingOwnHome) return; // no permitir descargar si no es tuyo
+
     if (!book.file_url) {
       Swal.fire({
         title: 'Error',

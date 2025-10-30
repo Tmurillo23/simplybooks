@@ -8,7 +8,6 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-collection-detail',
   standalone: true,
-  // 👇 Aquí agregamos los módulos necesarios
   imports: [RouterModule],
   templateUrl: './collection-detail.html',
   styleUrl: './collection-detail.css'
@@ -37,7 +36,7 @@ export class CollectionDetail implements OnInit {
     }
   }
 
-  removeBook(bookId: number) {
+  removeBook(bookId: string) {
     if (!this.collection) return;
     try {
       this.collectionService.removeBookFromCollection(this.collection.id, bookId);

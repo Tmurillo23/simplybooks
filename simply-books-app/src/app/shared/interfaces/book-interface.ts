@@ -1,6 +1,6 @@
 export interface BookInterface {
   // Frontend-specific fields (not in backend)
-  id: number; // Frontend uses number, backend uses UUID string
+  id: string; // Frontend uses number, backend uses UUID string //I changed it so it matches backend
   year: number;
   description: string;
   rating: number;
@@ -13,7 +13,7 @@ export interface BookInterface {
   title: string;
   author: string;
   pages: number;
-  
+
   // Optional backend fields that we'll map
   isbn?: string;
   cover?: string;

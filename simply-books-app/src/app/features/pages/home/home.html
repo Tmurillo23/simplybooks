@@ -40,6 +40,7 @@
             name="reading_status"
             (click)="$event.stopPropagation()"
             (change)="$event.stopPropagation()"
+            [disabled]="!viewingOwnHome"
             style="font-size: 0.7rem; padding: 0.2rem; margin-top: 0.1rem;"
           >
             <option value="Por leer">Por leer</option>
@@ -54,6 +55,7 @@
             <button
               [routerLink]="['/editbook', book.id]"
               (click)="$event.stopPropagation()"
+              [disabled]="!viewingOwnHome"
               style="font-size: 0.7rem; margin-right: 0.2rem;"
             >
               Editar
@@ -61,31 +63,30 @@
 
             <button
               (click)="removeBook(book.id); $event.stopPropagation()"
+              [disabled]="!viewingOwnHome"
               style="font-size: 0.7rem;"
             >
               Eliminar
             </button>
           </div>
 
-          <!-- Botón de descarga solo si tiene archivo -->
+          <!-- Botón de descarga -->
           @if (book.file_url) {
             <button
               (click)="downloadFile(book); $event.stopPropagation()"
+              [disabled]="!viewingOwnHome"
               class="download-btn"
               style="margin-top: 0.4rem; font-size: 0.7rem;"
             >
               📥 Descargar PDF
             </button>
           }
+
         </div>
       </article>
     }
   } @else {
-    <div class="empty-state">
-      <p>Aún no tienes libros en tu biblioteca</p>
-      <a [routerLink]="['/upload']" class="add-books-link">
-        ➕ Agregar libros
-      </a>
-    </div>
+    <p>Agrega algunos libros</p>
   }
+
 </section>

@@ -130,23 +130,11 @@ export class LoansService {
   }
 
   // Verificar si un libro está prestado
-  isBookLoaned(bookId: number): boolean {
+    isBookLoaned(bookId: string): boolean {
     return this.activeLoans().some(loan => loan.book.id === bookId);
   }
 
-  // Obtener préstamos de un libro específico
-  getBookLoanHistory(bookId: number): Loan[] {
-    return this._loans()
-      .filter(loan => loan.book.id === bookId)
-      .sort((a, b) => new Date(b.loanDate).getTime() - new Date(a.loanDate).getTime());
-  }
 
-  // Obtener préstamos de un beneficiario
-  getBeneficiaryLoans(beneficiary: string): Loan[] {
-    return this._loans()
-      .filter(loan => loan.beneficiary.toLowerCase() === beneficiary.toLowerCase())
-      .sort((a, b) => new Date(b.loanDate).getTime() - new Date(a.loanDate).getTime());
-  }
 
   // Limpiar historial (opcional - con confirmación)
   clearHistory() {

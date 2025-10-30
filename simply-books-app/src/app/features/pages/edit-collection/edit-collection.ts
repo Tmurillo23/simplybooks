@@ -56,7 +56,7 @@ export class EditCollection implements OnInit {
   }
 
 
-  removeBook(bookId: number): void {
+  removeBook(bookId: string): void {
     if (!this.collection) return;
 
     try {

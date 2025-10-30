@@ -32,7 +32,7 @@ export class Book implements OnInit {
   ) {}
 
   ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const id = (this.route.snapshot.paramMap.get('id'));
 
     // Look for the book in the user's bookshelf first
     this.book = this.bookshelfService.bookshelvesItems.find(b => b.id === id);
@@ -54,7 +54,7 @@ export class Book implements OnInit {
     return this.bookshelfService.bookshelvesItems.some(b => b.id === this.book!.id);
   }
 
-  async addBookToShelf() {
+  addBookToShelf() {
     if (!this.book) return;
 
     const bookToAdd = {
@@ -70,23 +70,34 @@ export class Book implements OnInit {
       reading_status: this.book.reading_status || 'Por leer'
     };
 
-    const added = await this.bookshelfService.addBook(bookToAdd);
-
-    if (added) {
-      Swal.fire({
-        title: 'Éxito',
-        text: 'Libro agregado a tu biblioteca',
-        icon: 'success'
-      });
-      this.router.navigate(['/home']);
-    } else {
-      Swal.fire({
-        title: 'Atención',
-        text: 'Este libro ya está en tu biblioteca',
-        icon: 'warning'
-      });
-    }
+    this.bookshelfService.addBook(bookToAdd).subscribe({
+      next: (added) => {
+        if (added) {
+          Swal.fire({
+            title: 'Éxito',
+            text: 'Libro agregado a tu biblioteca',
+            icon: 'success'
+          });
+          this.router.navigate(['/home']);
+        } else {
+          Swal.fire({
+            title: 'Atención',
+            text: 'Este libro ya está en tu biblioteca',
+            icon: 'warning'
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Error al agregar libro:', err);
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudo agregar el libro. Intenta de nuevo más tarde.',
+          icon: 'error'
+        });
+      }
+    });
   }
+
 
   addBookToCollection() {
     if (!this.book || !this.selectedCollectionId) {

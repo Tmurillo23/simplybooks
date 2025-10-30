@@ -21,7 +21,7 @@ export class UpdateBook {
   ) {}
 
   ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const id = (this.route.snapshot.paramMap.get('id'));
     const found = this.bookshelfService.bookshelvesItems.find(b => b.id === id);
     if (found) {
       this.book = { ...found };

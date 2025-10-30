@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, map, catchError, of } from 'rxjs';
 import { BookInterface } from '../interfaces/book-interface';
 import { getHeaders } from '../utils/utility';
+import { v4 as uuidv4 } from 'uuid';
 
 interface OpenLibrarySearchResponse {
   start: number;
@@ -14,8 +15,13 @@ interface BackendBook {
   id: string;
   title: string;
   author: string;
-  isbn: string;
-  cover: string;
+  isbn?: string;
+  cover?: string;
+  description?: string;
+  rating?: number;
+  pages?: number;
+  pages_read?: number;
+  reading_status?: string;
   userId: string;
 }
 
@@ -29,9 +35,9 @@ export class BooksService {
 
   constructor(private http: HttpClient) {}
 
-  // Search books in Open Library
-  searchBooks(query: string, limit: number = 20, page: number = 1): Observable<{books: BookInterface[], total: number}> {
-    let params = new HttpParams()
+  /** 🔍 Buscar libros en Open Library */
+  searchBooks(query: string, limit: number = 20, page: number = 1): Observable<{ books: BookInterface[]; total: number }> {
+    const params = new HttpParams()
       .set('q', query)
       .set('limit', limit.toString())
       .set('page', page.toString())
@@ -45,31 +51,46 @@ export class BooksService {
     );
   }
 
-  // Get books from backend for a specific user
+  /** 📥 Obtener libros desde backend por usuario */
   getBooksByUser(userId: string): Observable<BookInterface[]> {
     return this.http.get<BackendBook[]>(`${this.backendUrl}/user/${userId}`, getHeaders).pipe(
-      map(backendBooks => backendBooks.map(book => this.mapBackendToFrontend(book)))
+      map(backendBooks => backendBooks.map(book => this.mapBackendToFrontend(book))),
+      catchError(err => {
+        console.error('❌ Error cargando libros del backend:', err);
+        return of([]);
+      })
     );
   }
 
-  // Save book to backend
   saveBookToBackend(book: BookInterface, userId: string): Observable<any> {
     const backendBook = this.mapFrontendToBackend(book, userId);
-    return this.http.post(this.backendUrl, backendBook, getHeaders);
+    console.log('📤 Enviando libro al backend (sin ID):', backendBook);
+
+    return this.http.post(this.backendUrl, backendBook, getHeaders).pipe(
+      catchError(err => {
+        console.error('❌ Error guardando libro en backend:', err);
+        return of(null);
+      })
+    );
   }
 
-  // Update book in backend
+  /** ✏️ Actualizar libro en backend */
   updateBookInBackend(bookId: string, book: BookInterface): Observable<any> {
     const backendBook = this.mapFrontendToBackend(book, book.userId!);
-    return this.http.patch(`${this.backendUrl}/${bookId}`, backendBook, getHeaders);
+    return this.http.patch(`${this.backendUrl}/${bookId}`, backendBook, getHeaders).pipe(
+      catchError(err => {
+        console.error('❌ Error actualizando libro en backend:', err);
+        return of(null);
+      })
+    );
   }
 
-  // Delete book from backend
+  /** 🗑️ Eliminar libro del backend */
   deleteBookFromBackend(bookId: string): Observable<any> {
     return this.http.delete(`${this.backendUrl}/${bookId}`, getHeaders);
   }
 
-  // Get book cover URL
+  /** 🖼️ Obtener portada del libro */
   getBookCoverUrl(coverId?: number, isbn?: string[], size: 'S' | 'M' | 'L' = 'M'): string {
     if (coverId) {
       return `${this.coversBaseUrl}/id/${coverId}-${size}.jpg`;
@@ -79,65 +100,57 @@ export class BooksService {
     return 'assets/default-cover.jpg';
   }
 
-  // Map Open Library API response to BookInterface
+  // 🔄 Mapeos
+  /** 🧩 Open Library → Frontend */
   private mapOpenLibraryToBook(doc: any): BookInterface {
-    const authorName = doc.author_name && doc.author_name.length > 0 ? doc.author_name[0] : 'Unknown Author';
-    const firstIsbn = doc.isbn && doc.isbn.length > 0 ? doc.isbn[0] : undefined;
-    
+    const authorName = doc.author_name?.[0] ?? 'Autor desconocido';
+    const firstIsbn = doc.isbn?.[0] ?? undefined;
+
     return {
-      id: this.generateIdFromTitleAndAuthor(doc.title, authorName),
-      title: doc.title || 'Unknown Title',
+      id: uuidv4(),
+      title: doc.title ?? 'Título desconocido',
       author: authorName,
-      year: doc.first_publish_year || new Date().getFullYear(),
+      year: doc.first_publish_year ?? new Date().getFullYear(),
       portrait_url: this.getBookCoverUrl(doc.cover_i, doc.isbn),
-      pages: 0, // Default, can be updated
+      pages: 0,
       pages_read: 0,
       reading_status: 'Por leer',
-      description: '', // Open Library doesn't provide description in search results
+      description: '',
       rating: 0,
       isbn: firstIsbn
     };
   }
 
-  // Map backend book to frontend book interface
   private mapBackendToFrontend(backendBook: BackendBook): BookInterface {
     return {
-      id: this.generateIdFromTitleAndAuthor(backendBook.title, backendBook.author),
+      id: backendBook.id,
       title: backendBook.title,
       author: backendBook.author,
-      year: 0, // Backend doesn't store year
-      portrait_url: backendBook.cover || 'assets/default-cover.jpg',
-      pages: 0, // Backend doesn't store pages
-      pages_read: 0,
-      reading_status: 'Por leer',
-      description: '', // Backend doesn't store description
-      rating: 0,
-      isbn: backendBook.isbn,
+      year: 0,
+      portrait_url: backendBook.cover ?? 'assets/default-cover.jpg',
+      description: backendBook.description ?? '',
+      rating: backendBook.rating ?? 0,
+      pages: backendBook.pages ?? 0,
+      pages_read: backendBook.pages_read ?? 0,
+      reading_status: backendBook.reading_status ?? 'Por leer',
+      isbn: backendBook.isbn ?? '',
       userId: backendBook.userId
     };
   }
 
-  // Map frontend book to backend DTO
-  private mapFrontendToBackend(frontendBook: BookInterface, userId: string): any {
+  private mapFrontendToBackend(frontendBook: BookInterface, userId: string): Omit<BackendBook, 'id'> {
     return {
       title: frontendBook.title,
       author: frontendBook.author,
-      isbn: frontendBook.isbn || '', // Use ISBN from Open Library if available
-      cover: frontendBook.portrait_url, // Map portrait_url to cover
-      userId: userId
+      isbn: frontendBook.isbn ?? '',
+      cover: frontendBook.portrait_url,
+      description: frontendBook.description ?? '',
+      rating: frontendBook.rating ?? 0,
+      pages: frontendBook.pages ?? 0,
+      pages_read: frontendBook.pages_read ?? 0,
+      reading_status: frontendBook.reading_status ?? 'Por leer',
+      userId
     };
-  }
-
-  // Generate stable ID from title and author
-  private generateIdFromTitleAndAuthor(title: string, author: string): number {
-    const combined = title + author;
-    let hash = 0;
-    for (let i = 0; i < combined.length; i++) {
-      const char = combined.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash;
-    }
-    return Math.abs(hash);
   }
 
 }
