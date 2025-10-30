@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { UserService } from '../../../shared/services/user-service';
 import { User } from '../../../shared/interfaces/user';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-profile',
@@ -81,7 +82,7 @@ export class Profile implements OnInit {
           this.loadReviews();
           this.loadCollections();
         },
-        error: (err) => console.error('Error cargando perfil', err)
+        error: (err) => Swal.fire({ title: 'Error en el perfil', text: 'Error cargando el perfil.', icon: 'error' })
       });
     });
   }
@@ -93,7 +94,7 @@ export class Profile implements OnInit {
         this.user = res;
         this.updateStats();
       },
-      error: (err) => console.error('Error refrescando usuario', err)
+      error: (err) => Swal.fire({ title: 'Error de usuario', text: 'No se pudo refrescar el usuario.', icon: 'error' })
     });
   }
 

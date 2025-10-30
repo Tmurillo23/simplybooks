@@ -46,18 +46,17 @@ export class Home implements OnInit {
       } else {
         const foundUser = await this.userService.findByUsername(username!).toPromise();
         if (!foundUser) {
-          console.error('No se encontró el usuario');
+          Swal.fire({ title: 'Error', text: 'No se encontro el usuario.', icon: 'error' });
           return;
         }
         this.user = foundUser;
       }
 
       if (!this.user) {
-        console.error('No se pudo obtener usuario');
+        Swal.fire({ title: 'Error', text: 'No se pudo obtener el usuario.', icon: 'error' });
         return;
       }
-
-      console.log('Cargando biblioteca para:', this.user.username);
+      Swal.fire({ title: 'Cuidado', text: 'La biblioteca se esta cargando..', icon: 'warning' });
 
       // Pasar el usuario completo, no solo el username
       await this.bookshelfService.loadUserFiles(this.user);

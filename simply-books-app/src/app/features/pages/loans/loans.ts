@@ -6,6 +6,7 @@ import { Loan } from '../../../shared/interfaces/loan-interface';
 import { BookshelfService } from '../../../shared/services/bookshelf';
 import { BookInterface } from '../../../shared/interfaces/book-interface';
 import { LoansService } from '../../../shared/services/loan-service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-loans',
@@ -27,7 +28,7 @@ export class Loans implements OnInit {
 
   addLoan() {
     if (!this.newLoan.beneficiary || !this.newLoan.book || !this.newLoan.loanDate) {
-      alert('Por favor completa todos los campos');
+      Swal.fire({ title: 'Error', text: 'Por favor completa todos los campos.', icon: 'error' });
       return;
     }
 
@@ -35,13 +36,13 @@ export class Loans implements OnInit {
 
     // No prestar libros digitales
     if (book.file_url) {
-      alert('Este libro es digital y no se puede prestar físicamente');
+      Swal.fire({ title: 'Error', text: 'Este libro es diigtal y no se puede prestar fisicamente.', icon: 'error' });
       return;
     }
 
     // Verificar si el libro ya está prestado
     if (this.loansService.isBookLoaned(book.id)) {
-      alert('Este libro ya está prestado');
+      Swal.fire({ title: 'Error', text: 'Este libro ya está prestado.', icon: 'error' });
       return;
     }
 
@@ -59,13 +60,13 @@ export class Loans implements OnInit {
 
     // Limpiar formulario
     this.newLoan = {};
-    alert('Préstamo registrado exitosamente');
+    Swal.fire({ title: 'Prestamo registrado', text: 'Este prestaqmo fue registrado exitosamente.', icon: 'success' });
   }
 
   markReturned(loan: Loan) {
     if (confirm(`¿Confirmas que ${loan.beneficiary} devolvió "${loan.book.title}"?`)) {
       this.loansService.markAsReturned(loan.id);
-      alert('Libro marcado como devuelto y agregado de nuevo a la biblioteca');
+      Swal.fire({ title: 'Libro devuelto y agregado', text: 'Fue exitosamente devuelto y agregado.', icon: 'success' });
     }
   }
 

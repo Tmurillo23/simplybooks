@@ -9,6 +9,7 @@ import { BookShelfItem } from '../../../shared/services/bookshelf';
 import { TINYMCE_KEY } from '../../../../environments/environment';
 import {Auth} from '../../../shared/services/auth';
 import {User} from '../../../shared/interfaces/user';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -44,14 +45,14 @@ export class EditReview implements OnInit {
     this.reviewId = this.route.snapshot.paramMap.get('id') || '';
 
     if (!this.reviewId) {
-      console.error('No se proporciono ID de reseña');
+      Swal.fire({ title: 'Error', text: 'No se proporciono Id de la reseña', icon: 'success' });
       return;
     }
 
     // Cargar reseña existente
     const found = this.reviewService.getReviewById(this.reviewId);
     if (!found) {
-      console.error('Reseña no encontrada');
+      Swal.fire({ title: 'Error', text: 'Reseña no encontrada.', icon: 'error' });
       return;
     }
 
@@ -76,8 +77,7 @@ export class EditReview implements OnInit {
       rating: this.rating,
       draft: this.draft
     });
-
-    alert('Reseña actualizada correctamente');
+    Swal.fire({ title: 'Exito', text: 'Reseña actualizada correctamente.', icon: 'success' });
     this.router.navigate(['/reviews']);
   }
 
