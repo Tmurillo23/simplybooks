@@ -4,8 +4,8 @@ import { CollectionBook } from '../../collection-book/entities/collection-book.e
 
 @Entity('collections')
 export class Collection {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id?: string;
 
   @Column()
   name: string;
@@ -17,7 +17,7 @@ export class Collection {
   user: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @OneToMany(() => CollectionBook, collectionBook => collectionBook.collection)
   collectionBooks: CollectionBook[];

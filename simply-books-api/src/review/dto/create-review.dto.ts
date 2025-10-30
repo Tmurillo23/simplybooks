@@ -3,6 +3,6 @@ export class CreateReviewDto {
   rating: number;
   date?: Date;
   draft?: boolean;
-  userId: number;
-  bookId: number;
+  userId: string;
+  bookId: string;
 }

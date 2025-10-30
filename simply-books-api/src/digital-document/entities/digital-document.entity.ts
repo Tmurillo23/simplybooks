@@ -3,8 +3,8 @@ import { User } from '../../user/entities/user.entity';
 
 @Entity('digital_documents')
 export class DigitalDocument {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id?: string;
 
   @Column()
   name: string;
@@ -19,5 +19,5 @@ export class DigitalDocument {
   user: User;
 
   @Column()
-  userId: number;
+  userId: string;
 }

@@ -42,22 +42,22 @@ export class SignUp {
     }
 
     let user = this.signUpForm.value as User;
-    let signUpResponse = this.authService.signUp(user);
-
-    if (signUpResponse?.success) {
-      Swal.fire({
-        title: "Success",
-        text: "Usuario creado con éxito",
-        icon: "success",
-      });
-      this.router.navigate([signUpResponse.redirectTo]);
-    } else {
-      Swal.fire({
-        title: "Error",
-        text: "El formulario no es válido",
-        icon: "error"
-      });
-    }
+    this.authService.signUp(user).subscribe(response => {
+      if (response?.success) {
+        Swal.fire({
+          title: "Exitoso",
+          text: "Usuario creado exitosamente!",
+          icon: "success",
+        });
+        this.router.navigate([response.redirectTo]);
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: "Hubo un error en la creacion del usuario.",
+          icon: "error"
+        });
+      }
+    });;
   }
 
 }

@@ -4,8 +4,8 @@ import { Book } from '../../book/entities/book.entity';
 
 @Entity('progress')
 export class Progress {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id?: string;
 
   @Column()
   state: string;
@@ -14,11 +14,11 @@ export class Progress {
   user: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @ManyToOne(() => Book, book => book.progress)
   book: Book;
 
   @Column()
-  bookId: number;
+  bookId: string;
 }

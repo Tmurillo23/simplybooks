@@ -24,36 +24,36 @@ export class ReviewController {
   @Get(':id')
   @UseGuards(AuthGuard)
   findOne(@Param('id') id: string) {
-    return this.reviewService.findOne(+id);
+    return this.reviewService.findOne(id);
   }
 
   @Get('user/:userId')
   @UseGuards(AuthGuard)
   findByUser(@Param('userId') userId: string) {
-    return this.reviewService.findByUser(+userId);
+    return this.reviewService.findByUser(userId);
   }
 
   @Get('book/:bookId')
   @UseGuards(AuthGuard)
   findByBook(@Param('bookId') bookId: string) {
-    return this.reviewService.findByBook(+bookId);
+    return this.reviewService.findByBook(bookId);
   }
 
   @Get('user/:userId/book/:bookId')
   @UseGuards(AuthGuard)
   findByUserAndBook(@Param('userId') userId: string, @Param('bookId') bookId: string) {
-    return this.reviewService.findByUserAndBook(+userId, +bookId);
+    return this.reviewService.findByUserAndBook(userId, bookId);
   }
 
   @Patch(':id')
   @UseGuards(RoleGuard)
   update(@Param('id') id: string, @Body() updateReviewDto: UpdateReviewDto) {
-    return this.reviewService.update(+id, updateReviewDto);
+    return this.reviewService.update(id, updateReviewDto);
   }
 
   @Delete(':id')
   @UseGuards(RoleGuard)
   remove(@Param('id') id: string) {
-    return this.reviewService.remove(+id);
+    return this.reviewService.remove(id);
   }
 }

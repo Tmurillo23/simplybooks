@@ -24,24 +24,24 @@ export class DigitalDocumentController {
   @Get(':id')
   @UseGuards(AuthGuard)
   findOne(@Param('id') id: string) {
-    return this.digitalDocumentService.findOne(+id);
+    return this.digitalDocumentService.findOne(id);
   }
 
   @Get('user/:userId')
   @UseGuards(AuthGuard)
   findByUser(@Param('userId') userId: string) {
-    return this.digitalDocumentService.findByUser(+userId);
+    return this.digitalDocumentService.findByUser(userId);
   }
 
   @Patch(':id')
   @UseGuards(RoleGuard)
   update(@Param('id') id: string, @Body() updateDigitalDocumentDto: UpdateDigitalDocumentDto) {
-    return this.digitalDocumentService.update(+id, updateDigitalDocumentDto);
+    return this.digitalDocumentService.update(id, updateDigitalDocumentDto);
   }
 
   @Delete(':id')
   @UseGuards(RoleGuard)
   remove(@Param('id') id: string) {
-    return this.digitalDocumentService.remove(+id);
+    return this.digitalDocumentService.remove(id);
   }
 }

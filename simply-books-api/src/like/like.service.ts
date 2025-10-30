@@ -27,28 +27,28 @@ export class LikeService {
     });
   }
 
-  findByReview(reviewId: number) {
+  findByReview(reviewId: string) {
     return this.likeRepository.find({ 
       where: { reviewId },
       relations: ['user', 'review'] 
     });
   }
 
-  findByUser(userId: number) {
+  findByUser(userId: string) {
     return this.likeRepository.find({ 
       where: { userId },
       relations: ['user', 'review'] 
     });
   }
 
-  checkLike(userId: number, reviewId: number) {
+  checkLike(userId: string, reviewId: string) {
     return this.likeRepository.findOne({ 
       where: { userId, reviewId },
       relations: ['user', 'review'] 
     });
   }
 
-  async remove(userId: number, reviewId: number) {
+  async remove(userId: string, reviewId: string) {
     return this.likeRepository.delete({ userId, reviewId });
   }
 }

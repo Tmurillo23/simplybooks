@@ -23,13 +23,13 @@ export class FollowerController {
   @Get('user/:userId/following')
   @UseGuards(AuthGuard)
   findFollowing(@Param('userId') userId: string) {
-    return this.followerService.findFollowing(+userId);
+    return this.followerService.findFollowing(userId);
   }
 
   @Get('user/:userId/followers')
   @UseGuards(AuthGuard)
   findFollowers(@Param('userId') userId: string) {
-    return this.followerService.findFollowers(+userId);
+    return this.followerService.findFollowers(userId);
   }
 
   @Get('user/:userId/following/:followedId')
@@ -38,7 +38,7 @@ export class FollowerController {
     @Param('userId') userId: string,
     @Param('followedId') followedId: string,
   ) {
-    return this.followerService.checkFollowing(+userId, +followedId);
+    return this.followerService.checkFollowing(userId, followedId);
   }
 
   @Delete('user/:userId/following/:followedId')
@@ -47,6 +47,6 @@ export class FollowerController {
     @Param('userId') userId: string,
     @Param('followedId') followedId: string,
   ) {
-    return this.followerService.remove(+userId, +followedId);
+    return this.followerService.remove(userId, followedId);
   }
 }

@@ -1,11 +1,7 @@
-export interface UserStats {
-  booksRead:number;
-  reviewsCount:number;
-  followersCount:number;
-  followingCount:number;
-}
-export interface User{
-  id?:string;
+import { UserStats } from "./user";
+
+export interface JwtPayload{
+  id:string;
   username:string;
   password:string;
   email:string;
@@ -15,4 +11,6 @@ export interface User{
   bio?:string;
   following?: boolean;
   stats?:UserStats;
+  iat: number;
+  exp?:number;
 }

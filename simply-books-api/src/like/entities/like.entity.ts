@@ -5,10 +5,10 @@ import { Review } from '../../review/entities/review.entity';
 @Entity('likes')
 export class Like {
   @PrimaryColumn()
-  userId: number;
+  userId: string;
 
   @PrimaryColumn()
-  reviewId: number;
+  reviewId: string;
 
   @ManyToOne(() => User, user => user.likes)
   @JoinColumn({ name: 'userId' }) 

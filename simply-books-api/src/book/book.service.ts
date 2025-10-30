@@ -26,14 +26,14 @@ export class BookService {
     return this.bookRepository.find({ relations: ['user'] });
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.bookRepository.findOne({ 
       where: { id },
       relations: ['user'] 
     });
   }
 
-  findByUser(userId: number) {
+  findByUser(userId: string) {
     return this.bookRepository.find({ 
       where: { userId },
       relations: ['user'] 
@@ -47,12 +47,12 @@ export class BookService {
     });
   }
 
-  async update(id: number, updateBookDto: UpdateBookDto) {
+  async update(id: string, updateBookDto: UpdateBookDto) {
     await this.bookRepository.update(id, updateBookDto);
     return this.findOne(id);
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return this.bookRepository.delete(id);
   }
 }

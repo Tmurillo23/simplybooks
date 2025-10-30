@@ -24,13 +24,13 @@ export class BookController {
   @Get(':id')
   @UseGuards(AuthGuard)
   findOne(@Param('id') id: string) {
-    return this.bookService.findOne(+id);
+    return this.bookService.findOne(id);
   }
 
   @Get('user/:userId')
   @UseGuards(AuthGuard)
   findByUser(@Param('userId') userId: string) {
-    return this.bookService.findByUser(+userId);
+    return this.bookService.findByUser(userId);
   }
 
   @Get('isbn/:isbn')
@@ -42,12 +42,12 @@ export class BookController {
   @Patch(':id')
   @UseGuards(RoleGuard)
   update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    return this.bookService.update(+id, updateBookDto);
+    return this.bookService.update(id, updateBookDto);
   }
 
   @Delete(':id')
   @UseGuards(RoleGuard)
   remove(@Param('id') id: string) {
-    return this.bookService.remove(+id);
+    return this.bookService.remove(id);
   }
 }

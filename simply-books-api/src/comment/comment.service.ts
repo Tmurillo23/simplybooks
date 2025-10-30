@@ -28,40 +28,40 @@ export class CommentService {
     });
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.commentRepository.findOne({ 
       where: { id },
       relations: ['user', 'review', 'parent', 'replies'] 
     });
   }
 
-  findByReview(reviewId: number) {
+  findByReview(reviewId: string) {
     return this.commentRepository.find({ 
       where: { reviewId },
       relations: ['user', 'review', 'parent', 'replies'] 
     });
   }
 
-  findByUser(userId: number) {
+  findByUser(userId: string) {
     return this.commentRepository.find({ 
       where: { userId },
       relations: ['user', 'review', 'parent', 'replies'] 
     });
   }
 
-  findByParent(parentId: number) {
+  findByParent(parentId: string) {
     return this.commentRepository.find({ 
       where: { parentId },
       relations: ['user', 'review', 'parent', 'replies'] 
     });
   }
 
-  async update(id: number, updateCommentDto: UpdateCommentDto) {
+  async update(id: string, updateCommentDto: UpdateCommentDto) {
     await this.commentRepository.update(id, updateCommentDto);
     return this.findOne(id);
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return this.commentRepository.delete(id);
   }
 }

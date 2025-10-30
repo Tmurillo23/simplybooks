@@ -1,5 +1,5 @@
 export class CreateProgressDto {
   state: string;
-  userId: number;
-  bookId: number;
+  userId: string;
+  bookId: string;
 }

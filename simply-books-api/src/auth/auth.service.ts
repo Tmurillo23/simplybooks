@@ -1,8 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { UserService } from 'src/user/user.service';
-import { LoginDto } from './dto/create-auth.dto';
+import { SignUpDto } from './dto/sign-up.dto';
+import { LoginDto } from './dto/login.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -23,39 +25,73 @@ export class AuthService {
   async login(credentials: LoginDto) {
     const user = await this.validateUser(credentials.email, credentials.password);
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Credenciales Incorrectas!');
     }
 
     const payload = { 
-      id: user.id, 
-      email: user.email, 
-      username: user.username 
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      avatar_url: user.avatar_url ?? '',
+      created_at: user.created_at ?? new Date(0),
+      bio: user.bio ?? '',
+      following: user.following,
+      stats: user.stats ?? {
+        booksRead: 0,
+        reviewsCount: 0,
+        followersCount: 0,
+        followingCount: 0,
+      }
     };
 
     return {
-      access_token: this.jwtService.sign(payload),
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        avatar: user.avatar,
-      },
+      success: true,
+      token: this.jwtService.sign(payload)
     };
   }
 
-  async register(createUserDto: any) {
+  async register(createUserDto: SignUpDto) {
     const user = await this.userService.create(createUserDto);
-    const { password, ...result } = user;
+    //const { password, ...result } = user;
 
     const payload = { 
-      id: user.id, 
-      email: user.email, 
-      username: user.username 
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      avatar_url: '',
+      created_at: new Date(0),
+      bio: '',
+      following: user.following,
+      stats: {
+        booksRead: 0,
+        reviewsCount: 0,
+        followersCount: 0,
+        followingCount: 0,
+      }
     };
 
     return {
-      access_token: this.jwtService.sign(payload),
-      user: result,
+      success: true,
+      token: this.jwtService.sign(payload),
     };
   }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const user = await this.userService.findByEmail(resetPasswordDto.email!);
+    if (!user) {
+      throw new NotFoundException('Usuario no fue encontrado.');
+    }
+
+    const hashedPassword = await bcrypt.hash(resetPasswordDto.password!, 10);
+
+    await this.userService.update(user.id!, {
+    ...user,
+    password: hashedPassword
+  });
+    return {
+      success: true,
+      message: 'Contraseña cambiada exitosamente!',
+    };
+  }
+
 }

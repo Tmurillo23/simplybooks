@@ -1,4 +1,4 @@
 export class CreateCollectionBookDto {
-  collectionId: number;
-  bookId: number;
+  collectionId: string;
+  bookId: string;
 }

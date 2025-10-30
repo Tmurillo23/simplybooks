@@ -5,10 +5,10 @@ import { Book } from '../../book/entities/book.entity';
 @Entity('collection_books')
 export class CollectionBook {
   @PrimaryColumn()
-  collectionId: number;
+  collectionId: string;
 
   @PrimaryColumn()
-  bookId: number;
+  bookId: string;
 
   @ManyToOne(() => Collection, collection => collection.collectionBooks)
   @JoinColumn({ name: 'collectionId' })

@@ -27,28 +27,28 @@ export class FollowerService {
     });
   }
 
-  findFollowing(userId: number) {
+  findFollowing(userId: string) {
     return this.followerRepository.find({ 
       where: { userId },
       relations: ['follower', 'followed'] 
     });
   }
 
-  findFollowers(userId: number) {
+  findFollowers(userId: string) {
     return this.followerRepository.find({ 
       where: { followedId: userId },
       relations: ['follower', 'followed'] 
     });
   }
 
-  checkFollowing(userId: number, followedId: number) {
+  checkFollowing(userId: string, followedId: string) {
     return this.followerRepository.findOne({ 
       where: { userId, followedId },
       relations: ['follower', 'followed'] 
     });
   }
 
-  async remove(userId: number, followedId: number) {
+  async remove(userId: string, followedId: string) {
     return this.followerRepository.delete({ userId, followedId });
   }
 }

@@ -1,114 +1,118 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { catchError, map, Observable } from 'rxjs';
 import { User } from '../interfaces/user';
-import { LoginResponse, SignUpResponse, ResetPasswordResponse } from '../interfaces/login-response';
+import { LoginResponse, LoginServiceResponse } from '../interfaces/login-response';
+import { JwtService } from './jwt-service';
+import { SignUpResponse, SignUpServiceResponse } from '../interfaces/sign-up-response';
+import { ResetPasswordResponse, ResetPasswordServiceResponse } from '../interfaces/reset-password-response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Auth {
 
+  private http = inject(HttpClient);
+  private jwtService = inject(JwtService);
+
   isLogged = signal(false);
+  private apiUrl = 'http://localhost:3000/api/v1/auth';
 
   constructor() {
-    this.verifyUserLogged();
+    this.verifyLoggedUser();
   }
 
-  login(user: User): LoginResponse {
-    if (!user.username) return { success: false };
+  login(user: User): Observable<LoginResponse> {
+    return this.http.post<LoginServiceResponse>(`${this.apiUrl}/login`, user).pipe(
+      map(response => {
+        sessionStorage.setItem('token', response.token);
 
-    const storedUser = this.getAllUsers().find(u => u.username === user.username);
-    if (!storedUser) return { success: false, message: 'Error en el formulario' };
-
-    if (user.password === storedUser.password) {
-      sessionStorage.setItem('userLogged', storedUser.email);
-      this.verifyUserLogged();
-      return { success: true, redirectTo: 'home' };
-    }
-
-    return { success: false };
+        this.verifyLoggedUser();
+        return { 
+          success: true, 
+          redirectTo: 'home'
+        };
+      }),
+      catchError((error) => {
+        let message = 'Error during login';
+        if (error.status === 401) {
+          message = 'Invalid credentials';
+        }
+        return [{ success: false, message }];
+      })
+    );
   }
 
-  signUp(user: User): SignUpResponse {
-    if (!user.username || !user.email) return { success: false, message: 'Usuario inválido' };
-    if (localStorage.getItem(user.email)) {
-      return { success: false, message: 'Usuario ya existe' };
-    }
+  signUp(user: User): Observable<SignUpResponse> {
+    return this.http.post<SignUpServiceResponse>(`${this.apiUrl}/register`, user).pipe(
+      map(response => {
+        sessionStorage.setItem('token', response.token);
 
-    localStorage.setItem(user.email, JSON.stringify(user));
-    sessionStorage.setItem('userLogged', user.email);
-    this.verifyUserLogged();
-    return { success: true, redirectTo: 'home' };
+        this.verifyLoggedUser();
+        return { 
+          success: true, 
+          redirectTo: 'home'
+        };
+      }),
+      catchError((error) => {
+        let message = 'Error during register';
+        if (error.status === 409 || error.status === 400) {
+          message = 'The user already exists.';
+        }
+        return [{ success: false, message }];
+      })
+    );
   }
 
-  resetPassword(user: User): ResetPasswordResponse {
-    const email = sessionStorage.getItem('userLogged') || user.email;
-    if (!email) return { success: false, message: 'Usuario no encontrado' };
-
-    const userStr = localStorage.getItem(email);
-    if (!userStr) return { success: false, message: 'Usuario no encontrado' };
-
-    const storedUser = JSON.parse(userStr) as User;
-    storedUser.password = user.password;
-    storedUser.rePassword = user.rePassword;
-
-    localStorage.setItem(email, JSON.stringify(storedUser));
-    return { success: true, redirectTo: 'login' };
-  }
-
-  private verifyUserLogged() {
-    this.isLogged.set(!!sessionStorage.getItem('userLogged'));
+  resetPassword(user: User): Observable<ResetPasswordResponse> {
+    return this.http.post<ResetPasswordServiceResponse>(`${this.apiUrl}/reset-password`, user).pipe(
+      map(response => {
+        return {
+          success: true,
+          message: response.message,
+          redirectTo: 'login'
+        };
+      }),
+      catchError((error) => {
+        let message = 'Error during password reset';
+        if (error.status === 404) {
+          message = 'User not found';
+        } else if (error.status === 400) {
+          message = 'Invalid request';
+        }
+        return [{ success: false, message }];
+      })
+    );
   }
 
   logout() {
     sessionStorage.clear();
-    this.verifyUserLogged();
+    this.verifyLoggedUser();
   }
 
-
-  getUserLogged(): User {
-    const email = sessionStorage.getItem('userLogged');
-    if (!email) return { username: 'Bienvenido', email: 'ejemplo@mail.com', password: '' } as User;
-
-    const userStr = localStorage.getItem(email);
-    if (!userStr) return { username: 'Bienvenido', email: 'ejemplo@mail.com', password: '' } as User;
-
-    try {
-      const stored = JSON.parse(userStr) as User;
-      const user: User = {
-        username: stored.username || '',
-        email: stored.email || email,
-        password: stored.password || '',
-        rePassword: stored.rePassword,
-        avatar_url: stored.avatar_url || '/assets/default-avatar.png',
-        created_at: stored.created_at,
-        bio: stored.bio || '',
-        following: typeof stored.following === 'boolean' ? stored.following : false,
-        stats: stored.stats || { booksRead: 0, reviewsCount: 0, followersCount: 0, followingCount: 0 }
-      } as User;
-
-      return user;
-    } catch {
-      return { username: 'Bienvenido', email: 'ejemplo@mail.com', password: '' } as User;
+  getUserLogged():User {
+    let user = this.jwtService.decodeToken();
+    if (!user) return { id: '0', username: 'unknown-user', password: '', email: 'no-user', rePassword: '', avatar_url: '', created_at: new Date(0), bio: '', following: false, stats: { booksRead: 0, reviewsCount: 0, followersCount: 0, followingCount: 0 } };
+    return {
+      id: user.id,
+      username: user.username,
+      password: user.password,
+      email: user.email,
+      rePassword: user.rePassword,
+      avatar_url: user.avatar_url,
+      created_at: user.created_at,
+      bio: user.bio,
+      following: user.following,
+      stats: user.stats,
     }
   }
 
-  updateUser(updatedUser: User) {
-    const email = sessionStorage.getItem('userLogged');
-    if (!email) return { success: false, message: 'No hay sesión activa' };
-
-    localStorage.setItem(email, JSON.stringify(updatedUser));
-    return { success: true };
+  isTokenExpired() {
+    return this.jwtService.isTokenExpired();
   }
 
-  private getAllUsers(): User[] {
-    return Object.keys(localStorage)
-      .map(key => {
-        try {
-          return JSON.parse(localStorage.getItem(key) || '');
-        } catch {
-          return null;
-        }
-      })
-      .filter((u): u is User => !!u);
+  private verifyLoggedUser() {
+    this.isLogged.set(!!sessionStorage.getItem('token'))
   }
+
 }

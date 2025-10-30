@@ -24,36 +24,36 @@ export class CommentController {
   @Get(':id')
   @UseGuards(AuthGuard)
   findOne(@Param('id') id: string) {
-    return this.commentService.findOne(+id);
+    return this.commentService.findOne(id);
   }
 
   @Get('review/:reviewId')
   @UseGuards(AuthGuard)
   findByReview(@Param('reviewId') reviewId: string) {
-    return this.commentService.findByReview(+reviewId);
+    return this.commentService.findByReview(reviewId);
   }
 
   @Get('user/:userId')
   @UseGuards(AuthGuard)
   findByUser(@Param('userId') userId: string) {
-    return this.commentService.findByUser(+userId);
+    return this.commentService.findByUser(userId);
   }
 
   @Get('parent/:parentId')
   @UseGuards(AuthGuard)
   findByParent(@Param('parentId') parentId: string) {
-    return this.commentService.findByParent(+parentId);
+    return this.commentService.findByParent(parentId);
   }
 
   @Patch(':id')
   @UseGuards(RoleGuard)
   update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentService.update(+id, updateCommentDto);
+    return this.commentService.update(id, updateCommentDto);
   }
 
   @Delete(':id')
   @UseGuards(RoleGuard)
   remove(@Param('id') id: string) {
-    return this.commentService.remove(+id);
+    return this.commentService.remove(id);
   }
 }

@@ -23,24 +23,24 @@ export class LikeController {
   @Get('review/:reviewId')
   @UseGuards(AuthGuard)
   findByReview(@Param('reviewId') reviewId: string) {
-    return this.likeService.findByReview(+reviewId);
+    return this.likeService.findByReview(reviewId);
   }
 
   @Get('user/:userId')
   @UseGuards(AuthGuard)
   findByUser(@Param('userId') userId: string) {
-    return this.likeService.findByUser(+userId);
+    return this.likeService.findByUser(userId);
   }
 
   @Get('user/:userId/review/:reviewId')
   @UseGuards(AuthGuard)
   checkLike(@Param('userId') userId: string, @Param('reviewId') reviewId: string) {
-    return this.likeService.checkLike(+userId, +reviewId);
+    return this.likeService.checkLike(userId, reviewId);
   }
 
   @Delete('user/:userId/review/:reviewId')
   @UseGuards(RoleGuard)
   remove(@Param('userId') userId: string, @Param('reviewId') reviewId: string) {
-    return this.likeService.remove(+userId, +reviewId);
+    return this.likeService.remove(userId, reviewId);
   }
 }

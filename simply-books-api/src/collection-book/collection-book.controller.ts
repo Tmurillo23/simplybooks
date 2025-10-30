@@ -23,13 +23,13 @@ export class CollectionBookController {
   @Get('collection/:collectionId')
   @UseGuards(AuthGuard)
   findByCollection(@Param('collectionId') collectionId: string) {
-    return this.collectionBookService.findByCollection(+collectionId);
+    return this.collectionBookService.findByCollection(collectionId);
   }
 
   @Get('book/:bookId')
   @UseGuards(AuthGuard)
   findByBook(@Param('bookId') bookId: string) {
-    return this.collectionBookService.findByBook(+bookId);
+    return this.collectionBookService.findByBook(bookId);
   }
 
   @Delete('collection/:collectionId/book/:bookId')
@@ -38,6 +38,6 @@ export class CollectionBookController {
     @Param('collectionId') collectionId: string,
     @Param('bookId') bookId: string,
   ) {
-    return this.collectionBookService.remove(+collectionId, +bookId);
+    return this.collectionBookService.remove(collectionId, bookId);
   }
 }

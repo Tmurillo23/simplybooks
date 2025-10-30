@@ -24,24 +24,24 @@ export class CollectionController {
   @Get(':id')
   @UseGuards(AuthGuard)
   findOne(@Param('id') id: string) {
-    return this.collectionService.findOne(+id);
+    return this.collectionService.findOne(id);
   }
 
   @Get('user/:userId')
   @UseGuards(AuthGuard)
   findByUser(@Param('userId') userId: string) {
-    return this.collectionService.findByUser(+userId);
+    return this.collectionService.findByUser(userId);
   }
 
   @Patch(':id')
   @UseGuards(RoleGuard)
   update(@Param('id') id: string, @Body() updateCollectionDto: UpdateCollectionDto) {
-    return this.collectionService.update(+id, updateCollectionDto);
+    return this.collectionService.update(id, updateCollectionDto);
   }
 
   @Delete(':id')
   @UseGuards(RoleGuard)
   remove(@Param('id') id: string) {
-    return this.collectionService.remove(+id);
+    return this.collectionService.remove(id);
   }
 }

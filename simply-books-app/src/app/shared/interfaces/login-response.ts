@@ -1,8 +1,9 @@
-export interface LoginResponse {
-  success:boolean;
-  message?:string;
-  redirectTo?:string;
+export interface LoginResponse{
+    success:boolean;
+    message?:string;
 }
 
-export interface SignUpResponse extends LoginResponse{}
-export interface ResetPasswordResponse extends LoginResponse{}
+export interface LoginServiceResponse{
+    success:boolean;
+    token:string;
+}

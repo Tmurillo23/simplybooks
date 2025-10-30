@@ -28,26 +28,26 @@ export class CollectionService {
     });
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.collectionRepository.findOne({ 
       where: { id },
       relations: ['user', 'collectionBooks'] 
     });
   }
 
-  findByUser(userId: number) {
+  findByUser(userId: string) {
     return this.collectionRepository.find({ 
       where: { userId },
       relations: ['user', 'collectionBooks'] 
     });
   }
 
-  async update(id: number, updateCollectionDto: UpdateCollectionDto) {
+  async update(id: string, updateCollectionDto: UpdateCollectionDto) {
     await this.collectionRepository.update(id, updateCollectionDto);
     return this.findOne(id);
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return this.collectionRepository.delete(id);
   }
 }

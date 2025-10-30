@@ -4,10 +4,10 @@ import { User } from '../../user/entities/user.entity';
 @Entity('followers')
 export class Follower {
   @PrimaryColumn()
-  userId: number;
+  userId: string;
 
   @PrimaryColumn()
-  followedId: number;
+  followedId: string;
 
   @ManyToOne(() => User, user => user.following)
   @JoinColumn({ name: 'userId' })

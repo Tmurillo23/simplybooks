@@ -3,5 +3,5 @@ export class CreateBookDto {
   author: string;
   isbn: string;
   cover?: string;
-  userId: number;
+  userId: string;
 }

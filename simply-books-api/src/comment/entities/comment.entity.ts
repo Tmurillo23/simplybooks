@@ -4,8 +4,8 @@ import { Review } from '../../review/entities/review.entity';
 
 @Entity('comments')
 export class Comment {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id?: string;
 
   @Column('text')
   text: string;
@@ -17,19 +17,19 @@ export class Comment {
   user: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @ManyToOne(() => Review, review => review.comments)
   review: Review;
 
   @Column()
-  reviewId: number;
+  reviewId: string;
 
   @ManyToOne(() => Comment, comment => comment.replies, { nullable: true })
   parent: Comment;
 
   @Column({ nullable: true })
-  parentId: number;
+  parentId: string;
 
   @OneToMany(() => Comment, comment => comment.parent)
   replies: Comment[];

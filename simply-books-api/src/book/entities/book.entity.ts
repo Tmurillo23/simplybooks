@@ -7,8 +7,8 @@ import { CollectionBook } from '../../collection-book/entities/collection-book.e
 
 @Entity('books')
 export class Book {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id?: string;
 
   @Column()
   title: string;
@@ -26,7 +26,7 @@ export class Book {
   user: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @OneToMany(() => Review, review => review.book)
   reviews: Review[];

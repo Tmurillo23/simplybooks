@@ -6,8 +6,8 @@ import { Like } from '../../like/entities/like.entity';
 
 @Entity('reviews')
 export class Review {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id?: string;
 
   @Column('text')
   text: string;
@@ -25,13 +25,13 @@ export class Review {
   user: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @ManyToOne(() => Book, book => book.reviews)
   book: Book;
 
   @Column()
-  bookId: number;
+  bookId: string;
 
   @OneToMany(() => Comment, comment => comment.review)
   comments: Comment[];

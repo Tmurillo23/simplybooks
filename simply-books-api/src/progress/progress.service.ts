@@ -28,40 +28,40 @@ export class ProgressService {
     });
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.progressRepository.findOne({ 
       where: { id },
       relations: ['user', 'book'] 
     });
   }
 
-  findByUser(userId: number) {
+  findByUser(userId: string) {
     return this.progressRepository.find({ 
       where: { userId },
       relations: ['user', 'book'] 
     });
   }
 
-  findByBook(bookId: number) {
+  findByBook(bookId: string) {
     return this.progressRepository.find({ 
       where: { bookId },
       relations: ['user', 'book'] 
     });
   }
 
-  findByUserAndBook(userId: number, bookId: number) {
+  findByUserAndBook(userId: string, bookId: string) {
     return this.progressRepository.findOne({ 
       where: { userId, bookId },
       relations: ['user', 'book'] 
     });
   }
 
-  async update(id: number, updateProgressDto: UpdateProgressDto) {
+  async update(id: string, updateProgressDto: UpdateProgressDto) {
     await this.progressRepository.update(id, updateProgressDto);
     return this.findOne(id);
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return this.progressRepository.delete(id);
   }
 }

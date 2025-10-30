@@ -1,4 +1,4 @@
 export class CreateLikeDto {
-  userId: number;
-  reviewId: number;
+  userId: string;
+  reviewId: string;
 }

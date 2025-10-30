@@ -52,24 +52,24 @@ export class ResetPassword {
       password: this.resetPasswordForm.value.newPassword!,
       rePassword: this.resetPasswordForm.value.reNewPassword!,
     };
+    this.authService.resetPassword(user).subscribe(response => {
+        if(!!response.success) {
+          Swal.fire(
+            {
+              title: "Exitoso",
+              text: response.message,
+              icon: "success",
+            });
+          this.router.navigate([response.redirectTo]);
+        }
+        else{
+            Swal.fire(
+              {title: "Error",
+                text: response.message,
+                icon: "error"
+              });
+          }
+    });
 
-    let resetPasswordResponse = this.authService.resetPassword(user);
-
-    if(!!resetPasswordResponse.success) {
-      Swal.fire(
-        {
-          title: "Success",
-          text: "Contraseña cambiada exitosamente.",
-          icon: "success",
-        });
-      this.router.navigate([resetPasswordResponse.redirectTo]);
-    }
-    else{
-        Swal.fire(
-          {title: "Error",
-            text: resetPasswordResponse.message,
-            icon: "error"
-          });
-      }
-    }
+  }
 }

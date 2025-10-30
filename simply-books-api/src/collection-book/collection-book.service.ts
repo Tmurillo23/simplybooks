@@ -27,21 +27,21 @@ export class CollectionBookService {
     });
   }
 
-  findByCollection(collectionId: number) {
+  findByCollection(collectionId: string) {
     return this.collectionBookRepository.find({ 
       where: { collectionId },
       relations: ['collection', 'book'] 
     });
   }
 
-  findByBook(bookId: number) {
+  findByBook(bookId: string) {
     return this.collectionBookRepository.find({ 
       where: { bookId },
       relations: ['collection', 'book'] 
     });
   }
 
-  async remove(collectionId: number, bookId: number) {
+  async remove(collectionId: string, bookId: string) {
     return this.collectionBookRepository.delete({ collectionId, bookId });
   }
 }

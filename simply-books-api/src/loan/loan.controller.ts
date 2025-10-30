@@ -24,30 +24,30 @@ export class LoanController {
   @Get(':id')
   @UseGuards(AuthGuard)
   findOne(@Param('id') id: string) {
-    return this.loanService.findOne(+id);
+    return this.loanService.findOne(id);
   }
 
   @Get('user/:userId')
   @UseGuards(AuthGuard)
   findByUser(@Param('userId') userId: string) {
-    return this.loanService.findByUser(+userId);
+    return this.loanService.findByUser(userId);
   }
 
   @Get('book/:bookId')
   @UseGuards(AuthGuard)
   findByBook(@Param('bookId') bookId: string) {
-    return this.loanService.findByBook(+bookId);
+    return this.loanService.findByBook(bookId);
   }
 
   @Patch(':id')
   @UseGuards(RoleGuard)
   update(@Param('id') id: string, @Body() updateLoanDto: UpdateLoanDto) {
-    return this.loanService.update(+id, updateLoanDto);
+    return this.loanService.update(id, updateLoanDto);
   }
 
   @Delete(':id')
   @UseGuards(RoleGuard)
   remove(@Param('id') id: string) {
-    return this.loanService.remove(+id);
+    return this.loanService.remove(id);
   }
 }

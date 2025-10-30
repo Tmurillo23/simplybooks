@@ -1,6 +1,8 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/create-auth.dto';
+import { SignUpDto } from './dto/sign-up.dto';
+import { LoginDto } from './dto/login.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller('v1/auth')
 export class AuthController {
@@ -12,7 +14,12 @@ export class AuthController {
   }
 
   @Post('register')
-  async register(@Body() registerDto: any) {
+  async register(@Body() registerDto: SignUpDto) {
     return this.authService.register(registerDto);
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authService.resetPassword(resetPasswordDto);
   }
 }

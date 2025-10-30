@@ -24,36 +24,36 @@ export class ProgressController {
   @Get(':id')
   @UseGuards(AuthGuard)
   findOne(@Param('id') id: string) {
-    return this.progressService.findOne(+id);
+    return this.progressService.findOne(id);
   }
 
   @Get('user/:userId')
   @UseGuards(AuthGuard)
   findByUser(@Param('userId') userId: string) {
-    return this.progressService.findByUser(+userId);
+    return this.progressService.findByUser(userId);
   }
 
   @Get('book/:bookId')
   @UseGuards(AuthGuard)
   findByBook(@Param('bookId') bookId: string) {
-    return this.progressService.findByBook(+bookId);
+    return this.progressService.findByBook(bookId);
   }
 
   @Get('user/:userId/book/:bookId')
   @UseGuards(AuthGuard)
   findByUserAndBook(@Param('userId') userId: string, @Param('bookId') bookId: string) {
-    return this.progressService.findByUserAndBook(+userId, +bookId);
+    return this.progressService.findByUserAndBook(userId, bookId);
   }
 
   @Patch(':id')
   @UseGuards(RoleGuard)
   update(@Param('id') id: string, @Body() updateProgressDto: UpdateProgressDto) {
-    return this.progressService.update(+id, updateProgressDto);
+    return this.progressService.update(id, updateProgressDto);
   }
 
   @Delete(':id')
   @UseGuards(RoleGuard)
   remove(@Param('id') id: string) {
-    return this.progressService.remove(+id);
+    return this.progressService.remove(id);
   }
 }

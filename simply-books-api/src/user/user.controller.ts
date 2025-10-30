@@ -23,7 +23,7 @@ export class UserController {
   @Get(':id')
   @UseGuards(AuthGuard)
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    return this.userService.findOne(id);
   }
 
   @Get('username/:username')
@@ -35,12 +35,12 @@ export class UserController {
   @Patch(':id')
   @UseGuards(SelfOrAdminGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   @UseGuards(SelfOrAdminGuard)
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return this.userService.remove(id);
   }
 }

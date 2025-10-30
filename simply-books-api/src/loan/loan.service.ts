@@ -28,33 +28,33 @@ export class LoanService {
     });
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.loanRepository.findOne({ 
       where: { id },
       relations: ['user', 'book'] 
     });
   }
 
-  findByUser(userId: number) {
+  findByUser(userId: string) {
     return this.loanRepository.find({ 
       where: { userId },
       relations: ['user', 'book'] 
     });
   }
 
-  findByBook(bookId: number) {
+  findByBook(bookId: string) {
     return this.loanRepository.find({ 
       where: { bookId },
       relations: ['user', 'book'] 
     });
   }
 
-  async update(id: number, updateLoanDto: UpdateLoanDto) {
+  async update(id: string, updateLoanDto: UpdateLoanDto) {
     await this.loanRepository.update(id, updateLoanDto);
     return this.findOne(id);
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return this.loanRepository.delete(id);
   }
 }

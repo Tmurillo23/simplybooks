@@ -28,26 +28,26 @@ export class DigitalDocumentService {
     });
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.digitalDocumentRepository.findOne({ 
       where: { id },
       relations: ['user'] 
     });
   }
 
-  findByUser(userId: number) {
+  findByUser(userId: string) {
     return this.digitalDocumentRepository.find({ 
       where: { userId },
       relations: ['user'] 
     });
   }
 
-  async update(id: number, updateDigitalDocumentDto: UpdateDigitalDocumentDto) {
+  async update(id: string, updateDigitalDocumentDto: UpdateDigitalDocumentDto) {
     await this.digitalDocumentRepository.update(id, updateDigitalDocumentDto);
     return this.findOne(id);
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return this.digitalDocumentRepository.delete(id);
   }
 }

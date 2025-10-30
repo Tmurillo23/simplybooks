@@ -57,6 +57,7 @@ export class UpdateProfile implements OnInit {
       username: this.profileForm.value.username
     };
 
+    /*
     const response = this.authService.updateUser(updatedUser);
 
     if (!response.success) {
@@ -73,5 +74,6 @@ export class UpdateProfile implements OnInit {
       });
       this.router.navigate(['/profile']);
     }
+    */
   }
 }
